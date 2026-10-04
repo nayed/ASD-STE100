@@ -27,7 +27,7 @@ export function Section({
   return (
     <section id={id} className="border-t border-ink/80">
       <div className="mx-auto grid max-w-[1280px] grid-cols-1 gap-x-12 px-5 lg:grid-cols-[168px_minmax(0,1fr)] lg:px-10">
-        <div className="pt-8 lg:sticky lg:top-11 lg:h-max lg:pt-14">
+        <div className="pt-8 lg:sticky lg:top-[5.5rem] lg:h-max lg:pt-14">
           <div className="flex items-baseline gap-3 lg:block">
             <div className="font-mono text-[26px] font-medium leading-none text-hazard tnum">§{code}</div>
             <div className="micro mt-0 max-w-[150px] text-ash lg:mt-3">{title}</div>

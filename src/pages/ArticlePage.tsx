@@ -2,6 +2,7 @@ import { lazy, Suspense, useEffect, useMemo } from "react";
 import { useParams } from "react-router";
 import { findArticle } from "../articles/registry";
 import { SITE_NAME } from "../site";
+import SiteShell from "../components/SiteShell";
 import NotFound from "./NotFound";
 
 const cache = new Map<string, ReturnType<typeof lazy>>();
@@ -24,11 +25,19 @@ export default function ArticlePage({ slug: fixed }: { slug?: string }) {
     document.title = meta ? `${meta.title} · ${SITE_NAME}` : `Not found · ${SITE_NAME}`;
   }, [meta]);
 
-  if (!meta || !Article) return <NotFound />;
+  if (!meta || !Article) {
+    return (
+      <SiteShell>
+        <NotFound />
+      </SiteShell>
+    );
+  }
 
   return (
-    <Suspense fallback={<div className="min-h-screen" />}>
-      <Article />
-    </Suspense>
+    <SiteShell theme={meta.bar}>
+      <Suspense fallback={<div className="min-h-screen" />}>
+        <Article />
+      </Suspense>
+    </SiteShell>
   );
 }

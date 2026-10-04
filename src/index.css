@@ -40,3 +40,20 @@ body {
     transition-duration: 0.01ms !important;
   }
 }
+
+:root {
+  /* height of the shared site bar; articles offset fixed and sticky parts by it */
+  --site-bar-h: 2.75rem;
+}
+
+/* in the components layer so that utilities (normal-case, text-*) can override it */
+@layer components {
+  .bar-label {
+    font-family: var(--bar-font);
+    font-size: var(--bar-size);
+    text-transform: var(--bar-case);
+    letter-spacing: var(--bar-tracking);
+    line-height: 1.4;
+    font-weight: 500;
+  }
+}

@@ -1,5 +1,3 @@
-import { Link } from "react-router";
-
 const ROWS = [
   ["Allocation", "Automatic, on function call", "Explicit (malloc, new) or by the runtime"],
   ["Freed", "Automatically, on return", "free / delete, or the garbage collector"],
@@ -61,20 +59,14 @@ function MemoryDiagram() {
 
 export default function StackVsHeap() {
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-200 antialiased">
-      <header className="border-b border-slate-800">
-        <div className="mx-auto flex h-12 max-w-3xl items-center justify-between px-5">
-          <Link to="/" className="font-mono text-sm text-slate-400 hover:text-teal-300">
-            ← wiki
-          </Link>
+    <div className="bg-slate-950 text-slate-200 antialiased">
+      <main className="mx-auto max-w-3xl px-5 py-14">
+        <div className="flex items-center gap-3">
+          <p className="font-mono text-sm text-teal-300">memory / systems</p>
           <span className="rounded border border-amber-500/40 px-2 py-0.5 font-mono text-[11px] uppercase tracking-wider text-amber-300">
             stub
           </span>
         </div>
-      </header>
-
-      <main className="mx-auto max-w-3xl px-5 py-14">
-        <p className="font-mono text-sm text-teal-300">memory / systems</p>
         <h1 className="mt-2 text-4xl font-bold tracking-tight text-white sm:text-5xl">Stack vs heap</h1>
         <p className="mt-5 text-lg leading-relaxed text-slate-400">
           A running program keeps its data in two main regions. The stack is fast, ordered and short-lived. The heap is

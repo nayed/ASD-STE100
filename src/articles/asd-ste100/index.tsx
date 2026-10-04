@@ -79,7 +79,7 @@ const STRIPPED = [
 function TopBar() {
   const { scrollYProgress } = useScroll();
   return (
-    <header className="fixed inset-x-0 top-0 z-50 border-b border-ink bg-paper/95 backdrop-blur">
+    <header className="fixed inset-x-0 top-(--site-bar-h) z-40 border-b border-ink bg-paper/95 backdrop-blur">
       <div className="mx-auto flex h-11 max-w-[1280px] items-center gap-4 px-5 lg:px-10">
         <a href="#top" className="flex shrink-0 items-center gap-2">
           <span className="block h-3 w-3 bg-hazard" />
