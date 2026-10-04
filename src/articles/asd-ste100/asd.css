@@ -1,0 +1,63 @@
+/* Styles for the ASD-STE100 article only. Everything is scoped under .asd
+   so other articles keep their own design. */
+
+.asd {
+  font-feature-settings: "tnum" 0;
+}
+
+.asd ::selection {
+  background: #b3261e;
+  color: #f2eee4;
+}
+
+/* printed grid of the manual page */
+.asd .paper-grid,
+.asd.paper-grid {
+  background-image:
+    repeating-linear-gradient(to right, rgba(23, 22, 26, 0.045) 0 1px, transparent 1px 100%),
+    repeating-linear-gradient(to bottom, rgba(23, 22, 26, 0.045) 0 1px, transparent 1px 100%);
+  background-size: 96px 96px;
+}
+
+.asd .plate-grid {
+  background-image:
+    repeating-linear-gradient(to right, rgba(231, 225, 211, 0.07) 0 1px, transparent 1px 100%),
+    repeating-linear-gradient(to bottom, rgba(231, 225, 211, 0.07) 0 1px, transparent 1px 100%);
+  background-size: 64px 64px;
+}
+
+.asd .micro {
+  font-family: "IBM Plex Mono", ui-monospace, SFMono-Regular, monospace;
+  font-size: 10.5px;
+  line-height: 1.4;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+
+.asd .tnum {
+  font-variant-numeric: tabular-nums;
+}
+
+.asd .hide-scroll {
+  scrollbar-width: none;
+}
+.asd .hide-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.asd a:focus-visible,
+.asd button:focus-visible,
+.asd textarea:focus-visible,
+.asd summary:focus-visible {
+  outline: 2px solid #b3261e;
+  outline-offset: 2px;
+}
+
+.asd section[id] {
+  scroll-margin-top: 3.4rem;
+}
+
+.asd .rail-rule {
+  background-image: repeating-linear-gradient(to bottom, #d6cfbe 0 6px, transparent 6px 12px);
+}

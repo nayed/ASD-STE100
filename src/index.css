@@ -1,0 +1,42 @@
+@import "tailwindcss";
+
+/* Shared design tokens. Any article may use them; each article owns its own look. */
+@theme {
+  --font-display: "Archivo", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, monospace;
+  --font-serif: "Newsreader", ui-serif, Georgia, serif;
+
+  /* ASD-STE100 article palette */
+  --color-paper: #f2eee4;
+  --color-paper2: #e7e1d3;
+  --color-ink: #17161a;
+  --color-ash: #6b6558;
+  --color-hair: #d6cfbe;
+  --color-hazard: #b3261e;
+  --color-blueprint: #2c4c6b;
+  --color-plate: #1b2831;
+}
+
+html {
+  -webkit-font-smoothing: antialiased;
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: #ffffff;
+  color: #17161a;
+  font-family: ui-sans-serif, system-ui, sans-serif;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

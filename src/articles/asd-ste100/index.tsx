@@ -1,6 +1,7 @@
 import { motion, useScroll } from "framer-motion";
-import heroImg from "../public/images/hero-manual.jpg";
-import hangarImg from "../public/images/hangar-band.jpg";
+import "./asd.css";
+import heroImg from "./images/hero-manual.jpg";
+import hangarImg from "./images/hangar-band.jpg";
 import { Caption, Clause, Example, H2, Kicker, Lead, P, Section, useReveal } from "./components/Chrome";
 import { FunnelDiagram, LoopDiagram } from "./components/Diagrams";
 import Checker from "./components/Checker";
@@ -283,10 +284,10 @@ function Footer() {
   );
 }
 
-export default function App() {
+export default function AsdSte100() {
   const r = useReveal();
   return (
-    <div className="paper-grid min-h-screen pt-11">
+    <div className="asd paper-grid min-h-screen bg-paper pt-11 font-display text-ink">
       <TopBar />
       <Hero />
 
