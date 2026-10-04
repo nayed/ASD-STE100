@@ -1,7 +1,11 @@
 import { useEffect } from "react";
 import { useLocation } from "react-router";
 
-/** top of the page on navigation; the #hash target when there is one (it may render after a lazy load) */
+/**
+ * On arrival at a page: scroll to the top, or to the #hash target (it may
+ * render only after the lazy article loads). Hash changes inside the same page
+ * are left to the browser, so in-page links keep their smooth scrolling.
+ */
 export default function ScrollManager() {
   const { pathname, hash } = useLocation();
 
@@ -20,7 +24,8 @@ export default function ScrollManager() {
       }
     }, 50);
     return () => window.clearInterval(timer);
-  }, [pathname, hash]);
+    // only a new page runs this; `hash` is read as it is at that moment
+  }, [pathname]);
 
   return null;
 }

@@ -65,6 +65,32 @@ export const ARTICLES: ArticleMeta[] = [
     },
     load: () => import("./stack-vs-heap"),
   },
+  {
+    slug: "random-forest",
+    title: "Random forest",
+    summary: "How a team of randomised decision trees votes its way past overfitting, with a live forest to train.",
+    tags: ["machine learning", "algorithms", "decision trees"],
+    load: () => import("./random-forest"),
+    bar: {
+      page: "#fbfbf7",
+      bg: "rgba(251, 251, 247, 0.95)",
+      fg: "#191914",
+      muted: "#6e6e58",
+      accent: "#0e7a3c",
+      border: "#191914",
+      panel: "#fbfbf7",
+      hover: "rgba(14, 122, 60, 0.09)",
+      headBg: "#191914",
+      headFg: "#fbfbf7",
+      tag: "#0e7a3c",
+      font: '"IBM Plex Mono", ui-monospace, monospace',
+      size: "10.5px",
+      case: "uppercase",
+      tracking: "0.16em",
+      titleFont: '"IBM Plex Mono", ui-monospace, monospace',
+      summaryFont: '"IBM Plex Mono", ui-monospace, monospace',
+    },
+  },
 ];
 
 export function findArticle(slug: string | undefined): ArticleMeta | undefined {
