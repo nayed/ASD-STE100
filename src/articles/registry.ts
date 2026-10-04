@@ -7,6 +7,8 @@ export interface ArticleMeta {
   title: string;
   summary: string;
   tags: string[];
+  /** publication date, YYYY-MM-DD; orders "recently added" */
+  added: string;
   /** colours and type of the shared site bar on this article; unset fields use DEFAULT_BAR */
   bar?: Partial<BarTheme>;
   /** each article is its own lazy chunk, with its own design */
@@ -40,6 +42,7 @@ export const ARTICLES: ArticleMeta[] = [
       summaryStyle: "italic",
     },
     load: () => import("./asd-ste100"),
+    added: "2026-10-04",
   },
   {
     slug: "stack-vs-heap",
@@ -64,6 +67,7 @@ export const ARTICLES: ArticleMeta[] = [
       tracking: "0",
     },
     load: () => import("./stack-vs-heap"),
+    added: "2026-10-04",
   },
   {
     slug: "random-forest",
@@ -71,6 +75,7 @@ export const ARTICLES: ArticleMeta[] = [
     summary: "How a team of randomised decision trees votes its way past overfitting, with a live forest to train.",
     tags: ["machine learning", "algorithms", "decision trees"],
     load: () => import("./random-forest"),
+    added: "2026-10-05",
     bar: {
       page: "#fbfbf7",
       bg: "rgba(251, 251, 247, 0.95)",
@@ -96,6 +101,9 @@ export const ARTICLES: ArticleMeta[] = [
 export function findArticle(slug: string | undefined): ArticleMeta | undefined {
   return ARTICLES.find((a) => a.slug === slug);
 }
+
+/** the A–Z index of every article; "articles" is therefore not a valid slug */
+export const INDEX_PATH = "/articles";
 
 /** articles live at "/<slug>"; the home article lives at "/" */
 export function articlePath(slug: string): string {

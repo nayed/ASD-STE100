@@ -14,11 +14,17 @@ export default function SiteBar() {
   const listId = useId();
   /* below sm the field is folded into a button; this unfolds it over the bar */
   const [expanded, setExpanded] = useState(false);
-  const { inputRef } = s;
+  const { inputRef, active, open } = s;
 
   useEffect(() => {
     if (expanded) inputRef.current?.focus();
   }, [expanded, inputRef]);
+
+  /* keep the highlighted row visible when the arrow keys move it */
+  useEffect(() => {
+    if (!open) return;
+    document.getElementById(`${listId}-${active}`)?.scrollIntoView({ block: "nearest" });
+  }, [active, open, listId]);
 
   return (
     <div className="sticky top-0 z-50 h-(--site-bar-h) border-b border-(--bar-border) bg-(--bar-bg) text-(--bar-fg) backdrop-blur">
@@ -80,45 +86,70 @@ export default function SiteBar() {
             </kbd>
 
             {s.open && (
-              <ul
+              <div
                 id={listId}
                 role="listbox"
-                className="absolute left-0 right-0 top-[calc(100%+6px)] z-20 border border-(--bar-border) bg-(--bar-panel) shadow-lg sm:left-auto sm:w-full sm:min-w-[22rem]"
+                aria-label="Articles"
+                className="absolute left-0 right-0 top-[calc(100%+6px)] z-20 flex max-h-[min(70vh,calc(100dvh-var(--site-bar-h)-16px))] flex-col border border-(--bar-border) bg-(--bar-panel) shadow-lg sm:left-auto sm:w-full sm:min-w-[22rem]"
               >
-                <li className="bar-label flex justify-between bg-(--bar-head-bg) px-3 py-1.5 text-(--bar-head-fg)" role="presentation">
-                  <span>{s.query ? "Results" : "All articles"}</span>
-                  <span className="text-(--bar-accent) tabular-nums">{s.results.length}</span>
-                </li>
-                {s.results.length === 0 && (
-                  <li className="px-3 py-3 text-[14px] text-(--bar-muted) [font-family:var(--bar-summary-font)] [font-style:var(--bar-summary-style)]" role="presentation">
-                    No article matches.
-                  </li>
-                )}
-                {s.results.map((a, i) => {
-                  const here = articlePath(a.slug) === pathname;
-                  return (
-                    <li
-                      key={a.slug}
-                      id={`${listId}-${i}`}
-                      role="option"
-                      aria-selected={i === s.active}
-                      onMouseDown={(e) => e.preventDefault()}
-                      onMouseEnter={() => s.setActive(i)}
-                      onClick={() => s.select(a)}
-                      className={`cursor-pointer border-t border-(--bar-border) px-3 py-2.5 ${i === s.active ? "bg-(--bar-hover)" : ""}`}
-                    >
-                      <div className="flex items-baseline justify-between gap-3">
-                        <span className="text-[14px] font-semibold leading-tight [font-family:var(--bar-title-font)]">{a.title}</span>
-                        {here && <span className="bar-label shrink-0 text-(--bar-accent)">Here</span>}
+                <div className="bar-label flex shrink-0 justify-between bg-(--bar-head-bg) px-3 py-1.5 text-(--bar-head-fg)" role="presentation">
+                  <span>{s.browsing ? "Recently added" : "Results"}</span>
+                  <span className="text-(--bar-accent) tabular-nums">
+                    {s.browsing ? `${s.results.length} of ${s.total}` : s.matches}
+                  </span>
+                </div>
+
+                {/* only the results scroll; the header and the index row stay put */}
+                <div role="group" className="min-h-0 flex-1 overflow-y-auto overscroll-contain">
+                  {s.results.length === 0 && (
+                    <div className="px-3 py-3 text-[14px] text-(--bar-muted) [font-family:var(--bar-summary-font)] [font-style:var(--bar-summary-style)]" role="presentation">
+                      No article matches.
+                    </div>
+                  )}
+                  {s.results.map((a, i) => {
+                    const here = articlePath(a.slug) === pathname;
+                    return (
+                      <div
+                        key={a.slug}
+                        id={`${listId}-${i}`}
+                        role="option"
+                        aria-selected={i === s.active}
+                        onMouseDown={(e) => e.preventDefault()}
+                        onMouseEnter={() => s.setActive(i)}
+                        onClick={() => s.select(a)}
+                        className={`cursor-pointer border-t border-(--bar-border) px-3 py-2.5 first:border-t-0 ${i === s.active ? "bg-(--bar-hover)" : ""}`}
+                      >
+                        <div className="flex items-baseline justify-between gap-3">
+                          <span className="text-[14px] font-semibold leading-tight [font-family:var(--bar-title-font)]">{a.title}</span>
+                          {here && <span className="bar-label shrink-0 text-(--bar-accent)">Here</span>}
+                        </div>
+                        <p className="mt-0.5 text-[13.5px] leading-[1.4] text-(--bar-muted) [font-family:var(--bar-summary-font)] [font-style:var(--bar-summary-style)]">
+                          {a.summary}
+                        </p>
+                        <p className="mt-1 font-mono text-[10.5px] text-(--bar-tag)">{a.tags.join(" · ")}</p>
                       </div>
-                      <p className="mt-0.5 text-[13.5px] leading-[1.4] text-(--bar-muted) [font-family:var(--bar-summary-font)] [font-style:var(--bar-summary-style)]">
-                        {a.summary}
-                      </p>
-                      <p className="mt-1 font-mono text-[10.5px] text-(--bar-tag)">{a.tags.join(" · ")}</p>
-                    </li>
-                  );
-                })}
-              </ul>
+                    );
+                  })}
+                  {s.more > 0 && (
+                    <div className="border-t border-(--bar-border) px-3 py-2 text-[12.5px] text-(--bar-muted) [font-family:var(--bar-summary-font)] [font-style:var(--bar-summary-style)]" role="presentation">
+                      + {s.more} more — keep typing to narrow it down
+                    </div>
+                  )}
+                </div>
+
+                <div
+                  id={`${listId}-${s.indexRow}`}
+                  role="option"
+                  aria-selected={s.active === s.indexRow}
+                  onMouseDown={(e) => e.preventDefault()}
+                  onMouseEnter={() => s.setActive(s.indexRow)}
+                  onClick={s.openIndex}
+                  className={`bar-label flex shrink-0 cursor-pointer justify-between border-t border-(--bar-border) px-3 py-2 ${s.active === s.indexRow ? "bg-(--bar-hover)" : ""}`}
+                >
+                  <span>Browse all {s.total} articles</span>
+                  <span className="text-(--bar-accent)">A–Z →</span>
+                </div>
+              </div>
             )}
           </div>
           {expanded && (

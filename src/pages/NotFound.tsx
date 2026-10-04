@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { Link, useLocation } from "react-router";
-import { ARTICLES, articlePath } from "../articles/registry";
+import { articlePath, INDEX_PATH } from "../articles/registry";
+import { recentArticles } from "../search/search";
 import { SITE_NAME } from "../site";
 
 export default function NotFound() {
@@ -17,9 +18,9 @@ export default function NotFound() {
       <p className="mt-3 text-neutral-600">
         Nothing is published at <code className="rounded bg-neutral-100 px-1.5 py-0.5 text-sm">{pathname}</code>.
       </p>
-      <h2 className="mt-10 text-sm font-semibold uppercase tracking-wider text-neutral-500">Articles</h2>
+      <h2 className="mt-10 text-sm font-semibold uppercase tracking-wider text-neutral-500">Recently added</h2>
       <ul className="mt-3 divide-y divide-neutral-200 border-y border-neutral-200">
-        {ARTICLES.map((a) => (
+        {recentArticles(5).map((a) => (
           <li key={a.slug}>
             <Link to={articlePath(a.slug)} className="block py-3 hover:bg-neutral-50">
               <span className="font-medium">{a.title}</span>
@@ -28,9 +29,14 @@ export default function NotFound() {
           </li>
         ))}
       </ul>
-      <Link to="/" className="mt-8 inline-block text-sm font-medium underline underline-offset-4">
-        ← Home
-      </Link>
+      <div className="mt-8 flex gap-6 text-sm font-medium">
+        <Link to="/" className="underline underline-offset-4">
+          ← Home
+        </Link>
+        <Link to={INDEX_PATH} className="underline underline-offset-4">
+          All articles, A–Z →
+        </Link>
+      </div>
     </main>
   );
 }

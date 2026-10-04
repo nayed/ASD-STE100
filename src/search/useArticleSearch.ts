@@ -1,12 +1,19 @@
 import { useCallback, useEffect, useMemo, useRef, useState, type KeyboardEvent } from "react";
 import { useNavigate } from "react-router";
-import { articlePath, type ArticleMeta } from "../articles/registry";
-import { searchArticles } from "./search";
+import { ARTICLES, articlePath, INDEX_PATH, type ArticleMeta } from "../articles/registry";
+import { recentArticles, searchArticles } from "./search";
+
+/** rows shown with an empty box */
+export const RECENT_LIMIT = 5;
+/** rows shown while typing */
+export const RESULT_LIMIT = 8;
 
 /**
  * Behaviour of a search box, without any design: query, results, the
  * highlighted row, keyboard handling and the global "/" shortcut.
- * Each article draws its own box around it.
+ *
+ * The rows are `results`, then one more row that opens the A–Z index;
+ * `active` runs over both, so `active === results.length` is that last row.
  */
 export function useArticleSearch() {
   const navigate = useNavigate();
@@ -15,7 +22,17 @@ export function useArticleSearch() {
   const [active, setActive] = useState(0);
   const [open, setOpen] = useState(false);
 
-  const results = useMemo(() => searchArticles(query), [query]);
+  const browsing = query.trim() === "";
+  const { results, matches } = useMemo(() => {
+    if (browsing) return { results: recentArticles(RECENT_LIMIT), matches: ARTICLES.length };
+    const all = searchArticles(query);
+    return { results: all.slice(0, RESULT_LIMIT), matches: all.length };
+  }, [browsing, query]);
+
+  /** matches not shown because of RESULT_LIMIT */
+  const more = browsing ? 0 : matches - results.length;
+  const indexRow = results.length;
+  const rowCount = results.length + 1;
 
   const setQuery = useCallback((q: string) => {
     setQueryRaw(q);
@@ -28,37 +45,38 @@ export function useArticleSearch() {
     inputRef.current?.blur();
   }, []);
 
-  const select = useCallback(
-    (a: ArticleMeta) => {
+  const go = useCallback(
+    (path: string) => {
       setQueryRaw("");
       setActive(0);
       close();
-      navigate(articlePath(a.slug));
+      navigate(path);
     },
     [close, navigate],
   );
+
+  const select = useCallback((a: ArticleMeta) => go(articlePath(a.slug)), [go]);
+  const openIndex = useCallback(() => go(INDEX_PATH), [go]);
 
   const onKeyDown = useCallback(
     (e: KeyboardEvent<HTMLInputElement>) => {
       if (e.key === "ArrowDown") {
         e.preventDefault();
         setOpen(true);
-        setActive((i) => Math.min(i + 1, results.length - 1));
+        setActive((i) => Math.min(i + 1, rowCount - 1));
       } else if (e.key === "ArrowUp") {
         e.preventDefault();
         setActive((i) => Math.max(i - 1, 0));
       } else if (e.key === "Enter") {
-        const a = results[active];
-        if (a) {
-          e.preventDefault();
-          select(a);
-        }
+        e.preventDefault();
+        if (active === indexRow) openIndex();
+        else if (results[active]) select(results[active]);
       } else if (e.key === "Escape") {
         e.preventDefault();
         close();
       }
     },
-    [active, close, results, select],
+    [active, close, indexRow, openIndex, results, rowCount, select],
   );
 
   /* "/" focuses the box from anywhere on the page, except inside a field */
@@ -75,5 +93,23 @@ export function useArticleSearch() {
     return () => window.removeEventListener("keydown", onKey);
   }, []);
 
-  return { inputRef, query, setQuery, results, active, setActive, open, setOpen, close, select, onKeyDown };
+  return {
+    inputRef,
+    query,
+    setQuery,
+    browsing,
+    results,
+    matches,
+    more,
+    total: ARTICLES.length,
+    indexRow,
+    active,
+    setActive,
+    open,
+    setOpen,
+    close,
+    select,
+    openIndex,
+    onKeyDown,
+  };
 }
