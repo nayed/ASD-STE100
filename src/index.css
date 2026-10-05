@@ -15,6 +15,14 @@
   --color-hazard: #b3261e;
   --color-blueprint: #2c4c6b;
   --color-plate: #1b2831;
+
+  /* Go article palette (prefixed: its paper and ink differ from the ASD ones) */
+  --color-go-paper: #f2f0e9;
+  --color-go-ink: #17170f;
+  --color-go-olive: #6e7160;
+  --color-go-olive-deep: #43463a;
+  --color-go-accent: #00add8; /* Gopher Blue, the Go mascot colour */
+  --color-go-accent-text: #00728f; /* same hue, 4.8:1 on go-paper: small text on light backgrounds */
 }
 
 html {

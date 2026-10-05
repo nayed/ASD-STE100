@@ -96,6 +96,33 @@ export const ARTICLES: ArticleMeta[] = [
       summaryFont: '"IBM Plex Mono", ui-monospace, monospace',
     },
   },
+  {
+    slug: "go-programming",
+    title: "The Go programming language",
+    summary: "Go from zero: program anatomy, types, slices and maps, interfaces, errors, goroutines and channels.",
+    tags: ["go", "golang", "languages", "concurrency"],
+    load: () => import("./go-programming"),
+    added: "2026-10-05",
+    bar: {
+      page: "#f2f0e9",
+      bg: "rgba(242, 240, 233, 0.95)",
+      fg: "#17170f",
+      muted: "#6e7160",
+      accent: "#00add8",
+      border: "#17170f",
+      panel: "#f2f0e9",
+      hover: "rgba(255, 255, 255, 0.6)",
+      headBg: "#17170f",
+      headFg: "#f2f0e9",
+      tag: "#00728f",
+      font: '"IBM Plex Mono", ui-monospace, monospace',
+      size: "10.5px",
+      case: "uppercase",
+      tracking: "0.2em",
+      titleFont: '"IBM Plex Mono", ui-monospace, monospace',
+      summaryFont: '"IBM Plex Mono", ui-monospace, monospace',
+    },
+  },
 ];
 
 export function findArticle(slug: string | undefined): ArticleMeta | undefined {
