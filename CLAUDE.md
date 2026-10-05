@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project
 
-A personal technical wiki. Each article explains a programming concept with diagrams. The homepage (`/`) is the ASD-STE100 article. Stack: React 19, Vite 7, React Router 7, Tailwind CSS v4 (via `@tailwindcss/vite`), framer-motion, TypeScript (strict). The site is a client-side SPA built for a static host with a rewrite to `index.html`: `public/_redirects` serves Netlify and Cloudflare, `vercel.json` serves Vercel.
+A personal technical wiki. Each article explains a programming concept with diagrams. The homepage (`/`) is the ASD-STE100 article. Stack: React 19, Vite 7, React Router 7, Tailwind CSS v4 (via `@tailwindcss/vite`), framer-motion, TypeScript (strict). The site is a client-side SPA built for a static host with a rewrite to `index.html`: `public/_redirects` serves Netlify and Cloudflare, `vercel.json` serves Vercel. It deploys on Netlify at asd-ste100.nayed.dev; `netlify.toml` holds the build command, publish directory, Node version and cache headers.
 
 ## Licensing
 

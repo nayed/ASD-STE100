@@ -1,0 +1,17 @@
+# Netlify build settings; these override anything typed in the dashboard.
+# SPA routing (every path → index.html) lives in public/_redirects, shared with Cloudflare Pages.
+
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[build.environment]
+  # Vite 7 needs Node 20.19+ or 22.12+; pin the current LTS
+  NODE_VERSION = "24"
+
+# Vite fingerprints everything in /assets (index-3f2a9c.js…), so a file there never changes:
+# let browsers keep it for a year. index.html stays revalidated, so new deploys show up at once.
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
