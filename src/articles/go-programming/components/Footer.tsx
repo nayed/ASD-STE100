@@ -38,6 +38,10 @@ export function Footer() {
           <span>DOCUMENT SET FOR TRAINING — REDISTRIBUTE FREELY</span>
           <span className="text-go-accent">EOF · 10 / 10</span>
         </div>
+
+        <p className="mt-4 text-[10px] uppercase leading-5 tracking-[0.2em] text-go-paper/35">
+          Cover drawing after the Go gopher by Renée French, CC BY 4.0 · Text and diagrams CC BY 4.0, Nayed Saïd Ali
+        </p>
       </div>
     </footer>
   );

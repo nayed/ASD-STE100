@@ -1,0 +1,39 @@
+Content licence
+===============
+
+Copyright (c) 2026 Nayed Saïd Ali
+
+This repository holds two kinds of work, under two licences:
+
+  Code      MIT License, see LICENSE.
+            The application itself: routing, search, shared components,
+            and the logic inside articles (for example the STE checker and
+            the random forest playground).
+
+  Content   Creative Commons Attribution 4.0 International (CC BY 4.0).
+            The articles: their text, diagrams, figures and tables.
+
+Under CC BY 4.0 you may share and adapt the content for any purpose, including
+commercially, as long as you give appropriate credit, link to the licence and
+say whether you made changes. Suggested credit:
+
+  "<article title>" by Nayed Saïd Ali, licensed under CC BY 4.0.
+
+Full licence text: https://creativecommons.org/licenses/by/4.0/legalcode
+Summary:           https://creativecommons.org/licenses/by/4.0/
+
+Third-party material
+--------------------
+
+The licences above do not cover material that belongs to others:
+
+- The Go gopher was designed by Renée French and is licensed under CC BY 4.0.
+  The cover drawing in the Go article is a derivative of it.
+- ASD-STE100 (Simplified Technical English) is a specification of ASD, the
+  AeroSpace and Defence Industries Association of Europe. The ASD-STE100
+  article quotes and summarises it for teaching; the specification itself
+  remains ASD's.
+- Photographs in src/articles/asd-ste100/images/ are not covered by this
+  licence.
+- Names and trademarks (Go, Kubernetes, Docker, and others) belong to their
+  owners.

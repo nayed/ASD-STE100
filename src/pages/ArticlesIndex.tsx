@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { Link } from "react-router";
 import { ARTICLES, articlePath } from "../articles/registry";
 import { groupByLetter } from "../search/search";
-import { SITE_NAME } from "../site";
+import { OWNER, SITE_NAME } from "../site";
 
 const LETTERS = ["#", ..."ABCDEFGHIJKLMNOPQRSTUVWXYZ"];
 
@@ -88,6 +88,14 @@ export default function ArticlesIndex() {
             </ul>
           </section>
         ))}
+
+        <p className="mt-16 border-t border-neutral-200 pt-4 font-mono text-xs text-neutral-400">
+          © 2026 {OWNER} · Articles under{" "}
+          <a href="https://creativecommons.org/licenses/by/4.0/" className="underline underline-offset-2 hover:text-neutral-600">
+            CC BY 4.0
+          </a>{" "}
+          · Code under MIT · Third-party material keeps its own licence
+        </p>
       </div>
     </main>
   );

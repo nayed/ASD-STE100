@@ -6,6 +6,10 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 A personal technical wiki. Each article explains a programming concept with diagrams. The homepage (`/`) is the ASD-STE100 article. Stack: React 19, Vite 7, React Router 7, Tailwind CSS v4 (via `@tailwindcss/vite`), framer-motion, TypeScript (strict). The site is a client-side SPA built for a static host with a rewrite to `index.html`: `public/_redirects` serves Netlify and Cloudflare, `vercel.json` serves Vercel.
 
+## Licensing
+
+Code is MIT (`LICENSE`); article content (text, diagrams, figures) is CC BY 4.0 (`LICENSE-CONTENT`, which also lists third-party material such as the Go gopher and ASD-STE100). Credit third-party artwork inside the article that uses it, as the Go footer does for Renée French's gopher.
+
 ## Commands
 
 - `npm run dev`: start the Vite dev server
