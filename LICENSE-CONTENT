@@ -33,7 +33,7 @@ The licences above do not cover material that belongs to others:
   AeroSpace and Defence Industries Association of Europe. The ASD-STE100
   article quotes and summarises it for teaching; the specification itself
   remains ASD's.
-- Photographs in src/articles/asd-ste100/images/ are not covered by this
-  licence.
+- Photographs in src/articles/asd-ste100/images/ and the blueprint image in
+  src/articles/podman-basics/assets/ are not covered by this licence.
 - Names and trademarks (Go, Kubernetes, Docker, and others) belong to their
   owners.

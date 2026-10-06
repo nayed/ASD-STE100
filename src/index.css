@@ -23,6 +23,13 @@
   --color-go-olive-deep: #43463a;
   --color-go-accent: #00add8; /* Gopher Blue, the Go mascot colour */
   --color-go-accent-text: #00728f; /* same hue, 4.8:1 on go-paper: small text on light backgrounds */
+
+  /* Podman article palette (prefixed pd-*) */
+  --color-pd-ink: #11140f;
+  --color-pd-paper: #fbfbf8;
+  --color-pd-olive: #70755e;
+  --color-pd-olive2: #a7aa97;
+  --color-pd-purple: #6d28d9;
 }
 
 html {

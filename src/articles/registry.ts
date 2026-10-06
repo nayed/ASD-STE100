@@ -123,6 +123,33 @@ export const ARTICLES: ArticleMeta[] = [
       summaryFont: '"IBM Plex Mono", ui-monospace, monospace',
     },
   },
+  {
+    slug: "podman-basics",
+    title: "Podman from zero",
+    summary: "Containers from first principles, then Podman: images, rootless containers, pods, Containerfiles and systemd.",
+    tags: ["podman", "containers", "devops", "linux"],
+    load: () => import("./podman-basics"),
+    added: "2026-10-06",
+    bar: {
+      page: "#fbfbf8",
+      bg: "rgba(251, 251, 248, 0.95)",
+      fg: "#11140f",
+      muted: "#70755e",
+      accent: "#6d28d9",
+      border: "#11140f",
+      panel: "#fbfbf8",
+      hover: "rgba(17, 20, 15, 0.05)",
+      headBg: "#11140f",
+      headFg: "#fbfbf8",
+      tag: "#6d28d9",
+      font: '"IBM Plex Mono", ui-monospace, monospace',
+      size: "10px",
+      case: "uppercase",
+      tracking: "0.16em",
+      titleFont: '"IBM Plex Mono", ui-monospace, monospace',
+      summaryFont: '"IBM Plex Mono", ui-monospace, monospace',
+    },
+  },
 ];
 
 export function findArticle(slug: string | undefined): ArticleMeta | undefined {

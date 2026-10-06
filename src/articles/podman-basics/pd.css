@@ -1,0 +1,49 @@
+/* Styles for the Podman article only, scoped under .pd so other articles keep their own design. */
+
+/* dotted drafting paper */
+.pd {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='26' height='26'%3E%3Ccircle cx='1' cy='1' r='1' fill='%2311140f' fill-opacity='0.07'/%3E%3C/svg%3E");
+  text-rendering: optimizeLegibility;
+}
+.pd ::selection {
+  background: #6d28d9;
+  color: #fff;
+}
+
+/* thin technical scrollbar, only while this article is on the page */
+:root:has(.pd) ::-webkit-scrollbar { width: 8px; height: 8px; }
+:root:has(.pd) ::-webkit-scrollbar-track { background: #fbfbf8; border-left: 1px solid rgba(17, 20, 15, 0.15); }
+:root:has(.pd) ::-webkit-scrollbar-thumb { background: #11140f; }
+:root:has(.pd) ::-webkit-scrollbar-thumb:hover { background: #6d28d9; }
+
+/* ---------- outlined display type ---------- */
+.pd .outline-text {
+  -webkit-text-stroke: 1.5px #11140f;
+  color: transparent;
+}
+@media (min-width: 768px) {
+  .pd .outline-text { -webkit-text-stroke-width: 2px; }
+}
+
+/* ---------- scroll reveal ---------- */
+.pd .rv {
+  opacity: 0;
+  transform: translateY(22px);
+  transition: opacity 0.7s ease, transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: opacity, transform;
+}
+.pd .rv.on {
+  opacity: 1;
+  transform: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .pd .rv { transition: none; opacity: 1; transform: none; }
+}
+
+/* ---------- diagram typography ---------- */
+.pd .fb  { font-family: var(--font-mono); font-size: 11px; font-weight: 600; letter-spacing: 0.12em; fill: #11140f; }
+.pd .fs  { font-family: var(--font-mono); font-size: 9px;  font-weight: 500; letter-spacing: 0.10em; fill: #70755e; }
+.pd .fp  { font-family: var(--font-mono); font-size: 10px; font-weight: 700; letter-spacing: 0.14em; fill: #6d28d9; }
+.pd .fps { font-family: var(--font-mono); font-size: 9px;  font-weight: 700; letter-spacing: 0.12em; fill: #6d28d9; }
+.pd .fw  { font-family: var(--font-mono); font-size: 11px; font-weight: 600; letter-spacing: 0.12em; fill: #fbfbf8; }
+.pd .fws { font-family: var(--font-mono); font-size: 8.5px; font-weight: 500; letter-spacing: 0.10em; fill: #fbfbf8; }
