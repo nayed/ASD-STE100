@@ -150,6 +150,33 @@ export const ARTICLES: ArticleMeta[] = [
       summaryFont: '"IBM Plex Mono", ui-monospace, monospace',
     },
   },
+  {
+    slug: "ci-cd",
+    title: "CI/CD with Git and GitHub",
+    summary: "Version control, pull requests, pipelines and deployment, with a pipeline you can run and break in the browser.",
+    tags: ["ci/cd", "git", "github", "devops"],
+    load: () => import("./ci-cd"),
+    added: "2026-10-09",
+    bar: {
+      page: "#fbf9f3",
+      bg: "rgba(251, 249, 243, 0.95)",
+      fg: "#3c3836",
+      muted: "#665c54",
+      accent: "#3d7151",
+      border: "#3c3836",
+      panel: "#fffefb",
+      hover: "#ece7da",
+      headBg: "#3c3836",
+      headFg: "#fbf9f3",
+      tag: "#3d7151",
+      font: '"IBM Plex Mono", ui-monospace, monospace',
+      size: "10.5px",
+      case: "uppercase",
+      tracking: "0.16em",
+      titleFont: '"IBM Plex Mono", ui-monospace, monospace',
+      summaryFont: '"IBM Plex Mono", ui-monospace, monospace',
+    },
+  },
 ];
 
 export function findArticle(slug: string | undefined): ArticleMeta | undefined {
