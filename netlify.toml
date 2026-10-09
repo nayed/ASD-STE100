@@ -2,7 +2,8 @@
 # SPA routing (every path → index.html) lives in public/_redirects, shared with Cloudflare Pages.
 
 [build]
-  command = "npm run build"
+  # type-check first, as CI does: a type error then stops the deploy instead of shipping
+  command = "npm run typecheck && npm run build"
   publish = "dist"
 
 [build.environment]
