@@ -150,10 +150,21 @@ export function flatSvg(folder: string, details: boolean): string {
     .replace(/class="s d"/g, `stroke="${folder}"`);
 }
 
-/** point the SVG favicon at the page's accent (or the navy default) */
+/**
+ * Show the favicon in the page's accent (or the navy default).
+ *
+ * Chromium browsers pick the icon whose declared size matches the tab, so a
+ * static favicon.ico would win over the recoloured SVG. Once this runs, the
+ * SVG is the only icon left, and it is a fresh <link> each time so that every
+ * browser notices the change. Crawlers still read the static links in index.html.
+ */
 export function setFavicon(accent?: string): void {
   const { light, dark } = folderColors(accent);
-  const link = document.querySelector<HTMLLinkElement>('link[rel="icon"][type="image/svg+xml"]');
-  if (!link) return;
+  document.querySelectorAll('link[rel~="icon"]').forEach((l) => l.remove());
+  const link = document.createElement("link");
+  link.rel = "icon";
+  link.type = "image/svg+xml";
+  link.setAttribute("sizes", "any");
   link.href = "data:image/svg+xml," + encodeURIComponent(faviconSvg({ folder: light, folderDark: dark, details: "large" }));
+  document.head.appendChild(link);
 }
