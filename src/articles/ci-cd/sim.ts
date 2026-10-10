@@ -2,7 +2,7 @@
  * Behaviour of the CI/CD dossier, ported from its original inline script:
  * scroll progress, zone viewfinder, spine scroll-spy, and the three
  * interactive figures (Fig. 01 four areas, Fig. 03 pipeline runner,
- * Fig. 05 complete procedure).
+ * Fig. 05 complete procedure, with its fault and merge-conflict paths).
  *
  * It drives the markup that index.tsx renders, scoped to `root`, and returns a
  * cleanup that stops every timer, listener and running animation. index.tsx
@@ -297,20 +297,28 @@ export function mountCicd(root: HTMLElement): () => void {
     const cb1 = $("cb1");
     const cb2 = $("cb2");
     const cbf = $("cbf");
+    const cbr = $("cbr");
+    const tmG = $("tmG");
+    const cfG = $("cfG");
+    const syncPath = $<SVGPathElement>("syncPath");
     const lamps: Record<string, Element> = { BUILD: $("lB"), TEST: $("lT"), LINT: $("lL") };
     const fault = $<HTMLInputElement>("fault5");
+    const conflict = $<HTMLInputElement>("conflict5");
+    /** true once the branch contains the teammate's change, so the merge can go through */
+    let resolved = false;
     const b51 = $<HTMLButtonElement>("b51");
     const b52 = $<HTMLButtonElement>("b52");
     const b53 = $<HTMLButtonElement>("b53");
     const b54 = $<HTMLButtonElement>("b54");
     const b55 = $<HTMLButtonElement>("b55");
     const bfix = $<HTMLButtonElement>("b5fix");
+    const bcf = $<HTMLButtonElement>("b5cf");
     const b56 = $<HTMLButtonElement>("b56");
     const b57 = $<HTMLButtonElement>("b57");
     const br = $<HTMLButtonElement>("b5r");
-    const btns = [b51, b52, b53, b54, b55, bfix, b56, b57];
+    const btns = [b51, b52, b53, b54, b55, bfix, bcf, b56, b57];
     const pL = new Map<SVGPathElement, number>();
-    [brPath, mgPath, depLine].forEach((p) => pL.set(p, p.getTotalLength()));
+    [brPath, mgPath, depLine, syncPath].forEach((p) => pL.set(p, p.getTotalLength()));
     const drawPath = (p: SVGPathElement) => {
       const L = pL.get(p)!;
       p.style.transition = "none";
@@ -337,8 +345,10 @@ export function mountCicd(root: HTMLElement): () => void {
     const reset = () => {
       tok5++;
       resetPaths();
-      [brLblG, prG, mgG, depG].forEach((g) => g.classList.remove("on"));
-      [cb1, cb2, cbf].forEach((d) => d.classList.remove("on"));
+      [brLblG, prG, mgG, depG, tmG, cfG].forEach((g) => g.classList.remove("on"));
+      [cb1, cb2, cbf, cbr].forEach((d) => d.classList.remove("on"));
+      resolved = false;
+      bcf.classList.add("hide");
       Object.values(lamps).forEach((l) => l.classList.remove("run", "on", "bad"));
       stamp.classList.remove("on");
       bfix.classList.add("hide");
@@ -456,6 +466,23 @@ export function mountCicd(root: HTMLElement): () => void {
     on(b56, "click", async () => {
       const t = tok5;
       disAll();
+      if (conflict.checked && !resolved) {
+        // 3.3: main moved while the pull request was open, and both sides changed src/login.ts
+        tmG.classList.add("on");
+        log("PULL REQUEST #46 MERGED BY A TEAMMATE — main NOW HAS COMMIT d81e0a4", "res");
+        await sleep(600);
+        if (t !== tok5) return;
+        cfG.classList.add("on");
+        // the checks passed on the old commit; they must run again on the resolved one
+        Object.values(lamps).forEach((l) => l.classList.remove("on", "bad"));
+        log("PULL REQUEST #47 — THIS BRANCH HAS CONFLICTS THAT MUST BE RESOLVED", "bad");
+        log("<b>MERGE BLOCKED — BOTH BRANCHES CHANGE src/login.ts, LINE 3</b>", "bad");
+        await sleep(300);
+        if (t !== tok5) return;
+        bcf.classList.remove("hide");
+        en(bcf);
+        return;
+      }
       drawPath(mgPath);
       log(cmd("git checkout main &amp;&amp; git merge --no-ff fix/login-error"));
       await sleep(800);
@@ -465,6 +492,47 @@ export function mountCicd(root: HTMLElement): () => void {
       await sleep(600);
       if (t !== tok5) return;
       en(b57);
+    });
+    on(bcf, "click", async () => {
+      const t = tok5;
+      disAll();
+      bcf.classList.add("hide");
+      log(cmd("git fetch origin &amp;&amp; git merge origin/main"));
+      await sleep(450);
+      if (t !== tok5) return;
+      log("CONFLICT (content): Merge conflict in src/login.ts", "bad");
+      await sleep(300);
+      if (t !== tok5) return;
+      for (const line of [
+        "&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD",
+        "  const MAX_ATTEMPTS = 3;",
+        "=======",
+        "  const MAX_ATTEMPTS = 5;",
+        "&gt;&gt;&gt;&gt;&gt;&gt;&gt; origin/main",
+      ]) {
+        log(line, "mk");
+      }
+      await sleep(900);
+      if (t !== tok5) return;
+      log("EDIT src/login.ts — KEEP MAX_ATTEMPTS = 5 · DELETE THE THREE MARKER LINES", "res");
+      await sleep(600);
+      if (t !== tok5) return;
+      log(cmd('git add src/login.ts &amp;&amp; git commit -m "MERGE main INTO fix/login-error"'));
+      drawPath(syncPath);
+      cbr.classList.add("on");
+      await sleep(500);
+      if (t !== tok5) return;
+      log("MERGE COMMIT e7a2c90 RECORDED ON fix/login-error", "res");
+      log(cmd("git push"));
+      await sleep(450);
+      if (t !== tok5) return;
+      cfG.classList.remove("on");
+      resolved = true;
+      log("PUSH OK — CONFLICT RESOLVED · THE CHECKS RUN AGAIN ON THE NEW COMMIT", "ok");
+      // the re-run tests the resolution, not the original fault
+      const ok = await ci(t, true);
+      if (t !== tok5 || ok === null) return;
+      if (ok) en(b56);
     });
     on(b57, "click", async () => {
       const t = tok5;

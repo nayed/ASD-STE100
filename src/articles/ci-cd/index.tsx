@@ -4,6 +4,18 @@ import { mountCicd } from "./sim";
 // the real CI of this repository, shown in 4.5 — imported, so the article never drifts from the file
 import WORKFLOW from "../../../.github/workflows/ci.yml?raw";
 
+/** 2.4: what Git writes into the file. On main, merging fix/login-error; the teammate's 5 meets the branch's 3. */
+const CONFLICT = `// src/login.ts — Git marks the lines that conflict
+export function validate(attempts: number) {
+<<<<<<< HEAD
+  const MAX_ATTEMPTS = 5;
+=======
+  const MAX_ATTEMPTS = 3;
+>>>>>>> fix/login-error
+  return attempts <= MAX_ATTEMPTS;
+}`;
+const MARKER = /^(<{7}|={7}|>{7})/;
+
 const COLS = [1, 2, 3, 4, 5, 6, 7, 8];
 const ROWS = ["A", "B", "C", "D", "E", "F"];
 
@@ -40,11 +52,11 @@ export default function CiCd() {
       <div id="prog"><div className="bar" id="bar"></div></div>
       <div className="cm t"></div><div className="cm b"></div><div className="cm l"></div><div className="cm r"></div>
       <div id="zone">ZONE A-1</div>
-      <div id="roR"><b>TD-047</b> REV A</div>
+      <div id="roR"><b>TD-047</b> REV B</div>
 
       {/* left spine */}
       <aside className="spine">
-        <div className="sp-doc">TD-047 · REV A · ASD-STE100</div>
+        <div className="sp-doc">TD-047 · REV B · ASD-STE100</div>
         <nav className="sp-nav" id="spNav">
           <a href="#s01"><span>01</span></a>
           <a href="#s02"><span>02</span></a>
@@ -64,17 +76,17 @@ export default function CiCd() {
       <header>
         <div className="mast-top">
           <span>TECHNICAL DOSSIER · SERIES <b>TD</b></span>
-          <span>REF <b>TD-047</b> · REV <b>A</b></span>
+          <span>REF <b>TD-047</b> · REV <b>B</b></span>
         </div>
         <h1>Continuous Integration<br />and Continuous Delivery</h1>
         <div className="subject"><span className="sq"></span>SUBJECT — CI/CD PROCEDURE · VERSION CONTROL AND RELEASE PIPELINE · TOOLS: GIT, GITHUB</div>
         <div className="tblock">
           <div className="tb-t"><span className="k">Title</span><span className="v">CONTINUOUS INTEGRATION AND CONTINUOUS DELIVERY — CI/CD PROCEDURE</span></div>
           <div className="tb-d"><span className="k">Doc No</span><span className="v">TD-047</span></div>
-          <div className="tb-r"><span className="k">Rev</span><span className="v">A</span></div>
+          <div className="tb-r"><span className="k">Rev</span><span className="v">B</span></div>
           <div className="tb-s"><span className="k">Sheets</span><span className="v">08 + APP.A</span></div>
           <div className="tb-st"><span className="k">Status</span><span className="v"><span className="stsq"></span>PUBLISHED</span></div>
-          <div className="tb-dt"><span className="k">Date</span><span className="v">2026-10-09</span></div>
+          <div className="tb-dt"><span className="k">Date</span><span className="v">2026-10-10</span></div>
           <div className="tb-sc"><span className="k">Scale</span><span className="v">NTS</span></div>
           <div className="tb-lg"><span className="k">Language</span><span className="v">ASD-STE100</span></div>
           <div className="tb-sign">
@@ -129,6 +141,7 @@ export default function CiCd() {
               <tr><td className="term">MAIN</td><td>The primary branch. The team keeps main stable at all times.</td></tr>
               <tr><td className="term">GITHUB</td><td>A web service that holds Git repositories and helps teams work together.</td></tr>
               <tr><td className="term">PULL REQUEST</td><td>A request to merge one branch into another. The team reviews the change.</td></tr>
+              <tr><td className="term">MERGE CONFLICT</td><td>Two branches change the same lines. Git cannot merge them automatically. A person selects the correct lines.</td></tr>
               <tr><td className="term">PIPELINE</td><td>A set of automatic steps that build and test the software.</td></tr>
               <tr><td className="term">WORKFLOW</td><td>On GitHub, a file that tells GitHub Actions which pipeline to run, and when.</td></tr>
               <tr><td className="term">STATUS CHECK</td><td>The result of one pipeline job on a commit: pass or fail. GitHub shows it on the pull request.</td></tr>
@@ -265,6 +278,34 @@ export default function CiCd() {
             </div>
             <div className="fig-foot"><span>POINT AT A COMMIT TO SHOW ITS SHA. THE TEAL DOT TRACES THE SYNC PATH.</span><span>DWG TD-047-F02 · SCALE NTS</span></div>
           </figure>
+
+          <h3><span className="idx">2.4</span>Merge conflicts</h3>
+          <p>Usually, Git merges two branches automatically. Sometimes both branches change the same lines of the same file. Git cannot know which version is correct. Git then stops the merge and marks the lines in the file. This is a <b>merge conflict</b>.</p>
+          <p>A merge conflict is not damage. Git keeps both versions, and you lose no work. A person must select the correct lines.</p>
+          <div className="listing">
+            <div className="listing-head"><span>src/login.ts — during the merge</span><span>CONFLICT MARKERS</span></div>
+            <pre>{CONFLICT.split("\n").map((line, i) => (
+              <span key={i} className={MARKER.test(line) ? "m" : line.trimStart().startsWith("//") ? "c" : undefined}>{line + "\n"}</span>
+            ))}</pre>
+          </div>
+          <div className="tscroll"><table className="spec">
+            <thead><tr><th style={{ width: "225px" }}>Marker</th><th>Meaning</th></tr></thead>
+            <tbody>
+              <tr><td className="term">{"<<<<<<< HEAD"}</td><td>Start of the conflict. The lines below are the version of your current branch (here: main).</td></tr>
+              <tr><td className="term">{"======="}</td><td>The limit between the two versions.</td></tr>
+              <tr><td className="term">{">>>>>>> fix/login-error"}</td><td>End of the conflict. The lines above are the version of the other branch.</td></tr>
+            </tbody>
+          </table></div>
+          <p>To resolve a conflict, do this procedure:</p>
+          <ol className="steps">
+            <li>Run <code>git status</code>. Git shows each file with a conflict as "both modified".</li>
+            <li>Open each file. Find the conflict markers.</li>
+            <li>Keep the correct lines. You can keep one version, the other version, or a combination.</li>
+            <li>Delete the three marker lines.</li>
+            <li>Put each file into the index with <code>git add</code>.</li>
+            <li>Record the merge with <code>git commit</code>.</li>
+          </ol>
+          <div className="note caution"><span className="k">CAUTION</span><span>IF YOU ARE NOT SURE, STOP THE MERGE WITH <b>git merge --abort</b>. GIT PUTS THE BRANCH BACK TO ITS STATE BEFORE THE MERGE.</span></div>
         </div>
       </section>
 
@@ -292,6 +333,19 @@ export default function CiCd() {
             <li>Delete the branch after the merge.</li>
           </ol>
           <div className="note"><span className="k">NOTE</span><span>A reviewer writes comments on the code. You make the requested changes before the merge.</span></div>
+
+          <h3><span className="idx">3.3</span>Conflicts in a pull request</h3>
+          <p>While your pull request is open, other pull requests can merge into main. Sometimes they change the same lines as your branch. GitHub then shows: <b>This branch has conflicts that must be resolved</b>. You cannot merge the pull request.</p>
+          <p>Resolve the conflict in your branch, not in main:</p>
+          <ol className="steps">
+            <li>Change to your branch with <code>git switch fix/login-error</code>.</li>
+            <li>Get the new commits with <code>git fetch origin</code>.</li>
+            <li>Merge main into your branch with <code>git merge origin/main</code>.</li>
+            <li>Resolve the conflicts (2.4).</li>
+            <li>Send the result to GitHub with <code>git push</code>.</li>
+            <li>Wait for the checks. The pipeline runs again on the new commit.</li>
+          </ol>
+          <div className="note"><span className="k">NOTE</span><span>The checks must run again. The lines that you selected make new code, and no test ran on that code before. For small conflicts, GitHub can also open an editor on the website.</span></div>
         </div>
       </section>
 
@@ -373,6 +427,17 @@ export default function CiCd() {
           <h3><span className="idx">4.6</span>Required status checks</h3>
           <p>Each job in a workflow gives a status check on the commit. GitHub shows the checks on the pull request.</p>
           <p>A status check alone does not stop a merge. To stop the merge of a bad change, make the check required. Add the check to the protection rules of main (3.1). Then GitHub does not let you merge until the check passes.</p>
+
+          <h3><span className="idx">4.7</span>Clean merge, broken build</h3>
+          <p>Git compares lines, not meaning. A merge without conflicts can still break the software. Example:</p>
+          <ol className="steps">
+            <li>Branch A changes the name of the function <code>validate()</code> to <code>checkLogin()</code>.</li>
+            <li>Branch B adds a new call to <code>validate()</code> in a different file.</li>
+            <li>The two branches change different lines. Git merges them with no conflict.</li>
+            <li>After the merge, main calls a function that does not exist. The build fails.</li>
+          </ol>
+          <p>This is a <b>semantic conflict</b>. Git does not find it. Only the pipeline finds it.</p>
+          <p>GitHub can stop this error before the merge. In the protection rules of main, set <b>Require branches to be up to date before merging</b>. Each pull request must then contain the latest main. The pipeline tests that combination, not the old one.</p>
         </div>
       </section>
 
@@ -454,6 +519,7 @@ export default function CiCd() {
         <div className="sec-body">
           <p>Sections 2 to 5 give the separate procedures. This section shows the complete sequence.</p>
           <p>Use the simulation. Press each button and do one step. The console shows the commands. Set fault injection if you want the CI step to find a fault. Then you push a fix, and CI runs again.</p>
+          <p>Set conflict on merge if you want main to change while your pull request is open. The merge then stops with a conflict. You resolve the conflict in your branch, and CI runs again (3.3).</p>
 
           <figure className="fig">
             <figcaption className="fig-head">
@@ -474,8 +540,16 @@ export default function CiCd() {
                 <g id="brLblG" className="fade"><text x="330" y="142" textAnchor="middle" fontSize="10.5" fontWeight="600" className="t-teal">fix/login-error</text></g>
                 {/* branch commits */}
                 <g id="cb1" className="pop" transform="translate(365,165)"><circle r="7"/></g>
-                <g id="cb2" className="pop" transform="translate(485,165)"><circle r="7"/></g>
-                <g id="cbf" className="pop" transform="translate(585,165)"><circle r="7"/></g>
+                <g id="cb2" className="pop" transform="translate(445,165)"><circle r="7"/></g>
+                <g id="cbf" className="pop" transform="translate(515,165)"><circle r="7"/></g>
+                {/* conflict: a teammate's commit on main, merged into the branch to resolve */}
+                <g id="tmG" className="fade">
+                  <circle cx="545" cy="280" r="7" fill="var(--panel)" stroke="#3c3836" strokeWidth="1.8"/>
+                  <text x="545" y="262" textAnchor="middle" fontSize="8.5" letterSpacing="1" className="t-olive">PR #46</text>
+                  <text x="545" y="304" textAnchor="middle" fontSize="9" className="t-olive">d81e0a4</text>
+                </g>
+                <path id="syncPath" d="M545,273 C560,230 575,200 585,172" className="ln-teal"/>
+                <g id="cbr" className="pop" transform="translate(585,165)"><circle r="7"/></g>
                 {/* merge path + commit */}
                 <path id="mgPath" d="M600,165 C675,165 675,280 745,280" className="ln-ink"/>
                 <g id="mgG" className="fade">
@@ -495,6 +569,11 @@ export default function CiCd() {
                   <text x="519" y="134" textAnchor="middle" fontSize="7.5" className="t-olive">TEST</text>
                   <text x="579" y="134" textAnchor="middle" fontSize="7.5" className="t-olive">LINT</text>
                 </g>
+                {/* conflict badge */}
+                <g id="cfG" className="fade">
+                  <rect x="662" y="92" width="128" height="30" fill="var(--panel)" stroke="var(--red)" strokeWidth="1.5"/>
+                  <text x="726" y="111" textAnchor="middle" fontSize="10" fontWeight="700" letterSpacing="2" className="t-red">CONFLICT</text>
+                </g>
                 {/* deploy */}
                 <g id="depG" className="fade">
                   <path id="depLine" d="M745,290 L745,326" className="ln-teal"/>
@@ -512,14 +591,16 @@ export default function CiCd() {
                 <button className="btn" id="b54" disabled><span className="n">04</span>PUSH · OPEN PR</button>
                 <button className="btn" id="b55" disabled><span className="n">05</span>RUN CI</button>
                 <button className="btn fixb hide" id="b5fix"><span className="n">F</span>PUSH FIX · RE-RUN CI</button>
+                <button className="btn cfb hide" id="b5cf"><span className="n">R</span>RESOLVE CONFLICT · RE-RUN CI</button>
                 <button className="btn" id="b56" disabled><span className="n">06</span>MERGE → MAIN</button>
                 <button className="btn" id="b57" disabled><span className="n">07</span>DEPLOY</button>
                 <label className="fault"><input type="checkbox" id="fault5" /><span className="sw"></span><span className="ftxt">Fault injection — TEST</span></label>
+                <label className="fault"><input type="checkbox" id="conflict5" /><span className="sw"></span><span className="ftxt">Conflict on merge</span></label>
                 <button className="btn ghost" id="b5r" style={{ marginLeft: "auto" }}>RESET</button>
               </div>
               <div className="console" id="cons5"></div>
             </div>
-            <div className="fig-foot"><span>SIMULATION — SET FAULT INJECTION TO MAKE THE CI STEP FIND A FAULT. THEN YOU PUSH A FIX AND RUN CI AGAIN.</span><span>DWG TD-047-F05 · INTERACTIVE</span></div>
+            <div className="fig-foot"><span>SIMULATION — FAULT INJECTION MAKES CI FIND A FAULT. CONFLICT ON MERGE MAKES MAIN CHANGE WHILE THE PULL REQUEST IS OPEN.</span><span>DWG TD-047-F05 · INTERACTIVE</span></div>
           </figure>
         </div>
       </section>
@@ -540,6 +621,7 @@ export default function CiCd() {
               <tr><td className="term">Use a branch for each task.</td><td>Main stays stable at all times.</td></tr>
               <tr><td className="term">Run the pipeline before each merge.</td><td>Bad code does not reach main.</td></tr>
               <tr><td className="term">Merge to main often.</td><td>Each merge has few changes. Few changes make errors easy to find.</td></tr>
+              <tr><td className="term">Merge main into your branch often.</td><td>Small differences give small conflicts. You find them early.</td></tr>
               <tr><td className="term">Deploy to production at regular intervals.</td><td>Each release is small. A rollback is then easy.</td></tr>
               <tr><td className="term">Test the rollback procedure.</td><td>The team can recover quickly from a bad release.</td></tr>
             </tbody>
@@ -559,6 +641,7 @@ export default function CiCd() {
             <thead><tr><th style={{ width: "70px" }}>Rev</th><th style={{ width: "130px" }}>Date</th><th>Description</th><th style={{ width: "140px" }}>Author</th></tr></thead>
             <tbody>
               <tr><td className="term">A</td><td>2026-10-09</td><td>First issue in this wiki. An AI-generated draft, edited: GitHub Actions (4.5, 4.6, 5.4), git fetch (2.2), rollback and git revert (5.5), fault injection in FIG. 05.</td><td>N. SAÏD ALI</td></tr>
+              <tr><td className="term">B</td><td>2026-10-10</td><td>Merge conflicts added: 2.4, 3.3, 4.7, an operating rule, two commands, and a conflict simulation in FIG. 05.</td><td>N. SAÏD ALI</td></tr>
             </tbody>
           </table></div>
         </div>
@@ -577,12 +660,14 @@ export default function CiCd() {
             <tbody>
               <tr><td className="term">git clone &lt;url&gt;</td><td>Get a full copy of a remote repository.</td></tr>
               <tr><td className="term">git status</td><td>Show the state of the working directory and the index.</td></tr>
+              <tr><td className="term">git diff --name-only --diff-filter=U</td><td>Show only the names of the files that have conflicts.</td></tr>
               <tr><td className="term">git switch -c &lt;name&gt;</td><td>Make a new branch and change to the branch. The older form is git checkout -b &lt;name&gt;.</td></tr>
               <tr><td className="term">git add &lt;file&gt;</td><td>Put a change into the index.</td></tr>
               <tr><td className="term">git commit -m "text"</td><td>Record the index as a commit with a message.</td></tr>
               <tr><td className="term">git push origin &lt;branch&gt;</td><td>Send local commits to the remote repository.</td></tr>
               <tr><td className="term">git fetch origin</td><td>Get the new commits from the remote. Your files do not change.</td></tr>
               <tr><td className="term">git pull origin main</td><td>Do git fetch, then merge the commits into your branch.</td></tr>
+              <tr><td className="term">git merge --abort</td><td>Stop a merge that has conflicts. The branch goes back to its state before the merge.</td></tr>
               <tr><td className="term">git log --oneline</td><td>Show the history of commits. One line for each commit.</td></tr>
               <tr><td className="term">git revert &lt;sha&gt;</td><td>Make a new commit that undoes an earlier commit. The history stays complete.</td></tr>
             </tbody>
@@ -590,7 +675,7 @@ export default function CiCd() {
         </div>
       </section>
 
-      <div className="end">END OF DOCUMENT — TD-047 REV A</div>
+      <div className="end">END OF DOCUMENT — TD-047 REV B</div>
       <div className="endsub">UNCONTROLLED WHEN PRINTED — VERIFY THE REVISION BEFORE USE</div>
 
       </div>
