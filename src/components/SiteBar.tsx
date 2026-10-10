@@ -1,14 +1,17 @@
-import { useEffect, useId, useState } from "react";
+import { useEffect, useId, useMemo, useState } from "react";
 import { Link, useLocation } from "react-router";
 import { articlePath } from "../articles/registry";
 import { useArticleSearch } from "../search/useArticleSearch";
+import { logoSvg } from "./favicon";
 import { OWNER, OWNER_SHORT } from "../site";
 
 /**
- * The wiki bar on every page: owner on the left, article search on the right.
- * Colours and type come from the --bar-* variables set by SiteShell.
+ * The wiki bar on every page: logo and owner on the left, article search on the right.
+ * Colours and type come from the --bar-* variables set by SiteShell; the logo is
+ * the favicon's folder, in the same accent (`background` picks its dark-bar variant).
  */
-export default function SiteBar() {
+export default function SiteBar({ accent, background }: { accent?: string; background: string }) {
+  const logo = useMemo(() => logoSvg(accent, background), [accent, background]);
   const s = useArticleSearch();
   const { pathname } = useLocation();
   const listId = useId();
@@ -30,7 +33,8 @@ export default function SiteBar() {
     <div className="sticky top-0 z-50 h-(--site-bar-h) border-b border-(--bar-border) bg-(--bar-bg) text-(--bar-fg) backdrop-blur">
       <div className="relative mx-auto flex h-full max-w-[1280px] items-center justify-between gap-4 px-5 lg:px-10">
         <Link to="/" className="flex min-w-0 items-center gap-2 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--bar-accent)">
-          <span className="block h-3 w-3 shrink-0 bg-(--bar-accent)" />
+          {/* static markup built from our own drawing, never from user input */}
+          <span className="block h-[18px] w-[18px] shrink-0 [&>svg]:block [&>svg]:h-full [&>svg]:w-full" aria-hidden dangerouslySetInnerHTML={{ __html: logo }} />
           <span className="bar-label truncate">
             <span className="hidden sm:inline">{OWNER}</span>
             <span className="sm:hidden">{OWNER_SHORT}</span>

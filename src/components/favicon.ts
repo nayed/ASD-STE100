@@ -151,6 +151,18 @@ export function flatSvg(folder: string, details: boolean): string {
 }
 
 /**
+ * The same folder as an inline logo for the site bar (no ticks: it is about 18 px tall).
+ * `background` is the bar's page colour; on a dark bar the folder takes its
+ * dark-tab-bar variant so it does not sink into the background.
+ * The SVG carries no <style>: inline, a style block would apply to the whole page.
+ */
+export function logoSvg(accent: string | undefined, background: string): string {
+  const { light, dark } = folderColors(accent);
+  const onDark = /^#[0-9a-f]{6}$/i.test(background) && luminance(background) < 0.2;
+  return flatSvg(onDark ? dark : light, false);
+}
+
+/**
  * Show the favicon in the page's accent (or the navy default).
  *
  * Chromium browsers pick the icon whose declared size matches the tab, so a
