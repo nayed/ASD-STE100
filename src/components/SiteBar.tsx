@@ -33,8 +33,15 @@ export default function SiteBar({ accent, background }: { accent?: string; backg
     <div className="sticky top-0 z-50 h-(--site-bar-h) border-b border-(--bar-border) bg-(--bar-bg) text-(--bar-fg) backdrop-blur">
       <div className="relative mx-auto flex h-full max-w-[1280px] items-center justify-between gap-4 px-5 lg:px-10">
         <Link to="/" className="flex min-w-0 items-center gap-2 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--bar-accent)">
-          {/* static markup built from our own drawing, never from user input */}
-          <span className="block h-[18px] w-[18px] shrink-0 [&>svg]:block [&>svg]:h-full [&>svg]:w-full" aria-hidden dangerouslySetInnerHTML={{ __html: logo }} />
+          {/* Static markup from our own drawing, never user input. Sized in em of the bar's label size
+              (each theme sets its own), 1.3em tall and 54:44 wide like the cropped drawing. Lifted 0.21em
+              so the folder's front panel, its visual mass, centres on the capitals rather than its box
+              centring on the line. */}
+          <span
+            className="block h-[1.3em] w-[1.6em] shrink-0 -translate-y-[0.21em] [font-size:var(--bar-size)] [&>svg]:block [&>svg]:h-full [&>svg]:w-full"
+            aria-hidden
+            dangerouslySetInnerHTML={{ __html: logo }}
+          />
           <span className="bar-label truncate">
             <span className="hidden sm:inline">{OWNER}</span>
             <span className="sm:hidden">{OWNER_SHORT}</span>

@@ -159,7 +159,8 @@ export function flatSvg(folder: string, details: boolean): string {
 export function logoSvg(accent: string | undefined, background: string): string {
   const { light, dark } = folderColors(accent);
   const onDark = /^#[0-9a-f]{6}$/i.test(background) && luminance(background) < 0.2;
-  return flatSvg(onDark ? dark : light, false);
+  // cropped to the drawing (x 5–59, y 12–56), so the logo's box is the folder itself
+  return flatSvg(onDark ? dark : light, false).replace('viewBox="0 0 64 64"', 'viewBox="5 12 54 44"');
 }
 
 /**
