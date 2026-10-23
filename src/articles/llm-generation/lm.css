@@ -1,0 +1,122 @@
+/* Styles for the LLM generation article only, scoped under .lm so other articles keep their own design. */
+
+.lm {
+  font-size: 15px;
+  line-height: 1.62;
+  font-variant-numeric: tabular-nums;
+  -webkit-text-size-adjust: 100%;
+}
+.lm ::selection {
+  background: #e2571f;
+  color: #fbfbf9;
+}
+
+/* ---- typographic utilities ---- */
+.lm .u-label {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  line-height: 1.4;
+}
+.lm .u-display {
+  font-weight: 700;
+  letter-spacing: -0.035em;
+  line-height: 0.98;
+  text-transform: uppercase;
+}
+.lm .u-measure {
+  max-width: 62ch;
+}
+.lm .u-note {
+  font-style: italic;
+  font-size: 12px;
+  line-height: 1.55;
+  color: #4a4a45;
+}
+
+/* ---- rules ---- */
+.lm .rule-h {
+  border-top: 1px solid #d9d9d0;
+}
+.lm .rule-ink {
+  border-top: 1px solid #0d0d0c;
+}
+
+/* ---- diagram draw-on ---- */
+.lm .draw path,
+.lm .draw line,
+.lm .draw polyline,
+.lm .draw rect,
+.lm .draw circle,
+.lm .draw ellipse {
+  transition: stroke-dashoffset 700ms cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+.lm .draw .d {
+  stroke-dasharray: 2600;
+  stroke-dashoffset: 0;
+}
+.lm .draw.is-hidden .d {
+  stroke-dashoffset: 2600;
+}
+.lm .fade-cell {
+  opacity: 0;
+  transition: opacity 450ms cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+.lm .is-in .fade-cell {
+  opacity: 1;
+}
+
+/* film-grain-ish paper tooth */
+.lm .tooth {
+  background-image: radial-gradient(circle at 1px 1px, rgba(13, 13, 12, 0.045) 1px, transparent 0);
+  background-size: 4px 4px;
+}
+
+/* ---- sliders (Sampling lab) ---- */
+.lm input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 22px;
+  background: transparent;
+  cursor: pointer;
+}
+.lm input[type="range"]::-webkit-slider-runnable-track {
+  height: 2px;
+  background: #4a4a45;
+}
+.lm input[type="range"]::-moz-range-track {
+  height: 2px;
+  background: #4a4a45;
+}
+.lm input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 12px;
+  height: 18px;
+  margin-top: -8px;
+  background: #e2571f;
+  border: 0;
+  border-radius: 0;
+}
+.lm input[type="range"]::-moz-range-thumb {
+  width: 12px;
+  height: 18px;
+  background: #e2571f;
+  border: 0;
+  border-radius: 0;
+}
+.lm input[type="range"]:focus-visible::-webkit-slider-thumb {
+  outline: 2px solid #e2571f;
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lm .draw .d,
+  .lm .fade-cell {
+    transition: none !important;
+    stroke-dashoffset: 0 !important;
+    opacity: 1 !important;
+  }
+}

@@ -177,6 +177,33 @@ export const ARTICLES: ArticleMeta[] = [
       summaryFont: '"IBM Plex Mono", ui-monospace, monospace',
     },
   },
+  {
+    slug: "llm-generation",
+    title: "How an LLM generates text",
+    summary: "Tokens, embeddings, attention, next-token probabilities and sampling, with a lab to try temperature and top-p.",
+    tags: ["llm", "ai", "machine learning", "transformers"],
+    load: () => import("./llm-generation"),
+    added: "2026-10-23",
+    bar: {
+      page: "#fbfbf9",
+      bg: "rgba(251, 251, 249, 0.95)",
+      fg: "#0d0d0c",
+      muted: "#6b6b63",
+      accent: "#e2571f",
+      border: "#0d0d0c",
+      panel: "#fbfbf9",
+      hover: "#f2f2ec",
+      headBg: "#0d0d0c",
+      headFg: "#fbfbf9",
+      tag: "#6e7259",
+      font: '"IBM Plex Mono", ui-monospace, monospace',
+      size: "10px",
+      case: "uppercase",
+      tracking: "0.18em",
+      titleFont: '"IBM Plex Mono", ui-monospace, monospace',
+      summaryFont: '"IBM Plex Mono", ui-monospace, monospace',
+    },
+  },
 ];
 
 export function findArticle(slug: string | undefined): ArticleMeta | undefined {

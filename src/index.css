@@ -30,6 +30,19 @@
   --color-pd-olive: #70755e;
   --color-pd-olive2: #a7aa97;
   --color-pd-purple: #6d28d9;
+
+  /* LLM generation article palette (prefixed lm-*) */
+  --color-lm-paper: #fbfbf9;
+  --color-lm-paper-2: #f2f2ec;
+  --color-lm-ink: #0d0d0c;
+  --color-lm-ink-70: #4a4a45;
+  --color-lm-ink-45: #6b6b63;
+  --color-lm-rule: #d9d9d0;
+  --color-lm-olive: #6e7259;
+  --color-lm-olive-mid: #8a8e75;
+  --color-lm-olive-light: #b4b8a2;
+  --color-lm-orange: #e2571f;
+  --color-lm-orange-text: #ad4216; /* same hue, 5.2:1+ on the light page: small text */
 }
 
 html {
