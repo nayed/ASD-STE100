@@ -223,7 +223,7 @@ export default function CiCd() {
                 <text x="465" y="192" textAnchor="middle" fontSize="10.5" className="t-olive">git pull = git fetch + git merge — get commits from the remote</text>
                 <text id="shaL" className="f1sha" x="584" y="134" textAnchor="middle">7be04d2</text>
                 {/* travelling token */}
-                <g id="tok1" transform="translate(110,85)"><rect x="-7" y="-7" width="14" height="14"/></g>
+                <g id="tok1" transform="translate(110,70)"><rect x="-7" y="-7" width="14" height="14"/></g>
               </svg>
               <div id="state1">STATE — <b>CHANGE IN WORKING DIRECTORY</b></div>
               <div className="btns" style={{ margin: "12px 0 4px" }}>

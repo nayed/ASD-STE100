@@ -7,6 +7,8 @@ const HAZ = "#b3261e";
 const BLUE = "#2c4c6b";
 const ASH = "#6b6558";
 const HAIR = "#d6cfbe";
+/** the figure frame's background (paper2 at 50 % on paper): a halo in this colour keeps grid lines off labels */
+const FRAME_BG = "#ece8dc";
 
 function Frame({ children, label }: { children: ReactNode; label: string }) {
   return (
@@ -140,7 +142,8 @@ export function LengthDiagram() {
         {rows.map((row, i) => {
           const y = 42 + i * 66;
           const full = row.words * px;
-          const capped = Math.min(row.words, 20) * px;
+          // only the over-length sentence is cut at 20, so its excess shows in red; descriptions may reach 25
+          const capped = row.kind === "over" ? Math.min(row.words, 20) * px : full;
           return (
             <g key={row.label}>
               <text x={0} y={y + 20} fill={INK} fontFamily="Archivo" fontSize="14" fontWeight="600">
@@ -178,6 +181,10 @@ export function LengthDiagram() {
                 fontFamily="IBM Plex Mono"
                 fontSize="12"
                 fontWeight="500"
+                stroke={FRAME_BG}
+                strokeWidth={4}
+                strokeLinejoin="round"
+                paintOrder="stroke"
               >
                 {row.words} words
               </text>

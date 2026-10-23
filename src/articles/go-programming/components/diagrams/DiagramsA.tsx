@@ -122,10 +122,11 @@ export function FigPipeline() {
       <text x={443} y={222} textAnchor="middle" fontSize={10} fill={BLUE_TEXT} fontWeight={600} letterSpacing={1}>
         ESTABLISHED BEFORE RUNTIME
       </text>
-      <text x={833} y={208} textAnchor="middle" fontSize={10} fill={OLIVE_DEEP} letterSpacing={1}>
+      {/* centred at 812, not 833: at 833 these two lines ran past the right edge */}
+      <text x={812} y={208} textAnchor="middle" fontSize={10} fill={OLIVE_DEEP} letterSpacing={1}>
         NO VM, NO INTERPRETER,
       </text>
-      <text x={833} y={222} textAnchor="middle" fontSize={10} fill={OLIVE_DEEP} letterSpacing={1}>
+      <text x={812} y={222} textAnchor="middle" fontSize={10} fill={OLIVE_DEEP} letterSpacing={1}>
         NO RUNTIME DEPENDENCIES
       </text>
     </svg>
@@ -175,7 +176,7 @@ export function FigAnatomy() {
     },
   ];
   return (
-    <svg viewBox="0 0 900 348" className="h-auto w-full" style={MONO} role="img">
+    <svg viewBox="0 0 900 364" className="h-auto w-full" style={MONO} role="img">
       {/* code panel */}
       <rect x={16} y={24} width={400} height={296} fill="none" stroke={INK} strokeWidth={1.5} />
       <BoxLabel x={16} y={24} w={400} />

@@ -81,7 +81,8 @@ export function GopherBlueprint({ className = "" }: { className?: string }) {
       <line x1={246} y1={164} x2={246} y2={98} stroke={OLIVE_SOFT} strokeWidth={1} />
       <line x1={354} y1={164} x2={354} y2={98} stroke={OLIVE_SOFT} strokeWidth={1} />
       <line x1={250} y1={106} x2={350} y2={106} stroke={OLIVE_SOFT} strokeWidth={1} markerEnd="url(#bp-dim)" markerStart="url(#bp-dim)" />
-      <text x={300} y={94} textAnchor="middle" fontSize={9} fill={OLIVE_SOFT} letterSpacing={1.5}>
+      {/* ink halo: the gopher's centreline runs through this label */}
+      <text x={300} y={94} textAnchor="middle" fontSize={9} fill={OLIVE_SOFT} letterSpacing={1.5} stroke="#17170f" strokeWidth={4} strokeLinejoin="round" paintOrder="stroke">
         Ø 108 — EARSPAN
       </text>
 
@@ -99,8 +100,10 @@ export function GopherBlueprint({ className = "" }: { className?: string }) {
         OPTICS ×2 — CURIOUS
       </text>
       <line x1={336} y1={308} x2={442} y2={252} stroke={OLIVE_SOFT} strokeWidth={1} strokeDasharray={DIM} />
-      <text x={446} y={248} fontSize={9} fill={OLIVE_SOFT} letterSpacing={1.5}>
-        PROBOSCIS — BUG DETECTION UNIT
+      {/* two lines: on one, it ran 53 units past the drawing's right edge */}
+      <text x={446} y={244} fontSize={9} fill={OLIVE_SOFT} letterSpacing={1.5}>
+        <tspan x={446}>PROBOSCIS —</tspan>
+        <tspan x={446} dy={12}>BUG DETECTION UNIT</tspan>
       </text>
       <line x1={354} y1={168} x2={430} y2={150} stroke={OLIVE_SOFT} strokeWidth={1} strokeDasharray={DIM} />
       <text x={434} y={146} fontSize={9} fill={OLIVE_SOFT} letterSpacing={1.5}>

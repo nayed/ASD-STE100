@@ -104,7 +104,9 @@ function L({
   bg?: boolean;
   children: string;
 }) {
-  const per = cls === "fb" ? 7.1 : cls === "fp" ? 6.7 : cls === "fps" ? 5.9 : 5.75;
+  // per-character advance: 0.6em (IBM Plex Mono) + the class's letter-spacing; the old values
+  // were too small, so background patches ended before the text and border lines showed through it
+  const per = cls === "fb" ? 7.92 : cls === "fp" ? 7.4 : cls === "fps" ? 6.48 : 6.3;
   const wpx = children.length * per + 10;
   const rx = anchor === "middle" ? x - wpx / 2 : anchor === "end" ? x - wpx : x;
   return (
@@ -171,17 +173,21 @@ export function FigStacks() {
 
 export function FigLayers() {
   const layers = ["LAYER 04 — APP CONFIG", "LAYER 03 — APP CODE", "LAYER 02 — RUNTIME", "LAYER 01 — BASE SYSTEM"];
-  return wrap("read-only image layers and per-container writable layer", "0 0 760 300", <>
+  return wrap("read-only image layers and per-container writable layer", "0 0 760 312", <>
     <L x={210} y={26} cls="fb">AN IMAGE — A STACK OF READ-ONLY LAYERS</L>
     <L x={586} y={26} cls="fb">RUNNING CONTAINERS SHARE IT</L>
 
     <rect x={52} y={44} width={318} height={170} fill="none" stroke={O} strokeWidth={1} strokeDasharray="6 4" />
-    <L x={70} y={44} cls="fs" bg>UNION FILESYSTEM · READ-ONLY</L>
+    <L x={62} y={44} anchor="start" cls="fs" bg>UNION FILESYSTEM · READ-ONLY</L>
+    {/* names left-aligned, so they end before the hashes at the right of each box */}
     {layers.map((t, i) => (
-      <Bx key={t} x={70} y={56 + i * 40} w={278} h={34} lines={[t]} />
+      <g key={t}>
+        <Bx x={70} y={56 + i * 40} w={278} h={34} lines={[]} />
+        <L x={84} y={77 + i * 40} anchor="start" cls="fb">{t}</L>
+      </g>
     ))}
     {[0, 1, 2, 3].map((i) => (
-      <L key={i} x={360} y={78 + i * 40} anchor="end" cls="fs">{`sha:${["a91f", "04c2", "77bd", "e530"][i]}`}</L>
+      <L key={i} x={340} y={78 + i * 40} anchor="end" cls="fs">{`sha:${["a91f", "04c2", "77bd", "e530"][i]}`}</L>
     ))}
 
     <Arrow pts={[[382, 128], [452, 128]]} color={P} w={1.8} />
@@ -226,7 +232,7 @@ export function FigLoop() {
     <L x={248} y={76} cls="fs">build -t app:v1</L>
 
     <Arrow pts={[[520, 86], [608, 140]]} color={P} w={1.8} />
-    <L x={566} y={98} cls="fps">run -d -p 8080:80</L>
+    <L x={576} y={98} cls="fps">run -d -p 8080:80</L>
 
     <Arrow pts={[[432, 212], [432, 124]]} color={O} />
     <L x={444} y={172} anchor="start" cls="fs">pull</L>
@@ -249,16 +255,16 @@ export function FigDaemon() {
     <L x={565} y={26} cls="fb">PODMAN — FORK / EXEC, NO DAEMON</L>
     <line x1={380} y1={14} x2={380} y2={300} stroke={O} strokeWidth={1} strokeDasharray="3 5" />
 
-    {/* docker chain */}
-    <Bx x={110} y={52} w={170} h={38} lines={["$ docker run"]} />
-    <Arrow pts={[[195, 90], [195, 116]]} color={I} />
-    <Bx x={110} y={116} w={170} h={56} dark lines={["DOCKERD", "ROOT · ALWAYS RUNNING"]} />
-    <Arrow pts={[[195, 172], [195, 200]]} color={I} />
-    <Bx x={110} y={200} w={170} h={34} lines={["CONTAINERD / SHIM"]} />
-    <Arrow pts={[[195, 234], [195, 262]]} color={I} />
-    <Bx x={110} y={262} w={170} h={40} lines={["CONTAINER", "VIA RUNC"]} />
-    <L x={292} y={134} anchor="start" cls="fps">SINGLE POINT OF FAILURE</L>
-    <L x={292} y={150} anchor="start" cls="fs">AND A ROOT-POWERED TARGET</L>
+    {/* docker chain — at x 30 so the side note ends before the divider at 380 */}
+    <Bx x={30} y={52} w={170} h={38} lines={["$ docker run"]} />
+    <Arrow pts={[[115, 90], [115, 116]]} color={I} />
+    <Bx x={30} y={116} w={170} h={56} dark lines={["DOCKERD", "ROOT · ALWAYS RUNNING"]} />
+    <Arrow pts={[[115, 172], [115, 200]]} color={I} />
+    <Bx x={30} y={200} w={170} h={34} lines={["CONTAINERD / SHIM"]} />
+    <Arrow pts={[[115, 234], [115, 262]]} color={I} />
+    <Bx x={30} y={262} w={170} h={40} lines={["CONTAINER", "VIA RUNC"]} />
+    <L x={212} y={134} anchor="start" cls="fps">SINGLE POINT OF FAILURE</L>
+    <L x={212} y={150} anchor="start" cls="fs">AND A ROOT-POWERED TARGET</L>
     <L x={195} y={328} cls="fs">IF THE DAEMON DIES, EVERY CONTAINER IS ORPHANED</L>
 
     {/* podman chain */}
@@ -284,14 +290,14 @@ export function FigUid() {
     <L x={380} y={26} cls="fb">USER NAMESPACES — A CONTROLLED IDENTITY LIE</L>
 
     <rect x={44} y={56} width={300} height={196} fill="none" stroke={O} strokeWidth={1} strokeDasharray="6 4" />
-    <L x={62} y={56} cls="fs" bg>INSIDE THE CONTAINER</L>
-    <Bx x={72} y={88} w={244} h={36} dark lines={["UID 0 · ROOT — FULL POWER HERE"]} />
+    <L x={62} y={56} anchor="start" cls="fs" bg>INSIDE THE CONTAINER</L>
+    <Bx x={72} y={88} w={244} h={36} dark lines={["UID 0 · ROOT"]} sub="FULL POWER HERE" />
     <Bx x={72} y={132} w={244} h={36} lines={["UID 1 · APP"]} />
     <Bx x={72} y={176} w={244} h={36} lines={["UID 27 · DBUSER"]} />
 
     <rect x={420} y={56} width={296} height={196} fill="none" stroke={I} strokeWidth={1.2} />
-    <L x={438} y={56} cls="fs" bg>ON THE HOST</L>
-    <Bx x={448} y={88} w={240} h={36} lines={["UID 1000 · ALEX — AN ORDINARY USER"]} />
+    <L x={438} y={56} anchor="start" cls="fs" bg>ON THE HOST</L>
+    <Bx x={448} y={88} w={240} h={36} lines={["UID 1000 · ALEX"]} sub="AN ORDINARY USER" />
     <Bx x={448} y={132} w={240} h={36} lines={["UID 100000 · SUBUID + 0"]} />
     <Bx x={448} y={176} w={240} h={36} lines={["UID 100001 · SUBUID + 1"]} />
 
@@ -313,7 +319,7 @@ export function FigPod() {
 
     {/* pod boundary */}
     <rect x={170} y={64} width={420} height={212} fill="none" stroke={P} strokeWidth={1.8} strokeDasharray="8 5" />
-    <L x={176} y={64} cls="fp" bg>POD — SHARED NET + IPC NAMESPACE</L>
+    <L x={180} y={64} anchor="start" cls="fp" bg>POD — SHARED NET + IPC NAMESPACE</L>
 
     <Bx x={206} y={104} w={160} h={76} lines={["NGINX", "SERVES :80"]} />
     <Bx x={414} y={104} w={160} h={76} lines={["APP API", "LISTENS :3000"]} />

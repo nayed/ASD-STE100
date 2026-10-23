@@ -83,7 +83,8 @@ export function mountCicd(root: HTMLElement): () => void {
   {
     const tok = $<SVGGElement>("tok1");
     let tx = 110;
-    let ty = 85;
+    // the token parks at y 70, above each box title (at 85 it covered the titles)
+    let ty = 70;
     const set = () => tok.setAttribute("transform", `translate(${tx},${ty})`);
     set();
     const boxes = { A: $("bxA"), B: $("bxB"), C: $("bxC") };
@@ -117,7 +118,7 @@ export function mountCicd(root: HTMLElement): () => void {
     };
     const reset = () => {
       tx = 110;
-      ty = 85;
+      ty = 70;
       set();
       sha.classList.remove("on");
       st.innerHTML = "STATE — <b>CHANGE IN WORKING DIRECTORY</b>";
@@ -126,7 +127,7 @@ export function mountCicd(root: HTMLElement): () => void {
     reset();
     on(bAdd, "click", async () => {
       en([]);
-      await to(347, 85);
+      await to(347, 70);
       if (dead) return;
       flash(boxes.B);
       st.innerHTML = "STATE — <b>CHANGE IN INDEX</b> (STAGING AREA)";
@@ -134,7 +135,7 @@ export function mountCicd(root: HTMLElement): () => void {
     });
     on(bCom, "click", async () => {
       en([]);
-      await to(584, 85);
+      await to(584, 70);
       if (dead) return;
       flash(boxes.C);
       sha.classList.add("on");
@@ -143,7 +144,7 @@ export function mountCicd(root: HTMLElement): () => void {
     });
     on(bPush, "click", async () => {
       en([]);
-      await to(821, 85);
+      await to(821, 70);
       if (dead) return;
       flash($("bxD"));
       st.innerHTML = "STATE — <b>COMMIT ON ORIGIN</b> — GITHUB HAS THE CHANGE";
@@ -163,7 +164,7 @@ export function mountCicd(root: HTMLElement): () => void {
       set();
       flash(boxes.C);
       st.innerHTML = "STATE — <b>COMMITS FROM REMOTE</b> MERGED INTO LOCAL";
-      await to(110, 85, 350);
+      await to(110, 70, 350);
       if (dead) return;
       en([bPull]);
     });

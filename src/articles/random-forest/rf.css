@@ -128,6 +128,8 @@
 .rf .figcap .fr { margin-left: auto; color: var(--olive); letter-spacing: 0.12em; }
 .rf .fig svg { display: block; width: 100%; height: auto; }
 .rf .fig svg text { font-family: var(--mono); }
+/* Fig. 2: a paper-coloured halo, so the chart's grid lines do not run through its annotations */
+.rf #fig2 text { paint-order: stroke; stroke: var(--paper); stroke-width: 4px; stroke-linejoin: round; }
 .rf .late { opacity: 0; transition: opacity 0.7s ease 0.8s; }
 .rf svg.vis .late { opacity: 1; }
 .rf .draw { transition: stroke-dashoffset 1.7s cubic-bezier(0.45, 0, 0.2, 1); }
