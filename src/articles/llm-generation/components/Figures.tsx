@@ -9,6 +9,7 @@ export const ORANGE = "#E2571F";
 /** the same hue, darkened to pass 4.5:1 on the light page: small text in figures and captions */
 export const ORANGE_TEXT = "#AD4216";
 export const INK = "#0D0D0C";
+const PAPER = "#FBFBF9";
 
 const MONO = "'IBM Plex Mono', monospace";
 
@@ -98,7 +99,7 @@ export function Fig01() {
               y={84}
               fontSize={14}
               textAnchor="middle"
-              fill={isTarget ? ORANGE : INK}
+              fill={isTarget ? ORANGE_TEXT : INK}
               fontWeight={isTarget ? 600 : 400}
             >
               {b.t.replace(/ /g, "␣")}
@@ -117,7 +118,7 @@ export function Fig01() {
               y={144}
               fontSize={10.5}
               textAnchor="middle"
-              fill={isTarget ? ORANGE : OLIVE}
+              fill={isTarget ? ORANGE_TEXT : OLIVE}
               letterSpacing="0.06em"
             >
               {b.id}
@@ -170,6 +171,10 @@ const F2_POINTS = [
   { x: 762, y: 158, l: "motor" },
 ];
 
+/** Fig. 2 bar chart: zero line and the height of ±1.0 */
+const F2_ZERO = 152;
+const F2_SCALE = 58;
+
 export function Fig02() {
   return (
     <Frame height={340} label="Figure 2: a token becomes a vector of numbers; similar words sit near each other">
@@ -185,31 +190,31 @@ export function Fig02() {
         TOKEN ID 1646
       </text>
 
-      <line x1={24} y1={104} x2={300} y2={104} stroke={RULE} strokeWidth={1} />
+      {/* bars in their own band below the token row (they used to grow up into it), scale on the left */}
       {F2_VALUES.map((v, i) => {
-        const bx = 24 + i * 8.7;
-        const h = Math.abs(v) * 62;
+        const bx = 62 + i * 7.4;
+        const h = Math.abs(v) * F2_SCALE;
         return (
           <rect
             key={i}
             className="d"
             x={bx}
-            y={v >= 0 ? 104 - h : 104}
-            width={5.4}
+            y={v >= 0 ? F2_ZERO - h : F2_ZERO}
+            width={4.6}
             height={Math.max(h, 1.2)}
             fill={v >= 0 ? OLIVE : OLIVE_LIGHT}
             stroke="none"
           />
         );
       })}
-      <line x1={24} y1={104} x2={300} y2={104} stroke={OLIVE} strokeWidth={1} />
-      <text x={24} y={182} fontSize={10} fill={OLIVE} letterSpacing="0.12em">
+      <line x1={56} y1={F2_ZERO} x2={300} y2={F2_ZERO} stroke={OLIVE} strokeWidth={1} />
+      <text x={24} y={F2_ZERO - F2_SCALE + 4} fontSize={10} fill={OLIVE} letterSpacing="0.12em">
         +1.0
       </text>
-      <text x={24} y={126} fontSize={10} fill={OLIVE} letterSpacing="0.12em">
+      <text x={24} y={F2_ZERO + 4} fontSize={10} fill={OLIVE} letterSpacing="0.12em">
         0.0
       </text>
-      <text x={24} y={196} fontSize={10} fill={OLIVE_LIGHT} letterSpacing="0.12em">
+      <text x={24} y={F2_ZERO + F2_SCALE + 4} fontSize={10} fill={OLIVE_LIGHT} letterSpacing="0.12em">
         −1.0
       </text>
 
@@ -267,8 +272,12 @@ export function Fig02() {
             x={p.x + 10}
             y={p.y + 4}
             fontSize={11}
-            fill={p.hi ? ORANGE : OLIVE}
+            fill={p.hi ? ORANGE_TEXT : OLIVE}
             fontWeight={p.hi ? 600 : 400}
+            stroke={PAPER}
+            strokeWidth={3}
+            strokeLinejoin="round"
+            paintOrder="stroke"
           >
             {p.l}
           </text>
@@ -297,12 +306,13 @@ const F3_MATRIX = [
 
 export function Fig03() {
   const [row, setRow] = useState(1);
-  const cell = 46;
+  // cells wide enough for "sentence"; grid lowered so the column header clears the sentence line
+  const cell = 54;
   const ox = 300;
-  const oy = 78;
+  const oy = 108;
 
   return (
-    <Frame height={470} label="Figure 3: an attention matrix. Select a token to see the weights it gives to the other tokens">
+    <Frame height={530} label="Figure 3: an attention matrix. Select a token to see the weights it gives to the other tokens">
       <text x={24} y={26} fontSize={10} letterSpacing="0.18em" fill={OLIVE} fontWeight={600}>
         ATTENTION WEIGHTS — ONE HEAD, ONE LAYER
       </text>
@@ -319,13 +329,13 @@ export function Fig03() {
           y={oy - 12}
           fontSize={11}
           textAnchor="middle"
-          fill={row === c ? ORANGE : OLIVE}
+          fill={row === c ? ORANGE_TEXT : OLIVE}
           fontWeight={row === c ? 600 : 400}
         >
           {t}
         </text>
       ))}
-      <text x={ox - 96} y={oy - 12} fontSize={9.5} letterSpacing="0.16em" fill={OLIVE_LIGHT} fontWeight={600}>
+      <text x={ox - 210} y={oy - 12} fontSize={9.5} letterSpacing="0.16em" fill={OLIVE_LIGHT} fontWeight={600}>
         QUERY ↓ / KEY →
       </text>
       <text x={ox - 16} y={oy - 30} fontSize={9} letterSpacing="0.12em" fill={OLIVE_LIGHT} fontWeight={600} textAnchor="end">
@@ -378,7 +388,7 @@ export function Fig03() {
               y={oy + ri * cell + cell / 2 + 4}
               fontSize={12}
               textAnchor="middle"
-              fill={active ? ORANGE : INK}
+              fill={active ? ORANGE_TEXT : INK}
               fontWeight={active ? 600 : 400}
             >
               {t}
@@ -388,7 +398,7 @@ export function Fig03() {
               y={oy + ri * cell + cell / 2 + 4}
               fontSize={10.5}
               textAnchor="end"
-              fill={active ? ORANGE : OLIVE}
+              fill={active ? ORANGE_TEXT : OLIVE}
             >
               {F3_MATRIX[ri][row].toFixed(2)}
             </text>
@@ -396,7 +406,7 @@ export function Fig03() {
               <rect
                 x={ox - 210}
                 y={oy + ri * cell}
-                width={200 + 6 * cell}
+                width={210 + 6 * cell}
                 height={cell}
                 fill="none"
                 stroke={ORANGE}
@@ -447,7 +457,7 @@ export function Fig04() {
   const barX = 520;
   const barScale = 840;
   return (
-    <Frame height={360} label="Figure 4: raw scores converted to probabilities by the softmax function">
+    <Frame height={378} label="Figure 4: raw scores converted to probabilities by the softmax function">
       <text x={24} y={26} fontSize={10} letterSpacing="0.18em" fill={OLIVE} fontWeight={600}>
         RANK / TOKEN / LOGIT (RAW SCORE) / PROBABILITY
       </text>
@@ -467,7 +477,7 @@ export function Fig04() {
             <text x={266} y={y} fontSize={12} fill={OLIVE} textAnchor="end">
               {isOther ? "—" : r.logit.toFixed(2)}
             </text>
-            <text x={352} y={y} fontSize={12} fill={isOther ? OLIVE_MID : ORANGE} textAnchor="end" fontWeight={i === 0 ? 600 : 400}>
+            <text x={352} y={y} fontSize={12} fill={isOther ? OLIVE_MID : ORANGE_TEXT} textAnchor="end" fontWeight={i === 0 ? 600 : 400}>
               {r.p.toFixed(3)}
             </text>
             <rect
@@ -485,20 +495,22 @@ export function Fig04() {
         );
       })}
 
-      <text x={barX} y={72 - 30} fontSize={9.5} letterSpacing="0.16em" fill={OLIVE} fontWeight={600}>
+      {/* on the header row, above the rule (it used to sit on the rule) */}
+      <text x={barX} y={26} fontSize={9.5} letterSpacing="0.16em" fill={OLIVE} fontWeight={600}>
         PROBABILITY AFTER SOFTMAX
       </text>
-      <line x1={barX} y1={46} x2={barX} y2={72 + 5 * 46} stroke={OLIVE} strokeWidth={1} />
+      <line x1={barX} y1={46} x2={barX} y2={72 + 5 * 46 + 18} stroke={OLIVE} strokeWidth={1} />
       {[0.25, 0.5].map((v) => (
         <g key={v}>
-          <line x1={barX + v * barScale} y1={46} x2={barX + v * barScale} y2={72 + 5 * 46} stroke={RULE} strokeWidth={1} strokeDasharray="2 4" />
-          <text x={barX + v * barScale} y={72 + 5 * 46 + 16} fontSize={9.5} fill={OLIVE} textAnchor="middle">
+          <line x1={barX + v * barScale} y1={46} x2={barX + v * barScale} y2={72 + 5 * 46 + 18} stroke={RULE} strokeWidth={1} strokeDasharray="2 4" />
+          {/* axis values below the last row's rule, not on it */}
+          <text x={barX + v * barScale} y={72 + 5 * 46 + 34} fontSize={9.5} fill={OLIVE} textAnchor="middle">
             {v.toFixed(2)}
           </text>
         </g>
       ))}
 
-      <text x={24} y={330} fontSize={11} fill={INK}>
+      <text x={24} y={362} fontSize={11} fill={INK}>
         Softmax: p = e^score ÷ Σ e^score. The six probabilities above sum to 1.000.
       </text>
     </Frame>
@@ -535,7 +547,7 @@ function Box({
         stroke={accent ? ORANGE : OLIVE}
         strokeWidth={accent ? 1.5 : 1.2}
       />
-      <text x={x + 10} y={y + 18} fontSize={9} letterSpacing="0.16em" fill={accent ? ORANGE : OLIVE_MID} fontWeight={600}>
+      <text x={x + 10} y={y + 18} fontSize={9} letterSpacing="0.16em" fill={accent ? ORANGE_TEXT : OLIVE_MID} fontWeight={600}>
         {n}
       </text>
       <text x={x + 10} y={y + 38} fontSize={12.5} fill={INK} fontWeight={500}>
