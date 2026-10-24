@@ -23,7 +23,7 @@ export function Footer() {
             <div className="mt-6 h-[3px] w-20 bg-go-accent" />
           </div>
 
-          <div className="grid grid-cols-2 gap-x-16 gap-y-4 border-t border-go-paper/25 pt-6 lg:border-l lg:border-t-0 lg:pl-16 lg:pt-0">
+          <div className="grid grid-cols-2 gap-x-8 gap-y-4 sm:gap-x-16 border-t border-go-paper/25 pt-6 lg:border-l lg:border-t-0 lg:pl-16 lg:pt-0">
             {REFS.map(([k, v]) => (
               <div key={k}>
                 <div className="text-[9px] uppercase tracking-[0.3em] text-go-paper/45">{k}</div>
@@ -31,7 +31,7 @@ export function Footer() {
                   href={`https://${v.toLowerCase()}`}
                   target="_blank"
                   rel="noreferrer"
-                  className="mt-1 block text-[11px] font-semibold tracking-[0.12em] underline decoration-go-accent underline-offset-4 hover:text-go-accent"
+                  className="mt-1 block text-[11px] font-semibold tracking-[0.12em] [overflow-wrap:anywhere] underline decoration-go-accent underline-offset-4 hover:text-go-accent"
                 >
                   {v} ↗
                 </a>
