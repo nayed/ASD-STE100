@@ -14,8 +14,8 @@ function Shell({ children, className = "" }: { children: ReactNode; className?: 
 function Masthead() {
   const meta = [
     ["Document no.", "TG-01"],
-    ["Revision", "A"],
-    ["Issue date", "2026-10-23"],
+    ["Revision", "B"],
+    ["Issue date", "2026-10-24"],
     ["Classification", "Public"],
   ];
   return (
@@ -23,7 +23,7 @@ function Masthead() {
       <Shell>
         <div className="flex flex-wrap items-baseline justify-between gap-x-8 gap-y-2 py-4 u-label text-lm-olive-light">
           <span>ASD-STE100 · Simplified Technical English · Issue 9</span>
-          <span>Sheet 1 of 8 · Uncontrolled when printed</span>
+          <span>Sheet 1 of 9 · Uncontrolled when printed</span>
         </div>
         <div className="border-t border-[#3A3A34] pt-8 pb-10">
           <div className="u-label text-lm-orange">Technical dossier — TG-01</div>
@@ -125,20 +125,20 @@ function Figure({
 
 function Clause({
   code,
+  kicker = `Clause ${code}`,
   title,
   rule,
   children,
   figure,
   invert = false,
-  wide = false,
 }: {
   code: string;
+  kicker?: string;
   title: string;
   rule: string;
   children: ReactNode;
   figure?: ReactNode;
   invert?: boolean;
-  wide?: boolean;
 }) {
   return (
     <section id={`clause-${code}`} className={`scroll-mt-[calc(var(--site-bar-h)+2rem)] pt-8 pb-16 ${invert ? "" : "rule-ink"}`}>
@@ -147,7 +147,7 @@ function Clause({
           <div className="md:sticky md:top-[calc(var(--site-bar-h)+2rem)]">
             <div className="flex items-baseline gap-3">
               <span className="inline-block h-[10px] w-[10px]" style={{ background: ORANGE }} />
-              <span className="u-label text-lm-ink-45">Clause {code}</span>
+              <span className="u-label text-lm-ink-45">{kicker}</span>
             </div>
             <h2 className="u-display mt-3 text-[22px] md:text-[26px]">{title}</h2>
             <p className="u-note mt-5 border-l pl-3" style={{ borderColor: ORANGE }}>
@@ -155,7 +155,7 @@ function Clause({
             </p>
           </div>
         </aside>
-        <div className={`${wide ? "max-w-none" : "u-measure"} space-y-5 text-[15px]`}>{children}</div>
+        <div className="u-measure space-y-5 text-[15px]">{children}</div>
       </div>
       {figure}
     </section>
@@ -188,67 +188,79 @@ function List({ items }: { items: string[] }) {
   );
 }
 
-function Table({ head, rows }: { head: string[]; rows: string[][] }) {
+/** Fig. 07: a chat after the chat template, special tokens in orange (the format is an example) */
+const CHAT_SENT: [role: string, text: string][] = [
+  ["system", "You are a helpful assistant. Use short sentences."],
+  ["user", "What is a token?"],
+  ["assistant", "A token is a small part of a text."],
+  ["user", "Give an example."],
+];
+const CHAT_ANSWER = "The word “unhappy” can be two tokens: “un” and “happy”.";
+
+function ChatListing() {
+  const tok = (t: string) => (
+    <span className="font-semibold" style={{ color: ORANGE_TEXT }}>
+      {t}
+    </span>
+  );
+  const part = (label: string, body: ReactNode, model = false) => (
+    <div className={model ? "border-t border-lm-rule bg-[#FBEDE6]" : ""}>
+      <div className="u-label px-6 pt-4" style={model ? { color: ORANGE_TEXT } : undefined}>
+        {label}
+      </div>
+      <pre className="min-w-max px-6 pt-2 pb-5 text-[13px] leading-[1.75]">{body}</pre>
+    </div>
+  );
   return (
-    <div className="overflow-x-auto">
-      <table className="w-full min-w-[620px] border-collapse text-left">
-        <thead>
-          <tr className="rule-ink">
-            {head.map((h) => (
-              <th key={h} className="u-label py-3 pr-6 align-bottom">
-                {h}
-              </th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          {rows.map((r, i) => (
-            <tr key={i} className="border-b border-lm-rule align-top">
-              {r.map((c, j) => (
-                <td
-                  key={j}
-                  className={`py-3 pr-6 text-[13px] ${
-                    j === 0 ? "font-semibold whitespace-nowrap" : "text-lm-ink-70"
-                  }`}
-                >
-                  {c}
-                </td>
-              ))}
-            </tr>
+    <div className="overflow-x-auto border border-lm-rule bg-[#F2F2EC]">
+      {part(
+        "1 — The application sends this text",
+        <>
+          {CHAT_SENT.map(([role, text]) => (
+            <span key={role + text}>
+              {tok("<|start|>")}
+              {role}
+              {"\n"}
+              {text}
+              {tok("<|end|>")}
+              {"\n"}
+            </span>
           ))}
-        </tbody>
-      </table>
+          {tok("<|start|>")}assistant
+        </>,
+      )}
+      {part(
+        "2 — The model writes the rest, one token at a time",
+        <>
+          {CHAT_ANSWER}
+          {tok("<|end|>")}
+        </>,
+        true,
+      )}
     </div>
   );
 }
 
 /* ─────────────────────────────── content ─────────────────────────────── */
 
-const STE_RULES: string[][] = [
-  ["1.1", "Use the approved words of the dictionary.", "This document writes “use”, not “utilize”."],
-  ["1.2", "Give one meaning to one word.", "“Token” has one meaning in this document."],
-  ["1.5", "Write in the active voice.", "“The model predicts the next token.”"],
-  ["1.6", "Use a verb, not a noun phrase.", "“Predict”, not “make a prediction”."],
-  ["1.8", "Use the positive form.", "“Stop”, not “do not continue”."],
-  ["2.2", "Do not use more than three nouns together.", "“Large language model” = 3 nouns."],
-  ["2.3", "Use the definite article for a known item.", "“The context” = the context above."],
-  ["3.1", "Write in the present tense.", "“The model gives one score.”"],
-  ["3.3", "Use the imperative for an instruction.", "“Select TAKE 100 SAMPLES.”"],
-  ["4.1", "Keep a sentence to 20 words or fewer.", "The longest sentence in this document has 19 words."],
-  ["4.2", "Give one instruction or one fact per sentence.", "Each sentence above a diagram states one step."],
-  ["6.1", "Write descriptive text in a logical order.", "Clauses 01 to 06 follow the order of the operation."],
-];
-
 const GLOSSARY: [string, string][] = [
-  ["Attention", "The operation that gives a weight to each pair of tokens in the context."],
+  ["Attention", "The operation that gives a weight from each token to itself and to each earlier token."],
   ["Autoregressive", "The property of a model that uses its output as its next input."],
+  ["Chat template", "The format that joins the parts of a chat into one text."],
   ["Context", "The list of tokens that the model reads in one operation."],
   ["Embedding", "The list of numbers that the model uses for one token."],
+  ["Feed-forward network", "The part of a layer that changes each vector by itself, after attention."],
+  ["Fine-tuning", "The second stage of training. It uses examples of good answers."],
+  ["KV cache", "The store that keeps the attention data of the earlier tokens."],
   ["Logit", "The raw score that the model gives to one token."],
   ["Model", "The computer program that predicts the next token."],
+  ["Position information", "The numbers that the model adds to a vector to show the position of its token."],
+  ["Pre-training", "The first stage of training. The model predicts the next token in a very large text."],
   ["Probability", "A number from 0 to 1 that gives the chance of one result."],
   ["Sampling", "The operation that selects one token from the probabilities."],
   ["Softmax", "The function that changes the scores into probabilities."],
+  ["Special token", "A token that marks a part of a text. It is not a word."],
+  ["System prompt", "The instructions that the application puts before the conversation."],
   ["Temperature", "The control that changes the shape of the probability distribution."],
   ["Token", "A small part of a text. A token can be a word or a part of a word."],
   ["Tokenizer", "The program that cuts a text into tokens."],
@@ -257,7 +269,8 @@ const GLOSSARY: [string, string][] = [
   ["Vocabulary", "The complete list of tokens that a model can use."],
 ];
 
-const CONTENT_CLAUSES: [string, string, string][] = [
+/** [number, title, page, anchor id when it is not the number] */
+const CONTENT_CLAUSES: [string, string, string, string?][] = [
   ["00", "Scope", "01"],
   ["01", "Tokens", "02"],
   ["02", "Numbers for words", "03"],
@@ -265,9 +278,10 @@ const CONTENT_CLAUSES: [string, string, string][] = [
   ["04", "The next token", "05"],
   ["05", "Choosing the token", "06"],
   ["06", "The loop", "07"],
-  ["07", "What the model does not do", "08"],
-  ["A", "Rules applied", "08"],
-  ["B", "Glossary", "08"],
+  ["07", "Where the skill comes from", "08"],
+  ["08", "A chat is one text", "08"],
+  ["09", "What the model does not do", "09"],
+  ["", "Glossary", "09", "glossary"],
 ];
 
 const CONTENT_FIGURES: [string, string, string][] = [
@@ -277,16 +291,17 @@ const CONTENT_FIGURES: [string, string, string][] = [
   ["04", "Scores converted to probabilities", "05"],
   ["05", "Sampling control unit", "06"],
   ["06", "One pass of the generation loop", "07"],
+  ["07", "A chat as the model reads it", "08"],
   ["A", "Plate — specification booklet", "01"],
-  ["B", "Plate — pen plotter", "08"],
+  ["B", "Plate — pen plotter", "09"],
 ];
 
 function Contents() {
-  const col = (title: string, rows: [string, string, string][], href: boolean) => (
+  const col = (title: string, rows: [string, string, string, string?][], href: boolean) => (
     <div>
       <h2 className="u-label text-lm-ink-45">{title}</h2>
       <ol className="mt-4">
-        {rows.map(([n, t, s]) => {
+        {rows.map(([n, t, s, id]) => {
           const inner = (
             <>
               <span className="u-label w-[28px] shrink-0 text-lm-ink-45 group-hover:text-lm-orange-text">{n}</span>
@@ -298,7 +313,7 @@ function Contents() {
             <li key={n + t}>
               {href ? (
                 <a
-                  href={`#clause-${n}`}
+                  href={`#clause-${id ?? n}`}
                   className="group flex items-baseline gap-4 border-b border-lm-rule py-[9px] transition-colors duration-150 hover:text-lm-orange-text focus:outline-none focus-visible:bg-lm-orange focus-visible:text-lm-paper"
                 >
                   {inner}
@@ -345,7 +360,7 @@ export default function LlmGeneration() {
         <Clause
           code="00"
           title="Scope"
-          rule="STE 4.1 — Keep a sentence to 20 words or fewer. STE 4.2 — Give one instruction or one fact per sentence."
+          rule="Keep a sentence to 20 words or fewer. Give one instruction or one fact per sentence."
         >
           <p>
             This document explains how a large language model (LLM) generates text. It is for engineers and for
@@ -357,8 +372,8 @@ export default function LlmGeneration() {
             complete operation of text generation.
           </p>
           <p>
-            Read the clauses in order. Clause 01 to clause 06 follow the order of the operation. Clause 07 states the
-            limits of the model.
+            Read the clauses in order. Clause 01 to clause 06 follow the order of the operation. Clause 07 explains
+            training. Clause 08 explains how a chat becomes one text. Clause 09 states the limits of the model.
           </p>
           <p className="u-note border-l pl-3" style={{ borderColor: ORANGE }}>
             The diagrams show the operation at a high level. The numbers in the diagrams are examples. They are not
@@ -378,13 +393,13 @@ export default function LlmGeneration() {
         <Clause
           code="01"
           title="Tokens"
-          rule="STE 1.2 — Give one meaning to one word. In this document, “token” always means a small part of a text."
+          rule="Give one meaning to one word. In this document, “token” always means a small part of a text."
           figure={
             <Figure
               n="01"
               title="A sentence cut into tokens, with the numeric ID of each token"
-              note="The space before a token is part of the token. This is the reason for the mark ␣. The last token is the target: the model must predict this token from the five tokens that come before it."
-              sheet="Sheet 2 of 8 · Scale 1:1"
+              note="The space before a token is part of the token. This is the reason for the mark ␣. The marked token “␣word” is the target. The model must predict this token from the five tokens before it."
+              sheet="Sheet 2 of 9 · Scale 1:1"
             >
               <Fig01 />
             </Figure>
@@ -400,29 +415,33 @@ export default function LlmGeneration() {
           </p>
           <p>
             The tokens in one operation make the context. The context has a maximum length. For example, 8,192
-            tokens or 128,000 tokens. When the context is full, the model must remove the first tokens or stop.
+            tokens or 128,000 tokens. When the context is full, the program must remove the first tokens or stop.
           </p>
           <List
             items={[
-              "The tokenizer reads the text as characters.",
-              "The tokenizer finds the longest token that matches the text.",
-              "The tokenizer gives an ID to the token.",
-              "The tokenizer repeats this operation to the end of the text.",
+              "The tokenizer starts with the text as single characters.",
+              "The tokenizer applies a merge rule. The rule joins two neighbouring pieces into one larger piece.",
+              "The tokenizer repeats this step until no merge rule applies.",
+              "The tokenizer gives the ID of each final piece.",
             ]}
           />
+          <p className="u-note border-l pl-3" style={{ borderColor: ORANGE }}>
+            The merge rules come from a large sample of text. A frequent word becomes one token. A rare word becomes
+            two or more tokens.
+          </p>
         </Clause>
 
         {/* 02 EMBEDDINGS */}
         <Clause
           code="02"
           title="Numbers for words"
-          rule="STE 2.3 — Use the definite article for a known item. “The vector” means the vector of the selected token."
+          rule="Use the definite article for a known item. “The vector” means the vector of the selected token."
           figure={
             <Figure
               n="02"
               title="One token becomes a vector; similar words sit near each other"
-              note="A real vector has 768 to 4,096 values. The chart on the left shows 32 of these values. The chart on the right shows a projection of 1,536 dimensions onto two axes. The distances in this projection are only a simple view of the real distances."
-              sheet="Sheet 3 of 8 · Scale 1:1"
+              note="A real vector has from 768 to more than 16,000 values. The chart on the left shows 32 of these values. The chart on the right shows a projection of 1,536 dimensions onto two axes. The distances in this projection are only a simple view of the real distances. A lower distance means a nearer vector."
+              sheet="Sheet 3 of 9 · Scale 1:1"
             >
               <Fig02 />
             </Figure>
@@ -447,13 +466,13 @@ export default function LlmGeneration() {
         <Clause
           code="03"
           title="Attention"
-          rule="STE 6.1 — Write descriptive text in a logical order. This clause moves from the token to the head to the layer."
+          rule="Write descriptive text in a logical order. This clause moves from the token to the head to the layer."
           figure={
             <Figure
               n="03"
               title="Attention weights for one head in one layer"
-              note="Select a token in the left column. The orange row shows the weights that this token gives to the other tokens. A row always shows the token that asks. A column always shows the token that answers. In this example, the word “model” looks most strongly at itself and at the verb “reads”."
-              sheet="Sheet 4 of 8 · Interactive"
+              note="Select a token in the left column. The orange row shows the weights that this token gives to itself and to the tokens before it. A row always shows the token that asks. A column always shows the token that answers. The hatched cells are later tokens, which the row cannot see. In this example, the word “model” looks most strongly at itself and at “The”."
+              sheet="Sheet 4 of 9 · Interactive"
             >
               <Fig03 />
             </Figure>
@@ -464,16 +483,25 @@ export default function LlmGeneration() {
             meaning of one token. Attention is the operation that does this.
           </p>
           <p>
-            Each token looks at all the tokens in the context. The model gives a weight to each pair of tokens. A
-            high weight means “use this token”. A low weight means “do not use this token”.
+            The vectors alone do not show the order of the tokens. For this reason, the model adds position
+            information to each vector before attention.
           </p>
           <p>
-            Attention runs many times at the same time. Each run is a head. A large model can use 96 heads in one
-            layer. The model can have 96 layers. The output of one layer is the input of the next layer.
+            Each token looks at itself and at the tokens before it. It cannot look at the tokens after it. During
+            generation, these tokens do not exist yet. The model gives a weight to each of these pairs. A high
+            weight means “use this token”. A low weight means “do not use this token”.
           </p>
           <p>
-            The result of the attention operation is a new vector for each token. This vector contains information
-            from the full context. The model needs this information for the next operation.
+            Attention runs many times at the same time. Each run is a head. After attention, a feed-forward network
+            changes each vector by itself. Attention and the feed-forward network together make one layer.
+          </p>
+          <p>
+            A large model can use 96 heads in one layer. The model can have 96 layers. The output of one layer is
+            the input of the next layer.
+          </p>
+          <p>
+            The result of the layers is a new vector for each token. This vector contains information from the
+            token and from the tokens before it. The model needs this information for the next operation.
           </p>
         </Clause>
 
@@ -481,13 +509,13 @@ export default function LlmGeneration() {
         <Clause
           code="04"
           title="The next token"
-          rule="STE 1.6 — Use a verb, not a noun phrase. This document writes “predict”, not “make a prediction”."
+          rule="Use a verb, not a noun phrase. This document writes “predict”, not “make a prediction”."
           figure={
             <Figure
               n="04"
               title="Raw scores converted to probabilities by the softmax function"
               note="The scores (logits) are raw numbers with no limit. The softmax function changes them to probabilities. The probabilities always sum to 1.000. The final row shows the 199,992 tokens that are not in the first five positions."
-              sheet="Sheet 5 of 8 · Scale 1:1"
+              sheet="Sheet 5 of 9 · Scale 1:1"
             >
               <Fig04 />
             </Figure>
@@ -502,8 +530,9 @@ export default function LlmGeneration() {
             to 1. The sum of all probabilities is 1. FIG. 04 shows the six highest probabilities for one operation.
           </p>
           <p>
-            The model does not always select the token with the highest probability. Sometimes it selects a token
-            with a lower probability. The next clause explains this selection.
+            The program does not always select the token with the highest probability. Sometimes it selects a token
+            with a lower probability. At the lowest temperature, it always selects the token with the highest
+            probability. The next clause explains this selection.
           </p>
         </Clause>
       </Shell>
@@ -519,7 +548,7 @@ export default function LlmGeneration() {
               </div>
               <h2 className="u-display mt-3 text-[22px] md:text-[26px]">Choosing the token</h2>
               <p className="u-note mt-5 border-l pl-3" style={{ borderColor: ORANGE, color: "#B4B8A2" }}>
-                STE 3.3 — Use the imperative for an instruction. Select, move, and read the controls below.
+                Use the imperative for an instruction. Select, move, and read the controls below.
               </p>
             </aside>
             <div className="u-measure space-y-5 text-[15px] text-[#F2F2EC]">
@@ -550,13 +579,13 @@ export default function LlmGeneration() {
         <Clause
           code="06"
           title="The loop"
-          rule="STE 1.5 — Write in the active voice. “The model repeats the operation”, not “the operation is repeated”."
+          rule="Write in the active voice. “The model repeats the operation”, not “the operation is repeated”."
           figure={
             <Figure
               n="06"
               title="One pass of the autoregressive generation loop"
               note="The orange path is the repeat. Step 6 puts the new token at the end of the context. Then the operation starts again at step 3. The loop ends when the model selects an end token, or when the text reaches the maximum length."
-              sheet="Sheet 7 of 8 · Scale 1:1"
+              sheet="Sheet 7 of 9 · Scale 1:1"
             >
               <Fig06 />
             </Figure>
@@ -570,7 +599,7 @@ export default function LlmGeneration() {
             items={[
               "Input text: the user enters a text, for example a question.",
               "Tokenizer: the program cuts the text into tokens.",
-              "Model: the model calculates new vectors for all tokens in the context.",
+              "Model: the model calculates a new vector for each new token.",
               "Scores: the model gives one score to each token in the vocabulary.",
               "Sample: the operation selects one token with the controls of clause 05.",
               "Append: the operation puts the new token at the end of the context.",
@@ -581,16 +610,84 @@ export default function LlmGeneration() {
             of the input of the next pass. A 200-word answer is the result of about 300 passes.
           </p>
           <p>
+            The model does not calculate the old tokens again. It keeps their attention data in a store. This store
+            is the KV cache.
+          </p>
+          <p>
+            For this reason, the first token takes the longest time. On the first pass, the model reads the full
+            input. On each later pass, it calculates only the new token.
+          </p>
+          <p>
             The user sees the text one token at a time. This is the reason for the moving cursor in a chat window.
             The model does not write a full answer and then show it. It shows each token after it selects the token.
           </p>
         </Clause>
 
-        {/* 07 LIMITS */}
+        {/* 07 TRAINING */}
         <Clause
           code="07"
+          title="Where the skill comes from"
+          rule="Write in the present tense. “Training changes the values”, not “training changed the values”."
+        >
+          <p>
+            A new model cannot predict text. Its values start as random numbers. Training changes these values in two
+            stages.
+          </p>
+          <List
+            items={[
+              "Pre-training: the model reads a very large amount of text. At each position, it predicts the next token. The training program compares the prediction with the real token. Then it changes the values by a small quantity to make the error smaller. The program repeats this step for trillions of tokens.",
+              "Fine-tuning: the model trains on examples of questions and good answers. People also compare two answers and select the better answer. The model learns to give answers of the better type.",
+            ]}
+          />
+          <p>
+            Training stops before people use the model. During use, the values do not change. The model does not
+            learn from a conversation. It knows the conversation only because the conversation is in its context.
+          </p>
+        </Clause>
+
+        {/* 08 CHAT */}
+        <Clause
+          code="08"
+          title="A chat is one text"
+          rule="Write descriptive text in a logical order. The listing shows the text in the order that the model reads it."
+          figure={
+            <Figure
+              n="07"
+              title="A chat with two questions, as one text for the model"
+              note="Part 1 ends with the label of the assistant, with no answer. The model writes part 2 after this label. It stops when it selects the end token. The orange marks are special tokens. Each mark is one token with its own ID. The exact marks are different for each model."
+              sheet="Sheet 8 of 9 · Listing"
+            >
+              <ChatListing />
+            </Figure>
+          }
+        >
+          <p>
+            A chat window shows separate messages. The model does not see separate messages. It sees one text.
+          </p>
+          <p>
+            A chat template joins all the parts of the chat into this text. The parts are the system prompt, the user
+            messages and the answers. Special tokens mark the start and the end of each part. FIG. 07 shows an
+            example.
+          </p>
+          <p>
+            The system prompt is a text from the application. It gives instructions to the model before the
+            conversation starts.
+          </p>
+          <p>
+            The text ends with the label of the assistant. The model continues the text after this label. When the
+            answer is complete, the model selects the end token.
+          </p>
+          <p>
+            The model keeps no memory between two messages. The application sends the full conversation again with
+            each new message. For this reason, a long chat uses more of the context.
+          </p>
+        </Clause>
+
+        {/* 09 LIMITS */}
+        <Clause
+          code="09"
           title="What the model does not do"
-          rule="STE 1.8 — Use the positive form when it is possible. Some limits need the negative form for safety."
+          rule="Use the positive form when it is possible. Some limits need the negative form for safety."
         >
           <p>
             A model can produce a text that is wrong. The user must know the limits of the operation. The next
@@ -598,8 +695,8 @@ export default function LlmGeneration() {
           </p>
           <div className="mt-6 space-y-4">
             {[
-              ["The model predicts text.", "It does not look up a fact in a database. It calculates only the next probable token."],
-              ["The model has no plan for the full answer.", "It decides one token at a time. It cannot change a sentence that it has already produced."],
+              ["The model alone does not look up facts.", "It calculates only the next probable token. Some applications search the web or use other tools. They put the results into the context."],
+              ["The model commits to one token at a time.", "It can prepare the next words inside its calculation. It cannot change a token that it has already produced."],
               ["The model does not know whether a statement is true.", "Truth is not part of the calculation. Probability is the only quantity in the calculation."],
               ["The model can copy an error from its training data.", "Verify important facts with a second source."],
               ["The output is not stable.", "A small change in one probability can change all the text that comes after it."],
@@ -624,31 +721,12 @@ export default function LlmGeneration() {
       </Shell>
 
       <Shell>
-        {/* APPENDIX A */}
+        {/* GLOSSARY */}
         <Clause
-          code="A"
-          wide
-          title="Appendix A — Rules applied"
-          rule="ASD-STE100, Issue 9. This document applies the rules of Section 1 (words), Section 2 (noun phrases), Section 3 (verbs), Section 4 (sentences), and Section 6 (descriptive writing)."
-        >
-          <p>
-            Simplified Technical English is a set of writing rules for technical documentation. The rules control
-            the words, the verbs, and the sentence length. The target is a text that a reader can understand on the
-            first read.
-          </p>
-          <div className="mt-8">
-            <Table
-              head={["Rule", "Requirement", "Application in this document"]}
-              rows={STE_RULES}
-            />
-          </div>
-        </Clause>
-
-        {/* APPENDIX B */}
-        <Clause
-          code="B"
-          title="Appendix B — Glossary"
-          rule="STE 4.2 — Give one fact per sentence. Each entry below gives one definition."
+          code="glossary"
+          kicker="Appendix"
+          title="Glossary"
+          rule="Give one fact per sentence. Each entry below gives one definition."
         >
           <Defs items={GLOSSARY} />
         </Clause>
@@ -674,7 +752,7 @@ export default function LlmGeneration() {
                 ["Checked", "Not yet"],
                 ["Applicable spec", "ASD-STE100, Issue 9"],
                 ["Status", "Published"],
-                ["Sheets", "8 of 8"],
+                ["Sheets", "9 of 9"],
               ].map(([k, v]) => (
                 <div key={k} className="border-t border-[#3A3A34] pt-3">
                   <dt className="u-label text-lm-olive-mid">{k}</dt>
@@ -684,7 +762,7 @@ export default function LlmGeneration() {
             </dl>
           </div>
           <div className="flex flex-wrap items-baseline justify-between gap-x-8 gap-y-2 border-t border-[#3A3A34] py-5 u-label text-lm-olive-mid">
-            <span>Doc. TG-01 · Rev. A</span>
+            <span>Doc. TG-01 · Rev. B</span>
             <span>Set in IBM Plex Mono</span>
             <span style={{ color: ORANGE }}>■</span>
           </div>

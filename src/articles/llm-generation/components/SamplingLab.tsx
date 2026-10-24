@@ -139,7 +139,7 @@ export default function SamplingLab() {
       <div className="flex flex-wrap items-baseline justify-between gap-x-8 gap-y-2 border-b pb-4" style={{ borderColor: RULE }}>
         <div>
           <div className="u-label" style={{ color: ORANGE }}>
-            Fig. 05 — Sampling control unit · Sheet 6 of 8
+            Fig. 05 — Sampling control unit · Sheet 6 of 9
           </div>
           <h3 className="u-display text-[30px] md:text-[37px] mt-2">Temperature · Top-k · Top-p</h3>
         </div>

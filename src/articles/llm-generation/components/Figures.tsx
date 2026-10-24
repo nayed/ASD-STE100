@@ -59,7 +59,7 @@ const F1_TOKENS = [
   { t: " the", id: "279" },
   { t: " next", id: "1828" },
   { t: " word", id: "1734" },
-  { t: " .", id: "13" },
+  { t: ".", id: "13" },
 ];
 
 export function Fig01() {
@@ -222,6 +222,9 @@ export function Fig02() {
       <text x={24} y={246} fontSize={10} letterSpacing="0.18em" fill={OLIVE} fontWeight={600}>
         NEAREST VECTORS
       </text>
+      <text x={276} y={246} fontSize={9} letterSpacing="0.14em" fill={OLIVE} textAnchor="end">
+        DISTANCE
+      </text>
       {[
         ["engine", "0.18"],
         ["system", "0.22"],
@@ -295,13 +298,17 @@ export function Fig02() {
 
 /* ─────────────────────── FIG 03 — ATTENTION MATRIX ─────────────────────── */
 const F3_TOKENS = ["The", "model", "reads", "the", "sentence", "again"];
-const F3_MATRIX = [
-  [0.42, 0.18, 0.12, 0.14, 0.08, 0.06],
-  [0.16, 0.34, 0.14, 0.11, 0.15, 0.1],
-  [0.1, 0.28, 0.22, 0.08, 0.18, 0.14],
-  [0.22, 0.12, 0.1, 0.3, 0.16, 0.1],
-  [0.08, 0.14, 0.2, 0.1, 0.36, 0.12],
-  [0.12, 0.16, 0.24, 0.09, 0.15, 0.24],
+/**
+ * Causal attention: a token sees itself and the tokens before it, never the tokens after it
+ * (null = masked). Each row sums to 1.
+ */
+const F3_MATRIX: (number | null)[][] = [
+  [1.0, null, null, null, null, null],
+  [0.38, 0.62, null, null, null, null],
+  [0.12, 0.55, 0.33, null, null, null],
+  [0.2, 0.15, 0.35, 0.3, null, null],
+  [0.1, 0.22, 0.3, 0.13, 0.25, null],
+  [0.08, 0.18, 0.34, 0.07, 0.18, 0.15],
 ];
 
 export function Fig03() {
@@ -312,7 +319,13 @@ export function Fig03() {
   const oy = 108;
 
   return (
-    <Frame height={530} label="Figure 3: an attention matrix. Select a token to see the weights it gives to the other tokens">
+    <Frame height={552} label="Figure 3: a causal attention matrix. Select a token to see the weights it gives to itself and to the tokens before it">
+      <defs>
+        <pattern id="f3mask" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(45)">
+          <rect width="7" height="7" fill="#F2F2EC" />
+          <line x1="0" y1="0" x2="0" y2="7" stroke={RULE} strokeWidth={1.4} />
+        </pattern>
+      </defs>
       <text x={24} y={26} fontSize={10} letterSpacing="0.18em" fill={OLIVE} fontWeight={600}>
         ATTENTION WEIGHTS — ONE HEAD, ONE LAYER
       </text>
@@ -346,6 +359,12 @@ export function Fig03() {
       {F3_MATRIX.map((r, ri) =>
         r.map((w, ci) => {
           const active = ri === row;
+          if (w === null) {
+            // masked: a later token, which this row cannot see
+            return (
+              <rect key={`${ri}-${ci}`} x={ox + ci * cell} y={oy + ri * cell} width={cell} height={cell} fill="url(#f3mask)" stroke={RULE} strokeWidth={1} />
+            );
+          }
           return (
             <rect
               key={`${ri}-${ci}`}
@@ -400,7 +419,7 @@ export function Fig03() {
               textAnchor="end"
               fill={active ? ORANGE_TEXT : OLIVE}
             >
-              {F3_MATRIX[ri][row].toFixed(2)}
+              {F3_MATRIX[ri][row]?.toFixed(2) ?? "—"}
             </text>
             {active && (
               <rect
@@ -429,15 +448,26 @@ export function Fig03() {
           </text>
         </g>
       ))}
+      <rect x={ox + 6 * cell + 34} y={oy + 20 + 5 * 22 + 8} width={22} height={14} fill="url(#f3mask)" stroke={RULE} />
+      <text x={ox + 6 * cell + 64} y={oy + 31 + 5 * 22 + 8} fontSize={9.5} fill={OLIVE}>
+        masked — a later token
+      </text>
 
       <line x1={24} y1={oy + 6 * cell + 34} x2={976} y2={oy + 6 * cell + 34} stroke={RULE} strokeWidth={1} />
       <text x={24} y={oy + 6 * cell + 58} fontSize={11.5} fill={INK}>
-        Selected query: <tspan fontWeight={600} fill={ORANGE_TEXT}>{F3_TOKENS[row]}</tspan>. This token looks at the
-        other five tokens in the context.
+        Selected query: <tspan fontWeight={600} fill={ORANGE_TEXT}>{F3_TOKENS[row]}</tspan>.{" "}
+        {row === 0
+          ? "This token is the first token. It can look only at itself."
+          : `This token looks at itself and at the ${["", "token", "two tokens", "three tokens", "four tokens", "five tokens"][row]} before it.${
+              row < F3_TOKENS.length - 1 ? " It cannot see the tokens after it." : ""
+            }`}
       </text>
       <text x={24} y={oy + 6 * cell + 80} fontSize={11.5} fill={OLIVE}>
         The value at the left of each row is the weight that the row gives to the selected token. High weight = the
         model uses that token.
+      </text>
+      <text x={24} y={oy + 6 * cell + 102} fontSize={11.5} fill={OLIVE}>
+        A dash means that the row comes before the selected token, so the row cannot see it.
       </text>
     </Frame>
   );
