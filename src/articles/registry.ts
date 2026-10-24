@@ -72,7 +72,7 @@ export const ARTICLES: ArticleMeta[] = [
   {
     slug: "random-forest",
     title: "Random forest",
-    summary: "How a team of randomised decision trees votes its way past overfitting, with a live forest to train.",
+    summary: "How a team of randomised decision trees votes its way past overfitting: Gini splits, out-of-bag scores, feature importance, scikit-learn, and a live forest to train.",
     tags: ["machine learning", "algorithms", "decision trees"],
     load: () => import("./random-forest"),
     added: "2026-10-05",

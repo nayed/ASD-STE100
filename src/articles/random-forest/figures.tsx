@@ -9,8 +9,8 @@ const INK = "#191914";
 /* ------------------------------------------------------------------ */
 
 const SAMPLES = [
-  { w: "180 g", d: "90 mm", c: "—", r: "GRAPEFRUIT", els: ["eRR", "nRoot", "nR", "eRG", "lG"], chips: ["cRR", "cRG"] },
-  { w: "120 g", d: "70 mm", c: "—", r: "ORANGE", els: ["eRR", "nRoot", "nR", "eRO", "lO"], chips: ["cRR", "cRO"] },
+  { w: "320 g", d: "110 mm", c: "—", r: "GRAPEFRUIT", els: ["eRR", "nRoot", "nR", "eRG", "lG"], chips: ["cRR", "cRG"] },
+  { w: "180 g", d: "75 mm", c: "—", r: "ORANGE", els: ["eRR", "nRoot", "nR", "eRO", "lO"], chips: ["cRR", "cRO"] },
   { w: "110 g", d: "—", c: "YELLOW", r: "LEMON", els: ["eRL", "nRoot", "nL", "eLL", "lL"], chips: ["cRL", "cLL"] },
   { w: "95 g", d: "—", c: "RED", r: "APPLE", els: ["eRL", "nRoot", "nL", "eLA", "lA"], chips: ["cRL", "cLA"] },
 ];
@@ -251,9 +251,11 @@ const TOC: [string, string, string][] = [
   ["s5", "5.0", "FOREST PROCEDURE"],
   ["s6", "6.0", "THE VOTE"],
   ["s7", "7.0", "OOB SCORE"],
-  ["s8", "8.0", "ADVANTAGES · LIMITS"],
-  ["s9", "9.0", "INTERACTIVE EXAMPLE"],
-  ["s10", "10.0", "SUMMARY"],
+  ["s8", "8.0", "FEATURE IMPORTANCE"],
+  ["s9", "9.0", "ADVANTAGES · LIMITS"],
+  ["s10", "10.0", "INTERACTIVE EXAMPLE"],
+  ["s11", "11.0", "THE FOREST IN CODE"],
+  ["s12", "12.0", "SUMMARY"],
 ];
 
 export function Toc() {
