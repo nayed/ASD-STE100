@@ -240,13 +240,20 @@ export function K({ children }: { children: ReactNode }) {
   );
 }
 
-export function InlineList({ items }: { items: [string, string][] }) {
+/** rows of [term, definition], plus a URL when the term is a link */
+export function InlineList({ items }: { items: [string, string, string?][] }) {
   return (
     <ul className="my-2 divide-y divide-go-ink/15 border-y border-go-ink/25">
-      {items.map(([term, def], i) => (
+      {items.map(([term, def, href], i) => (
         <li key={i} className="flex flex-col gap-1 py-3 sm:flex-row sm:gap-6">
           <span className="w-56 shrink-0 text-[11px] font-semibold uppercase tracking-[0.18em] text-go-olive-deep">
-            {term}
+            {href ? (
+              <a href={href} target="_blank" rel="noreferrer" className="underline decoration-go-accent underline-offset-4 hover:text-go-accent-text">
+                {term} ↗
+              </a>
+            ) : (
+              term
+            )}
           </span>
           <span className="text-[13px] leading-6 text-go-ink/85">{def}</span>
         </li>

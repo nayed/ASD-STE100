@@ -7,7 +7,7 @@ export const SECTIONS = [
   { id: "s04", no: "04", title: "FUNCTIONS & CONTROL FLOW" },
   { id: "s05", no: "05", title: "ARRAYS, SLICES, MAPS" },
   { id: "s06", no: "06", title: "STRUCTS & METHODS" },
-  { id: "s07", no: "07", title: "INTERFACES" },
+  { id: "s07", no: "07", title: "INTERFACES & GENERICS" },
   { id: "s08", no: "08", title: "ERRORS" },
   { id: "s09", no: "09", title: "GOROUTINES & CHANNELS" },
   { id: "s10", no: "10", title: "TOOLING & NEXT STEPS" },
@@ -106,7 +106,7 @@ export function Toc() {
             <br />
             8 SCHEMATICS
             <br />
-            12 EXHIBITS
+            15 EXHIBITS
           </div>
         </div>
       </aside>

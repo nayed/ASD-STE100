@@ -42,13 +42,14 @@ function BoxLabel({
 /* ================================================================== */
 export function FigPipeline() {
   const stages = [
-    { x: 8, w: 104, label: "MAIN.GO", sub: "SOURCE" },
-    { x: 137, w: 104, label: "PARSER", sub: "TOKENS" },
-    { x: 266, w: 88, label: "AST", sub: "TREE" },
-    { x: 379, w: 128, label: "TYPE CHECK", sub: "SAFETY NET" },
-    { x: 532, w: 88, label: "SSA", sub: "OPTIMIZE" },
-    { x: 645, w: 104, label: "CODEGEN", sub: "EMIT" },
-    { x: 774, w: 118, label: "DOSSIER", sub: "STATIC BINARY" },
+    { x: 8, w: 96, label: "MAIN.GO", sub: "SOURCE" },
+    { x: 123, w: 96, label: "PARSER", sub: "TOKENS" },
+    { x: 238, w: 76, label: "AST", sub: "TREE" },
+    { x: 333, w: 120, label: "TYPE CHECK", sub: "SAFETY NET" },
+    { x: 472, w: 72, label: "SSA", sub: "OPTIMIZE" },
+    { x: 563, w: 96, label: "CODEGEN", sub: "EMIT" },
+    { x: 678, w: 80, label: "LINK", sub: "+ RUNTIME" },
+    { x: 777, w: 110, label: "DOSSIER", sub: "STATIC BINARY" },
   ];
   return (
     <svg viewBox="0 0 900 250" className="h-auto w-full" style={MONO} role="img">
@@ -63,7 +64,7 @@ export function FigPipeline() {
 
       {stages.map((s, i) => {
         const hot = i === 3;
-        const isFile = i === 0 || i === 6;
+        const isFile = i === 0 || i === stages.length - 1;
         return (
           <g key={i}>
             <rect
@@ -113,13 +114,13 @@ export function FigPipeline() {
       })}
 
       {/* annotations */}
-      <text x={205} y={208} textAnchor="middle" fontSize={10} fill={OLIVE_DEEP} letterSpacing={1}>
+      <text x={176} y={208} textAnchor="middle" fontSize={10} fill={OLIVE_DEEP} letterSpacing={1}>
         SYNTAX ERRORS DIE HERE
       </text>
-      <text x={443} y={208} textAnchor="middle" fontSize={10} fill={BLUE_TEXT} fontWeight={600} letterSpacing={1}>
+      <text x={393} y={208} textAnchor="middle" fontSize={10} fill={BLUE_TEXT} fontWeight={600} letterSpacing={1}>
         WHOLE-PROGRAM TYPE SAFETY,
       </text>
-      <text x={443} y={222} textAnchor="middle" fontSize={10} fill={BLUE_TEXT} fontWeight={600} letterSpacing={1}>
+      <text x={393} y={222} textAnchor="middle" fontSize={10} fill={BLUE_TEXT} fontWeight={600} letterSpacing={1}>
         ESTABLISHED BEFORE RUNTIME
       </text>
       {/* centred at 812, not 833: at 833 these two lines ran past the right edge */}
@@ -127,7 +128,7 @@ export function FigPipeline() {
         NO VM, NO INTERPRETER,
       </text>
       <text x={812} y={222} textAnchor="middle" fontSize={10} fill={OLIVE_DEEP} letterSpacing={1}>
-        NO RUNTIME DEPENDENCIES
+        THE RUNTIME IS INSIDE
       </text>
     </svg>
   );

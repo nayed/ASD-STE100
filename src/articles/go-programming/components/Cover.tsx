@@ -2,8 +2,8 @@ import { GopherBlueprint } from "./diagrams/GopherBlueprint";
 
 const META = [
   ["DOC NO", "GO/101"],
-  ["REV", "1.2"],
-  ["SPEC", "GO1.22"],
+  ["REV", "1.3"],
+  ["SPEC", "GO 1.25+"],
   ["CLASS", "PUBLIC RELEASE"],
 ];
 

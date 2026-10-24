@@ -56,7 +56,9 @@ func main() {
           <K>defer</K> schedules a call to run when the enclosing function
           returns — regardless of how it returns. It is the standard pattern
           for cleanup: open a file, <K>defer f.Close()</K>, and never think
-          about the early-exit path again.
+          about the early-exit path again. Several deferred calls run in
+          reverse order, last in first out, and their arguments are evaluated
+          when the <K>defer</K> line runs, not when the call finally happens.
         </P>
         <CodeBlock
           exhibit="EXHIBIT E"
@@ -70,12 +72,13 @@ if err := risky(); err != nil {
 for i := 0; i < 10; i++ { } // counted
 for x < 100 { }             // "while"
 for { }                     // forever — break to exit
+for range 10 { }            // ten times, no counter (Go 1.22+)
 
 for i, v := range items {   // index and value
 	fmt.Println(i, v)
 }
 
-// switch — no fallthrough, no break needed
+// switch — no implicit fallthrough, no break needed
 switch os := runtime.GOOS; os {
 case "darwin", "linux":
 	fmt.Println("unix lineage")
@@ -83,11 +86,12 @@ default:
 	fmt.Println("somewhere else")
 }`}
         />
-        <Note label="FIELD NOTE — ONE LOOP TO RULE THEM">
-          Go has exactly one loop keyword. <strong>for</strong> is a counted
-          loop, a while loop, and an infinite loop. There is no ternary
-          operator either — write the <strong>if</strong> out. Verbosity here
-          is a readability feature.
+        <Note label="FIELD NOTE — FUNCTIONS ARE VALUES">
+          A function can be stored in a variable, passed as an argument and
+          returned. A function literal is a <strong>closure</strong>: it
+          captures the variables around it and keeps them alive. HTTP
+          handlers, sort orders and callbacks are all plain func values —{" "}
+          <K>slices.SortFunc(xs, func(a, b T) int {"{ … }"})</K>.
         </Note>
       </Section>
 
@@ -150,9 +154,16 @@ func main() {
         </Note>
         <P>
           Maps are unordered key→value stores, always created with{" "}
-          <K>make</K> or a literal. Reads return the zero type for missing
+          <K>make</K> or a literal. Reads return the zero value for missing
           keys; use the comma-ok form when absence matters. Iteration order
-          is deliberately randomized — never depend on it.
+          is deliberately randomized — never depend on it. For a stable order,
+          sort the keys: <K>slices.Sorted(maps.Keys(ages))</K>.
+        </P>
+        <P>
+          The generic <K>slices</K> and <K>maps</K> packages cover the
+          everyday chores — <K>slices.Sort</K>, <K>slices.Contains</K>,{" "}
+          <K>slices.Index</K>, <K>maps.Keys</K> — so you rarely write those
+          loops by hand.
         </P>
       </Section>
 
@@ -169,7 +180,9 @@ func main() {
           <strong>methods</strong>: ordinary functions with a receiver
           argument. A value receiver operates on a copy; a pointer receiver
           can mutate the original. The choice is part of your API's meaning,
-          and it is declared in plain sight at every call site.
+          and it is declared at the method, not at the call:{" "}
+          <K>s.Shutdown()</K> reads the same either way, because Go takes the
+          address for you.
         </P>
         <CodeBlock
           exhibit="EXHIBIT G"

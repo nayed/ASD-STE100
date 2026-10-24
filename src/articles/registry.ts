@@ -99,7 +99,7 @@ export const ARTICLES: ArticleMeta[] = [
   {
     slug: "go-programming",
     title: "The Go programming language",
-    summary: "Go from zero: program anatomy, types, slices and maps, interfaces, errors, goroutines and channels.",
+    summary: "Go from zero: program anatomy, types, slices and maps, interfaces and generics, errors, goroutines, channels and context.",
     tags: ["go", "golang", "languages", "concurrency"],
     load: () => import("./go-programming"),
     added: "2026-10-05",

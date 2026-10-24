@@ -27,14 +27,21 @@ export function Footer() {
             {REFS.map(([k, v]) => (
               <div key={k}>
                 <div className="text-[9px] uppercase tracking-[0.3em] text-go-paper/45">{k}</div>
-                <div className="mt-1 text-[11px] font-semibold tracking-[0.12em]">{v}</div>
+                <a
+                  href={`https://${v.toLowerCase()}`}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="mt-1 block text-[11px] font-semibold tracking-[0.12em] underline decoration-go-accent underline-offset-4 hover:text-go-accent"
+                >
+                  {v} ↗
+                </a>
               </div>
             ))}
           </div>
         </div>
 
         <div className="mt-16 flex flex-col gap-3 border-t border-go-paper/25 pt-5 text-[10px] uppercase tracking-[0.25em] text-go-paper/45 md:flex-row md:items-center md:justify-between">
-          <span>GO/101 — TECHNICAL DOSSIER, REV 1.2</span>
+          <span>GO/101 — TECHNICAL DOSSIER, REV 1.3</span>
           <span>DOCUMENT SET FOR TRAINING — REDISTRIBUTE FREELY</span>
           <span className="text-go-accent">EOF · 10 / 10</span>
         </div>

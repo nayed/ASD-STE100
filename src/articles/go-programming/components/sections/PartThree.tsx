@@ -20,8 +20,8 @@ export function PartThree() {
       <Section
         id="s07"
         no="07"
-        title="INTERFACES"
-        brief="IMPLICIT SATISFACTION, SMALL CONTRACTS"
+        title="INTERFACES & GENERICS"
+        brief="IMPLICIT SATISFACTION, TYPE PARAMETERS"
       >
         <P>
           An interface declares a method set and nothing else. There is no{" "}
@@ -79,6 +79,57 @@ func main() {
           with a type assertion <K>v := x.(T)</K> or a type switch when one
           value may be several things.
         </P>
+        <P>
+          Interfaces abstract over behavior. <strong>Generics</strong>, added
+          in Go 1.18, abstract over types: a function or type takes{" "}
+          <strong>type parameters</strong> in square brackets, each limited by
+          a constraint. The constraint is itself an interface — <K>any</K>{" "}
+          for every type, <K>comparable</K> for types that support{" "}
+          <K>==</K>, <K>cmp.Ordered</K> for types that support <K>&lt;</K>.
+        </P>
+        <CodeBlock
+          exhibit="EXHIBIT I"
+          file="GENERICS.GO"
+          code={`package main
+
+import (
+	"cmp"
+	"fmt"
+)
+
+// T is a type parameter; cmp.Ordered is its constraint
+// (min and max are built in since Go 1.21 — this is for illustration)
+func Max[T cmp.Ordered](a, b T) T {
+	if a > b {
+		return a
+	}
+	return b
+}
+
+// a generic type: a stack of any element type
+type Stack[T any] struct {
+	items []T
+}
+
+func (s *Stack[T]) Push(v T) { s.items = append(s.items, v) }
+
+func main() {
+	fmt.Println(Max(3, 7))      // 7 — T inferred as int
+	fmt.Println(Max("go", "c")) // go — T inferred as string
+
+	var names Stack[string]
+	names.Push("gopher")
+	fmt.Println(len(names.items)) // 1
+}`}
+        />
+        <Note label="FIELD NOTE — GENERICS OR INTERFACES?">
+          Use an interface when values of different types must behave alike
+          at run time. Use a type parameter when the same code works on many
+          types and must keep the exact type — containers, <K>Max</K>,{" "}
+          <K>Map</K>, <K>Filter</K>. The standard library's <K>slices</K> and{" "}
+          <K>maps</K> packages are generic; start there before writing your
+          own.
+        </Note>
       </Section>
 
       {/* ---------------------------------------------------------- */}
@@ -97,7 +148,7 @@ func main() {
           to be designed, not discovered in production.
         </P>
         <CodeBlock
-          exhibit="EXHIBIT I"
+          exhibit="EXHIBIT J"
           file="ERRORS.GO"
           code={`package main
 
@@ -138,14 +189,46 @@ func main() {
         <Figure
           fig="06"
           title="ERROR PROPAGATION — CONTEXT ACCUMULATES UPWARD"
-          note="errors.IS / ERRORS.AS WALK THE CHAIN"
+          note="ERRORS.IS / ERRORS.AS WALK THE CHAIN"
         >
           <FigErrors />
         </Figure>
+        <P>
+          <K>errors.Is</K> compares against a specific value, such as a
+          sentinel. <K>errors.As</K> looks for an error of a given{" "}
+          <em>type</em> anywhere in the chain and hands it back, fields
+          included — the way to carry structured detail like a line number.
+        </P>
+        <CodeBlock
+          exhibit="EXHIBIT K"
+          file="PARSE_ERROR.GO"
+          code={`// a custom error type carries structured detail
+type ParseError struct {
+	Line int
+	Msg  string
+}
+
+func (e *ParseError) Error() string {
+	return fmt.Sprintf("line %d: %s", e.Line, e.Msg)
+}
+
+// errors.As finds the first error of that type in the chain
+var pe *ParseError
+if errors.As(err, &pe) {
+	fmt.Println("fix line", pe.Line)
+}`}
+        />
+        <Note label="FIELD NOTE — THE TYPED NIL TRAP">
+          An interface value holds a type and a value. Return a nil{" "}
+          <strong>*ParseError</strong> as an <strong>error</strong> and the
+          interface is not nil — its type is set — so <K>err != nil</K> is
+          true. When there is no error, return a literal <K>nil</K>.
+        </Note>
         <Note label="FIELD NOTE — PANIC IS A LAST RESORT">
-          <strong>panic</strong> crashes the goroutine and must be recovered
-          explicitly; it is for programmer errors and impossible states, not
-          for expected failures. Missing files, bad input, timeouts — all of
+          <strong>panic</strong> unwinds the goroutine, running its deferred
+          calls; unless a deferred <strong>recover</strong> stops it, it then
+          crashes the whole program. It is for programmer errors and
+          impossible states, not for expected failures. Missing files, bad input, timeouts — all of
           that is an <strong>error</strong>, returned calmly like any other
           result.
         </Note>
@@ -176,9 +259,12 @@ func main() {
         </Figure>
         <P>
           Goroutines share memory, so Go gives you a discipline for talking
-          between them: <strong>channels</strong> — typed conduits on which
-          values flow in one direction. Send blocks until the buffer has
-          room; receive blocks until a value arrives. The motto:{" "}
+          between them: <strong>channels</strong> — typed conduits that carry
+          values from a sending goroutine to a receiving one. On an
+          unbuffered channel, a send waits until a receiver takes the value,
+          so the two goroutines meet. On a buffered channel, a send waits only
+          when the buffer is full, and a receive only when it is empty. The
+          motto:{" "}
           <em>don't communicate by sharing memory; share memory by
           communicating.</em>
         </P>
@@ -190,7 +276,7 @@ func main() {
           <FigChannel />
         </Figure>
         <CodeBlock
-          exhibit="EXHIBIT J"
+          exhibit="EXHIBIT L"
           file="CONCURRENCY.GO"
           code={`package main
 
@@ -201,36 +287,56 @@ import (
 )
 
 func main() {
-	var wg sync.WaitGroup           // wait for a set of goroutines
-	results := make(chan string, 3) // buffered: senders never block
+	var wg sync.WaitGroup           // waits for a set of goroutines
+	results := make(chan string, 3) // capacity 3 = 3 workers: no send blocks
 
 	for i := 1; i <= 3; i++ {
-		wg.Add(1)
-		go func(id int) {
-			defer wg.Done()
+		// wg.Go (Go 1.25+) starts the goroutine and tracks it;
+		// since Go 1.22 each iteration has its own i, safe to capture
+		wg.Go(func() {
 			time.Sleep(time.Millisecond) // simulate work
-			results <- fmt.Sprintf("worker %d done", id)
-		}(i)
+			results <- fmt.Sprintf("worker %d done", i)
+		})
 	}
 
 	wg.Wait()
-	close(results)
-
-	for msg := range results { // drains until closed
+	close(results)             // the sending side closes
+	for msg := range results { // drains, then stops at the close
 		fmt.Println(msg)
 	}
 }`}
         />
+        <Note label="FIELD NOTE — CLOSING A CHANNEL">
+          Only the sending side closes a channel, to say that no more values
+          will come. A receive from a closed channel returns at once with the
+          zero value; the two-value form <K>v, ok := &lt;-ch</K> sets{" "}
+          <K>ok</K> to false. Sending on a closed channel panics.
+        </Note>
+        <P>
+          Real programs must also <em>stop</em> work: a client hangs up, a
+          deadline passes. <K>context.Context</K> carries that cancellation
+          signal. Any function that can block takes a <K>ctx</K> as its first
+          argument, and the standard library's HTTP requests and database
+          calls all accept one. <K>select</K> waits on the work and on{" "}
+          <K>ctx.Done()</K> at the same time.
+        </P>
         <CodeBlock
-          exhibit="EXHIBIT K"
-          file="SELECT.GO"
-          code={`// select waits on multiple channel operations at once
-select {
-case msg := <-news:
-	fmt.Println(msg)
-case <-time.After(time.Second):
-	fmt.Println("timed out") // the timeout arm
-}`}
+          exhibit="EXHIBIT M"
+          file="CONTEXT.GO"
+          code={`// select waits on several channel operations at once
+func fetch(ctx context.Context, results <-chan string) (string, error) {
+	select {
+	case msg := <-results:
+		return msg, nil
+	case <-ctx.Done(): // cancelled, or the deadline passed
+		return "", ctx.Err()
+	}
+}
+
+// the caller sets the deadline once; every call below inherits it
+ctx, cancel := context.WithTimeout(context.Background(), time.Second)
+defer cancel()
+msg, err := fetch(ctx, results)`}
         />
         <Note label="FIELD NOTE — THE RACE DETECTOR">
           If you must share memory, do it under <K>sync.Mutex</K> — and
@@ -251,20 +357,21 @@ case <-time.After(time.Second):
           Go ships as one toolchain with no package-manager archaeology.
           Formatting, testing, dependency management, vetting and docs are
           first-class commands — consistent across every Go codebase on
-          earth. Learn these ten verbs and you can navigate any repository
+          earth. Learn these nine commands and you can navigate any repository
           in the ecosystem.
         </P>
         <TerminalBlock
-          exhibit="EXHIBIT L"
+          exhibit="EXHIBIT N"
           lines={[
-            { text: "go mod init dossier      # declare a module" },
-            { text: "go get ./...             # resolve dependencies" },
-            { text: "go build ./...           # compile everything" },
-            { text: "go test ./...            # run all tests" },
-            { text: "go test -race ./...      # tests + race detector" },
-            { text: "go vet ./...             # static-analysis pass" },
-            { text: "gofmt -w .               # canonical formatting" },
-            { text: "go doc http.Server       # docs, in your terminal" },
+            { text: "go mod init example.com/dossier       # declare a module" },
+            { text: "go get github.com/google/uuid@latest  # add or upgrade one dependency" },
+            { text: "go mod tidy                           # add missing, drop unused deps" },
+            { text: "go build ./...                        # compile everything" },
+            { text: "go test ./...                         # run all tests" },
+            { text: "go test -race ./...                   # tests + race detector" },
+            { text: "go vet ./...                          # static-analysis pass" },
+            { text: "gofmt -w .                            # canonical formatting" },
+            { text: "go doc net/http.Server                # docs, in your terminal" },
           ]}
         />
         <P>
@@ -274,21 +381,35 @@ case <-time.After(time.Second):
           <K>t.Run</K>.
         </P>
         <CodeBlock
-          exhibit="EXHIBIT M"
+          exhibit="EXHIBIT O"
           file="FUNCS_TEST.GO"
           code={`func TestDivide(t *testing.T) {
-	got, err := divide(10, 4)
-	if err != nil || got != 2.5 {
-		t.Fatalf("divide(10, 4) = %v, %v; want 2.5, nil", got, err)
+	tests := []struct {
+		name    string
+		a, b    float64
+		want    float64
+		wantErr bool
+	}{
+		{"simple", 10, 4, 2.5, false},
+		{"negative", -9, 3, -3, false},
+		{"by zero", 1, 0, 0, true},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got, err := divide(tt.a, tt.b)
+			if (err != nil) != tt.wantErr || got != tt.want {
+				t.Errorf("divide(%v, %v) = %v, %v", tt.a, tt.b, got, err)
+			}
+		})
 	}
 }`}
         />
         <InlineList
           items={[
-            ["THE TOUR OF GO", "go.dev/tour — the interactive syntax primer. Do it in one sitting; it is the fastest on-ramp."],
-            ["EFFECTIVE GO", "go.dev/doc/effective_go — the style document. Read it after the tour, then again a month later."],
-            ["THE SPEC", "go.dev/ref/spec — short enough to read whole. When in doubt, the spec settles it."],
-            ["STDLIB SOURCE", "pkg.go.dev/stdlib — the standard library is exemplary Go. Read io, fmt, net/http."],
+            ["THE TOUR OF GO", "go.dev/tour — the interactive syntax primer. Do it in one sitting; it is the fastest on-ramp.", "https://go.dev/tour"],
+            ["EFFECTIVE GO", "go.dev/doc/effective_go — the style document. Read it after the tour, then again a month later.", "https://go.dev/doc/effective_go"],
+            ["THE SPEC", "go.dev/ref/spec — short enough to read whole. When in doubt, the spec settles it.", "https://go.dev/ref/spec"],
+            ["STDLIB SOURCE", "pkg.go.dev/std — the standard library is exemplary Go. Read io, fmt, net/http.", "https://pkg.go.dev/std"],
             ["BUILD SOMETHING", "A CLI tool, then a JSON REST API with net/http, then a worker pool with channels. Ten sections can only take you to the trailhead."],
           ]}
         />
