@@ -291,14 +291,14 @@ export function FigSlice() {
         </g>
       ))}
 
-      {/* pointers into the array */}
+      {/* pointers into the array; labels sit on their lines, with a paper halo breaking the line behind them */}
       <line x1={133} y1={112} x2={86} y2={188} stroke={OLIVE_DEEP} strokeWidth={1.5} strokeDasharray={DASH} markerEnd="url(#arr-slice)" />
-      <text x={96} y={150} fontSize={9} fill={OLIVE_DEEP} letterSpacing={1}>S.PTR</text>
+      <text x={96} y={150} fontSize={9} fill={OLIVE_DEEP} letterSpacing={1} stroke={PAPER} strokeWidth={4} strokeLinejoin="round" paintOrder="stroke">S.PTR</text>
       <line x1={680} y1={112} x2={172} y2={188} stroke={OLIVE_DEEP} strokeWidth={1.5} strokeDasharray={DASH} markerEnd="url(#arr-slice)" />
-      <text x={400} y={136} fontSize={9} fill={OLIVE_DEEP} letterSpacing={1}>T.PTR — CELL 1</text>
+      <text x={400} y={136} fontSize={9} fill={OLIVE_DEEP} letterSpacing={1} stroke={PAPER} strokeWidth={4} strokeLinejoin="round" paintOrder="stroke">T.PTR — CELL 1</text>
 
       {/* backing array */}
-      <text x={40} y={174} fontSize={10} fill={OLIVE} letterSpacing={2}>
+      <text x={40} y={174} fontSize={10} fill={OLIVE} letterSpacing={2} stroke={PAPER} strokeWidth={4} strokeLinejoin="round" paintOrder="stroke">
         BACKING ARRAY — ONE ALLOCATION, SHARED BY EVERY SLICE ONTO IT
       </text>
       {cells.map((v, i) => {

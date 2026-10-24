@@ -545,7 +545,7 @@ export default function CiCd() {
                 {/* conflict: a teammate's commit on main, merged into the branch to resolve */}
                 <g id="tmG" className="fade">
                   <circle cx="545" cy="280" r="7" fill="var(--panel)" stroke="#3c3836" strokeWidth="1.8"/>
-                  <text x="545" y="262" textAnchor="middle" fontSize="8.5" letterSpacing="1" className="t-olive">PR #46</text>
+                  <text x="534" y="268" textAnchor="end" fontSize="8.5" letterSpacing="1" className="t-olive">PR #46</text>
                   <text x="545" y="304" textAnchor="middle" fontSize="9" className="t-olive">d81e0a4</text>
                 </g>
                 <path id="syncPath" d="M545,273 C560,230 575,200 585,172" className="ln-teal"/>

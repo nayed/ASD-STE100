@@ -69,11 +69,12 @@ export function FigInterface() {
       {/* satisfaction lines */}
       <line x1={370} y1={138} x2={160} y2={228} stroke={OLIVE_DEEP} strokeWidth={1.5} strokeDasharray={DASH} markerEnd="url(#arr-iface)" />
       <line x1={470} y1={138} x2={440} y2={228} stroke={OLIVE_DEEP} strokeWidth={1.5} strokeDasharray={DASH} markerEnd="url(#arr-iface)" />
-      <text x={268} y={196} textAnchor="middle" fontSize={9.5} fill={BLUE_TEXT} fontWeight={600} letterSpacing={1.5}>
+      {/* labels on their lines: a paper halo breaks the line behind them */}
+      <text x={268} y={196} textAnchor="middle" fontSize={9.5} fill={BLUE_TEXT} fontWeight={600} letterSpacing={1.5} stroke={PAPER} strokeWidth={4} strokeLinejoin="round" paintOrder="stroke">
         SATISFIES — IMPLICITLY
       </text>
       <line x1={540} y1={138} x2={726} y2={228} stroke={OLIVE} strokeWidth={1.5} strokeDasharray={DASH} />
-      <text x={646} y={196} textAnchor="middle" fontSize={9.5} fill={OLIVE} letterSpacing={1.5}>
+      <text x={646} y={196} textAnchor="middle" fontSize={9.5} fill={OLIVE} letterSpacing={1.5} stroke={PAPER} strokeWidth={4} strokeLinejoin="round" paintOrder="stroke">
         ×  NO SPEAK, NO SATISFACTION
       </text>
 
@@ -244,7 +245,7 @@ export function FigGMP() {
 
       {/* work-stealing arc */}
       <path d="M 688 156 C 620 108, 390 108, 322 158" fill="none" stroke={OLIVE_DEEP} strokeWidth={1.5} strokeDasharray={DASH} markerEnd="url(#arr-gmp)" />
-      <text x={505} y={122} textAnchor="middle" fontSize={9.5} fill={OLIVE_DEEP} letterSpacing={2}>
+      <text x={505} y={122} textAnchor="middle" fontSize={9.5} fill={OLIVE_DEEP} letterSpacing={2} stroke={PAPER} strokeWidth={4} strokeLinejoin="round" paintOrder="stroke">
         WORK-STEALING
       </text>
 

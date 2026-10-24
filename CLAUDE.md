@@ -16,8 +16,9 @@ Code is MIT (`LICENSE`); article content (text, diagrams, figures) is CC BY 4.0 
 - `npm run build`: production build into `dist/`
 - `npm run preview`: serve the build
 - `npm run typecheck`: `tsc --noEmit`. `vite build` does not type-check
+- `npm run check:figures`: after a build, serves `dist/` and checks every diagram for colliding or cut-off labels (needs `npx playwright install --only-shell chromium`); CI runs it. When a label must sit on a line, give it a halo (`paint-order: stroke` in the background colour) or a background patch, which the check accepts
 
-There is no linter and no test suite.
+There is no linter and no unit test suite.
 
 ## Architecture
 

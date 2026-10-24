@@ -19,3 +19,6 @@ jobs:
       - run: npm ci
       - run: npm run typecheck
       - run: npm run build
+      # diagrams: fail on labels that collide or get cut off (scripts/check-figures.ts)
+      - run: npx playwright install --with-deps --only-shell chromium
+      - run: npm run check:figures

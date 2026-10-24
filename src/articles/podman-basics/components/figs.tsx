@@ -232,7 +232,7 @@ export function FigLoop() {
     <L x={248} y={76} cls="fs">build -t app:v1</L>
 
     <Arrow pts={[[520, 86], [608, 140]]} color={P} w={1.8} />
-    <L x={576} y={98} cls="fps">run -d -p 8080:80</L>
+    <L x={576} y={98} cls="fps" bg>run -d -p 8080:80</L>
 
     <Arrow pts={[[432, 212], [432, 124]]} color={O} />
     <L x={444} y={172} anchor="start" cls="fs">pull</L>
@@ -243,7 +243,7 @@ export function FigLoop() {
     <Arrow pts={[[674, 190], [674, 302], [125, 302], [125, 194]]} color={O} dash />
     <L x={400} y={294} cls="fs" bg>CHANGE THE CODE → REBUILD → RERUN</L>
 
-    <L x={125} y={212} cls="fs">1 · WRITE RECIPE ONCE</L>
+    <L x={125} y={212} cls="fs" bg>1 · WRITE RECIPE ONCE</L>
   </>);
 }
 
