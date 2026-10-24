@@ -1,5 +1,5 @@
 import { ArrowDown } from "lucide-react";
-import { Figure, Note, P, PullQuote, Section, Sub } from "../components/chrome";
+import { Figure, Note, P, PullQuote, REV, Section, Sub } from "../components/chrome";
 import { Reveal } from "../lib/reveal";
 import { FigLayers, FigStacks } from "../components/figs";
 import { GlossaryTable } from "../components/blocks";
@@ -13,7 +13,7 @@ export function Cover() {
       <div>
         <div className="flex items-baseline justify-between gap-4 border-b border-pd-ink/20 pb-3 text-[9px] uppercase tracking-[0.2em] text-pd-olive">
           <span>TECHNICAL DOSSIER // CONTAINER SYSTEMS // ENTRY LEVEL</span>
-          <span className="whitespace-nowrap">ISSUE 001 — 10 SHEETS · 7 FIGS</span>
+          <span className="whitespace-nowrap">ISSUE 001 — 12 SHEETS · 8 FIGS</span>
         </div>
 
         <div className="relative mt-12">
@@ -32,7 +32,7 @@ export function Cover() {
           <P className="max-w-[560px] text-[14px]">
             This dossier teaches containers from absolute zero — what they are, why every team ships
             with them, and how to drive <b>Podman</b>, the daemonless, rootless, security-first
-            engine. Read the ten sheets in order; by the last one you will run, build, pod, and
+            engine. Read the twelve sheets in order; by the last one you will run, build, pod, and
             service-manage containers for real.
           </P>
           <div className="space-y-2 border border-pd-ink p-4 text-[10px] uppercase leading-[2] tracking-[0.14em]">
@@ -42,11 +42,11 @@ export function Cover() {
             </div>
             <div className="flex justify-between text-pd-olive">
               <span>READING TIME</span>
-              <span className="text-pd-ink">±25 MIN</span>
+              <span className="text-pd-ink">±35 MIN</span>
             </div>
             <div className="flex justify-between text-pd-olive">
               <span>EXERCISES</span>
-              <span className="text-pd-purple font-bold">8 FIELD TASKS</span>
+              <span className="text-pd-purple font-bold">10 FIELD TASKS</span>
             </div>
             <Barcode />
           </div>
@@ -56,9 +56,9 @@ export function Cover() {
       <div className="mt-14">
         <div className="grid grid-cols-2 gap-px border-2 border-pd-ink bg-pd-ink md:grid-cols-3 xl:grid-cols-6">
           {[
-            ["DOCUMENT", "PDM-101 · REV C"],
+            ["DOCUMENT", `PDM-101 · ${REV}`],
             ["SUBJECT", "CONTAINER FUNDAMENTALS"],
-            ["TOOLCHAIN", "PODMAN ≥ 4 · OCI"],
+            ["TOOLCHAIN", "PODMAN 5 · OCI"],
             ["HOST", "LINUX · MAC/WIN VIA VM"],
             ["LEVEL", "NO PREREQUISITES"],
             ["STATUS", "PUBLIC · TLP:CLEAR", true],
@@ -224,7 +224,7 @@ export function S03() {
     <Section id="s03" no="03" kicker="SEC. 03 — TERMINOLOGY" title="Core Vocabulary">
       <Reveal>
         <P className="max-w-[620px]">
-          Eight words cover ninety percent of the container world. Learn them precisely now and
+          Nine words cover ninety percent of the container world. Learn them precisely now and
           every tutorial, error message, and man page gets easier.
         </P>
         <div className="mt-8">
@@ -232,6 +232,7 @@ export function S03() {
             rows={[
               ["IMAGE", "A read-only, versioned template holding code + dependencies. Built once, copied everywhere. A photograph, not a living thing."],
               ["CONTAINER", "A live instance of an image: real processes running inside namespaces, with a thin writable layer on top."],
+              ["VOLUME", "Storage mounted into a container from outside, so its data survives when the container is deleted. Sheet 07."],
               ["CONTAINERFILE", "The build recipe for an image. Literally the same format as a Dockerfile — Podman reads both, identically."],
               ["REGISTRY", "An image warehouse over HTTP: docker.io, quay.io, ghcr.io, or your company's own. You push and pull images to/from it."],
               ["TAG", "A human label pinned to an image — app:1.4.2. ':latest' is just a tag; nothing guarantees it is latest."],

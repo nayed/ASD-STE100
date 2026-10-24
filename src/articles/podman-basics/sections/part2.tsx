@@ -14,8 +14,8 @@ export function S04() {
           <div className="space-y-5">
             <P>
               Get the binary first: <Code>dnf install podman</Code> on Fedora/RHEL,{" "}
-              <Code>apt install podman</Code> on Debian/Ubuntu, <Code>brew install podman</Code>{" "}
-              on macOS (then <Code>podman machine init && podman machine start</Code> once). From
+              <Code>apt install podman</Code> on Debian/Ubuntu, and the installer from podman.io on
+              macOS or Windows (then <Code>podman machine init && podman machine start</Code> once). From
               here, your whole working life is four verbs: <b>pull, build, run, prune.</b>
             </P>
             <P>
@@ -25,7 +25,7 @@ export function S04() {
           </div>
           <Note label="ALREADY KNOW DOCKER?">
             <p>
-              The CLI is intentionally a superset of Docker’s. <Code>alias docker=podman</Code>{" "}
+              The CLI deliberately mirrors Docker’s for daily work. <Code>alias docker=podman</Code>{" "}
               works, and most distributions ship a <b>podman-docker</b> package that wires the
               alias permanently. Same images, same flags, same Containerfiles.
             </p>
@@ -45,7 +45,7 @@ export function S04() {
           right="SHEET 04"
           lines={[
             { t: "podman run -d --name web -p 8080:80 docker.io/library/nginx", c: "cmd" },
-            { t: "# resolved → pulled → signature-checked → started. one line.", c: "com" },
+            { t: "# resolved → pulled → started. one line.", c: "com" },
             { t: "9f2c0e1a7b31d5...", c: "out" },
             { t: "podman ps", c: "cmd" },
             { t: "CONTAINER ID  IMAGE                            STATUS        PORTS                   NAMES", c: "out" },
@@ -53,7 +53,7 @@ export function S04() {
             { t: "curl -s localhost:8080 | head -n 2", c: "cmd" },
             { t: "<!DOCTYPE html>  <!-- Welcome to nginx! -->", c: "out" },
             { t: "podman logs --tail 1 web", c: "cmd" },
-            { t: '172.17.0.1 - - "GET / HTTP/1.1" 200 615 "curl/8.0"', c: "out" },
+            { t: '… "GET / HTTP/1.1" 200 615 "-" "curl/8.5.0"', c: "out" },
             { t: "podman stop web && podman rm web", c: "cmd" },
             { t: "web", c: "out" },
             { t: "web", c: "out" },
@@ -70,7 +70,7 @@ export function S04() {
             ["podman run", "Create + start a container from an image", "-d · -p · --name · --rm"],
             ["podman ps", "Show running containers", "-a  (include stopped)"],
             ["podman stop / start", "Send SIGTERM, or restart a stopped container as-is", "--time 10"],
-            ["podman restart", "Stop + start in one move", "-"],
+            ["podman volume", "Create, list, inspect and delete named volumes (sheet 07)", "ls · create · rm"],
             ["podman logs", "Read whatever the process printed", "-f  (follow, like tail)"],
             ["podman exec", "Run a second command inside a live container", "-it web sh  (get a shell)"],
             ["podman rm", "Delete a stopped container and its writable layer", "-f  (force, running too)"],
@@ -129,10 +129,10 @@ export function S05() {
     <Section id="s05" no="05" kicker="SEC. 05 — THE DIFFERENTIATOR" title="Why Podman">
       <Reveal>
         <P className="max-w-[640px]">
-          Podman started at Red Hat in 2018 as an answer to a pointed question:{" "}
-          <i>why should every container on Earth trust one giant root daemon?</i> It is a
-          CNCF-graduated, Apache-2.0 project (the name: <b>pod man</b>ager), and it rests on three
-          architectural choices.
+          Red Hat engineers began Podman in 2017, and 1.0 shipped in 2019, as an answer to a
+          pointed question: <i>why should every container on Earth trust one giant root daemon?</i>{" "}
+          It is an Apache-2.0 project, part of the CNCF since 2025 (the name: <b>pod man</b>ager),
+          and it rests on three architectural choices.
         </P>
         <div className="mt-8 grid gap-px border-2 border-pd-ink bg-pd-ink sm:grid-cols-3">
           {PILLARS.map((p) => (
@@ -167,7 +167,9 @@ export function S05() {
             ["BACKGROUND SERVICE", "None — fork/exec per command, conmon babysits each container", "dockerd, an always-on system daemon"],
             ["PRIVILEGE DEFAULT", "Rootless-first; no root required anywhere for daily work", "Root daemon; rootless mode exists but is opt-in"],
             ["MULTI-CONTAINER UNIT", "Pods are first-class objects", "Single containers; grouping via Compose plugin"],
-            ["KUBERNETES BRIDGE", "generate kube / play kube are built into the CLI", "Requires external tooling or plugins"],
+            ["KUBERNETES BRIDGE", "podman kube generate / kube play are built into the CLI", "Requires external tooling or plugins"],
+            ["COMPOSE FILES", "podman compose runs compose.yaml through docker-compose or podman-compose", "docker compose, the reference plugin"],
+            ["DOCKER API", "podman.socket serves a Docker-compatible API on demand", "The dockerd socket, always on"],
             ["SERVICE MANAGEMENT", "systemd Quadlets — containers are native unit files", "--restart flags, daemon-level policies"],
             ["CLI COMPATIBILITY", "Drop-in: alias docker=podman", "The reference implementation"],
             ["IMAGE FORMAT", "OCI — runs everything Docker builds, and vice versa", "Same OCI standard"],
@@ -176,7 +178,7 @@ export function S05() {
         <div className="mt-8 grid gap-8 md:grid-cols-2">
           <Note label="WHAT IS CONMON?">
             <p>
-              A ~200-line C monitor spawned per container. It holds the PTY, forwards logs to
+              A small C program spawned per container. It holds the PTY, forwards logs to
               journald, and records the exit code — so Podman itself is free to exit the moment
               your container starts.
             </p>
@@ -226,7 +228,7 @@ export function S06() {
       </Reveal>
 
       <Reveal delay={60}>
-        <Figure no="06" title="A controlled identity lie — root inside, nobody outside" note="USER NS MAP">
+        <Figure no="06" title="A controlled identity lie — root inside, your own user outside" note="USER NS MAP">
           <FigUid />
         </Figure>
       </Reveal>
@@ -247,8 +249,8 @@ export function S06() {
           </Note>
           <Note label="SURVIVING LOGOUT">
             <p>
-              Rootless containers pause when you log out unless you run{" "}
-              <Code>loginctl enable-linger $USER</Code> once. Sheet 09 uses this.
+              Rootless containers stop when you log out, and your user services skip boot, unless
+              you run <Code>loginctl enable-linger $USER</Code> once. Sheet 11 uses this.
             </p>
           </Note>
         </div>

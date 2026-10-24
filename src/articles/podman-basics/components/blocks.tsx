@@ -100,7 +100,8 @@ export function CompareTable({ rows }: { rows: [string, string, string][] }) {
   );
 }
 
-export function GlossaryTable({ rows }: { rows: [string, string][] }) {
+/** rows of [term, meaning], plus a URL when the term is a link */
+export function GlossaryTable({ rows }: { rows: [string, string, string?][] }) {
   return (
     <div className="overflow-x-auto">
       <table className="w-full border-collapse text-left text-[11.5px]">
@@ -111,9 +112,17 @@ export function GlossaryTable({ rows }: { rows: [string, string][] }) {
           </tr>
         </thead>
         <tbody>
-          {rows.map(([t, d]) => (
+          {rows.map(([t, d, href]) => (
             <tr key={t} className="transition-colors hover:bg-pd-ink/[0.04]">
-              <Td className="font-bold">{t}</Td>
+              <Td className="font-bold">
+                {href ? (
+                  <a href={href} target="_blank" rel="noreferrer" className="underline decoration-pd-purple underline-offset-[3px] hover:text-pd-purple">
+                    {t} ↗
+                  </a>
+                ) : (
+                  t
+                )}
+              </Td>
               <Td className="text-pd-ink/75">{d}</Td>
             </tr>
           ))}

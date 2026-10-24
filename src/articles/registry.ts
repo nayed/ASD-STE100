@@ -126,7 +126,7 @@ export const ARTICLES: ArticleMeta[] = [
   {
     slug: "podman-basics",
     title: "Podman from zero",
-    summary: "Containers from first principles, then Podman: images, rootless containers, pods, Containerfiles and systemd.",
+    summary: "Containers from first principles, then Podman: images, rootless containers, volumes, networks and Compose, pods, Containerfiles and systemd.",
     tags: ["podman", "containers", "devops", "linux"],
     load: () => import("./podman-basics"),
     added: "2026-10-06",

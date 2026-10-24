@@ -2,7 +2,8 @@ import "./pd.css";
 import { Column, DocProvider, Rail, TopStrip } from "./components/chrome";
 import { Cover, S01, S02, S03 } from "./sections/part1";
 import { S04, S05, S06 } from "./sections/part2";
-import { Footer, S07, S08, S09, S10 } from "./sections/part3";
+import { S07, S08 } from "./sections/part3";
+import { Footer, S09, S10, S11, S12 } from "./sections/part4";
 
 export default function PodmanBasics() {
   return (
@@ -23,6 +24,8 @@ export default function PodmanBasics() {
           <S08 />
           <S09 />
           <S10 />
+          <S11 />
+          <S12 />
         </Column>
         <Footer />
       </main>

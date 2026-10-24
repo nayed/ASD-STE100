@@ -4,6 +4,8 @@ import { createContext, useContext, useEffect, useState, type ReactNode } from "
 /*  Document model                                                     */
 /* ------------------------------------------------------------------ */
 
+export const REV = "REV D";
+
 export const SECTIONS = [
   { id: "s01", no: "01", title: "WHY CONTAINERS" },
   { id: "s02", no: "02", title: "THE MENTAL MODEL" },
@@ -11,10 +13,12 @@ export const SECTIONS = [
   { id: "s04", no: "04", title: "THE COMMAND LOOP" },
   { id: "s05", no: "05", title: "WHY PODMAN" },
   { id: "s06", no: "06", title: "ROOTLESS BY DESIGN" },
-  { id: "s07", no: "07", title: "PODS — THE NAMESAKE" },
-  { id: "s08", no: "08", title: "BUILDING IMAGES" },
-  { id: "s09", no: "09", title: "KEEPING IT RUNNING" },
-  { id: "s10", no: "10", title: "FIELD CHECKLIST" },
+  { id: "s07", no: "07", title: "KEEPING DATA" },
+  { id: "s08", no: "08", title: "NETWORKS & COMPOSE" },
+  { id: "s09", no: "09", title: "PODS — THE NAMESAKE" },
+  { id: "s10", no: "10", title: "BUILDING IMAGES" },
+  { id: "s11", no: "11", title: "KEEPING IT RUNNING" },
+  { id: "s12", no: "12", title: "FIELD CHECKLIST" },
 ];
 
 type DocState = { active: string; progress: number };
@@ -62,10 +66,10 @@ export function TopStrip() {
   return (
     <header className="fixed inset-x-0 top-(--site-bar-h) z-40 h-8 bg-pd-ink text-pd-paper">
       <div className="flex h-full items-center justify-between px-3 text-[9px] uppercase tracking-[0.16em] md:px-5 md:text-[10px]">
-        <span className="font-semibold">PDM-101 · REV C</span>
+        <span className="font-semibold">PDM-101 · {REV}</span>
         <span className="hidden text-pd-paper/55 md:block">CONTAINER SYSTEMS — TRAINING DOSSIER</span>
         <span className="text-pd-paper/80">
-          SHEET <span className="text-pd-purple font-bold">{sec.no}</span> / 10 — {sec.title}
+          SHEET <span className="text-pd-purple font-bold">{sec.no}</span> / {SECTIONS.length} — {sec.title}
         </span>
       </div>
       <div className="absolute bottom-0 left-0 h-[2px] bg-pd-purple transition-[width] duration-150" style={{ width: `${progress * 100}%` }} />
@@ -80,7 +84,7 @@ export function Rail() {
       <div>
         <div className="border border-pd-ink p-3.5">
           <div className="text-[8.5px] uppercase tracking-[0.22em] text-pd-olive">TECHNICAL DOSSIER</div>
-          <div className="mt-1 text-[13px] font-bold leading-none">PDM-101 · REV C</div>
+          <div className="mt-1 text-[13px] font-bold leading-none">PDM-101 · {REV}</div>
           <div className="mt-3 border-t border-pd-ink/20 pt-2 text-[8.5px] uppercase tracking-[0.22em] text-pd-olive">INDEX OF SHEETS</div>
         </div>
         <nav className="mt-5 space-y-[7px]">
@@ -149,7 +153,7 @@ export function Section({
         <div className="ml-auto pb-1 text-right text-[9px] uppercase leading-[1.7] tracking-[0.18em] text-pd-olive">
           PDM-101
           <br />
-          SHEET {no} / 10
+          SHEET {no} / {SECTIONS.length}
         </div>
       </div>
       <div className="pt-9">{children}</div>

@@ -265,7 +265,7 @@ export function FigDaemon() {
     <Bx x={30} y={262} w={170} h={40} lines={["CONTAINER", "VIA RUNC"]} />
     <L x={212} y={134} anchor="start" cls="fps">SINGLE POINT OF FAILURE</L>
     <L x={212} y={150} anchor="start" cls="fs">AND A ROOT-POWERED TARGET</L>
-    <L x={195} y={328} cls="fs">IF THE DAEMON DIES, EVERY CONTAINER IS ORPHANED</L>
+    <L x={195} y={328} cls="fs">BY DEFAULT, A DAEMON RESTART STOPS ALL CONTAINERS</L>
 
     {/* podman chain */}
     <Bx x={480} y={52} w={170} h={38} accent lines={["$ podman run"]} />
@@ -299,19 +299,46 @@ export function FigUid() {
     <L x={438} y={56} anchor="start" cls="fs" bg>ON THE HOST</L>
     <Bx x={448} y={88} w={240} h={36} lines={["UID 1000 · ALEX"]} sub="AN ORDINARY USER" />
     <Bx x={448} y={132} w={240} h={36} lines={["UID 100000 · SUBUID + 0"]} />
-    <Bx x={448} y={176} w={240} h={36} lines={["UID 100001 · SUBUID + 1"]} />
+    <Bx x={448} y={176} w={240} h={36} lines={["UID 100026 · SUBUID + 26"]} />
 
-    <L x={382} y={42} cls="fps" bg>ROOT HERE = NOBODY OUTSIDE</L>
+    <L x={382} y={42} cls="fps" bg>ROOT HERE = YOUR OWN USER OUTSIDE</L>
     <Arrow pts={[[316, 106], [448, 106]]} color={P} w={2} />
     <Arrow pts={[[316, 150], [448, 150]]} color={O} />
     <Arrow pts={[[316, 194], [448, 194]]} color={O} />
-    <L x={382} y={270} cls="fs" bg>HOST UID = CONTAINER UID + 99,999</L>
+    <L x={382} y={270} cls="fs" bg>FROM UID 1 ON: HOST UID = CONTAINER UID + 99,999</L>
 
     <L x={44} y={296} anchor="start" cls="fs">/etc/subuid lends each user 65,536 host UIDs · rootless storage lives in ~/.local/share/containers</L>
   </>);
 }
 
-/* ---------------- FIG 07 — pod anatomy ---------------- */
+/* ---------------- FIG 07 — where data lives ---------------- */
+
+export function FigData() {
+  return wrap("a container with a named volume, a bind mount and its writable layer", "0 0 760 304", <>
+    <L x={380} y={26} cls="fb">WHERE A CONTAINER'S DATA LIVES</L>
+
+    <rect x={40} y={56} width={260} height={212} fill="none" stroke={O} strokeWidth={1} strokeDasharray="6 4" />
+    <L x={58} y={56} anchor="start" cls="fs" bg>INSIDE THE CONTAINER</L>
+    <Bx x={56} y={80} w={228} h={44} lines={["/var/lib/postgresql/data"]} sub="MOUNT POINT" />
+    <Bx x={56} y={140} w={228} h={44} lines={["/app"]} sub="MOUNT POINT" />
+    <Bx x={56} y={200} w={228} h={44} dash lines={["WRITABLE LAYER"]} sub="EVERYTHING ELSE" />
+
+    <rect x={460} y={56} width={260} height={212} fill="none" stroke={I} strokeWidth={1.2} />
+    <L x={478} y={56} anchor="start" cls="fs" bg>ON THE HOST</L>
+    <Bx x={476} y={80} w={228} h={44} accent lines={["NAMED VOLUME · pgdata"]} sub="MANAGED BY PODMAN · SURVIVES rm" />
+    <Bx x={476} y={140} w={228} h={44} lines={["BIND MOUNT · ~/project"]} sub="A FOLDER YOU OWN · EDIT IT LIVE" />
+    <L x={590} y={226} cls="fps">NO HOST COPY · GONE WITH rm</L>
+
+    <Arrow pts={[[476, 102], [284, 102]]} color={P} w={1.8} />
+    <L x={380} y={92} cls="fps" bg>-v NAME:PATH</L>
+    <Arrow pts={[[476, 162], [284, 162]]} color={O} />
+    <L x={380} y={152} cls="fs" bg>-v ./DIR:PATH:Z</L>
+
+    <L x={44} y={292} anchor="start" cls="fs">volumes live in ~/.local/share/containers/storage/volumes · :Z relabels a bind mount for SELinux</L>
+  </>);
+}
+
+/* ---------------- FIG 08 — pod anatomy ---------------- */
 
 export function FigPod() {
   return wrap("a pod with two containers sharing a network namespace", "0 0 760 340", <>
@@ -319,7 +346,7 @@ export function FigPod() {
 
     {/* pod boundary */}
     <rect x={170} y={64} width={420} height={212} fill="none" stroke={P} strokeWidth={1.8} strokeDasharray="8 5" />
-    <L x={180} y={64} anchor="start" cls="fp" bg>POD — SHARED NET + IPC NAMESPACE</L>
+    <L x={180} y={64} anchor="start" cls="fp" bg>POD — SHARED NET + IPC + UTS NAMESPACES</L>
 
     <Bx x={206} y={104} w={160} h={76} lines={["NGINX", "SERVES :80"]} />
     <Bx x={414} y={104} w={160} h={76} lines={["APP API", "LISTENS :3000"]} />
@@ -340,8 +367,8 @@ export function FigPod() {
     {/* kube out */}
     <Arrow pts={[[590, 142], [616, 142]]} color={P} w={1.8} />
     <Bx x={616} y={104} w={114} h={76} lines={["POD.YAML", "K8S SPEC"]} dash />
-    <L x={673} y={200} cls="fs">podman generate kube</L>
-    <L x={673} y={214} cls="fs">podman play kube</L>
+    <L x={673} y={200} cls="fs">podman kube generate</L>
+    <L x={673} y={214} cls="fs">kubectl apply -f</L>
 
     <L x={44} y={318} anchor="start" cls="fs">containers in a pod reach each other on localhost · the pod is the smallest unit kubernetes deploys</L>
   </>);
