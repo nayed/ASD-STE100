@@ -1,0 +1,358 @@
+/* Stack and heap — MEM-100. Every rule is scoped under .svh: CSS from a lazy chunk stays loaded. */
+
+.svh {
+  --paper: #f5f4ee;
+  --paper-2: #ecebe3;
+  --ink: #121210;
+  --ink-2: #3a3a33;
+  --olive: #6b6c5a; /* 4.9:1 on paper: secondary text and strokes */
+  --olive-lt: #a6a795; /* construction lines, hatching */
+  --rule: #dcdbcf;
+  --yel: #f2c300; /* the accent: fills only, always under an ink outline */
+  --yel-text: #7a5800; /* the accent's hue for small text, 5.9:1 on paper */
+  --mono: "IBM Plex Mono", ui-monospace, monospace;
+
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--mono);
+  font-size: 13.5px;
+  line-height: 1.85;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+.svh ::selection { background: var(--yel); color: var(--ink); }
+.svh *,
+.svh *::before,
+.svh *::after { box-sizing: border-box; }
+.svh a { color: inherit; }
+.svh code { font-family: var(--mono); background: var(--paper-2); border: 1px solid var(--rule); padding: 0 4px; font-size: 0.92em; }
+
+/* ---------- page grid: rail + document ---------- */
+.svh .page {
+  display: grid;
+  grid-template-columns: 252px minmax(0, 1fr);
+  gap: 44px;
+  max-width: 1320px;
+  margin: 0 auto;
+  padding: 0 36px 80px;
+}
+.svh main { min-width: 0; }
+
+/* ---------- rail: the dossier as an address map ---------- */
+.svh .rail {
+  position: sticky;
+  top: calc(var(--site-bar-h) + 26px);
+  align-self: start;
+  max-height: calc(100vh - var(--site-bar-h) - 40px);
+  overflow-y: auto;
+  padding: 34px 0 20px 34px;
+}
+.svh .rail-doc { font-size: 24px; font-weight: 700; letter-spacing: 0.02em; line-height: 1; }
+.svh .rail-rev { font-size: 9.5px; letter-spacing: 0.2em; color: var(--olive); margin-top: 6px; }
+.svh .rail-h { font-size: 9px; letter-spacing: 0.24em; color: var(--olive); margin: 26px 0 8px; display: flex; justify-content: space-between; }
+.svh .rail-map { border: 1.5px solid var(--ink); }
+.svh .rail-map a {
+  position: relative;
+  display: grid;
+  grid-template-columns: 50px minmax(0, 1fr);
+  gap: 8px;
+  padding: 5px 10px;
+  border-top: 1px solid var(--rule);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  line-height: 1.5;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+.svh .rail-map a:first-child { border-top: 0; }
+.svh .rail-map a .off { color: var(--olive); font-size: 9.5px; letter-spacing: 0.02em; }
+.svh .rail-map a:hover { background: var(--paper-2); }
+.svh .rail-map a.done { color: var(--olive); }
+.svh .rail-map a.act { background: var(--yel); font-weight: 600; box-shadow: inset 0 0 0 1.5px var(--ink); }
+.svh .rail-map a.act .off { color: var(--ink); }
+/* the stack pointer marks the sheet on screen */
+.svh .rail-map a.act::before {
+  content: "SP ▸";
+  position: absolute;
+  right: calc(100% + 5px);
+  top: 5px;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  white-space: nowrap;
+  color: var(--ink);
+}
+.svh .rail-sp { margin-top: 14px; font-size: 10px; letter-spacing: 0.1em; display: grid; grid-template-columns: auto 1fr; gap: 3px 10px; }
+.svh .rail-sp dt { color: var(--olive); font-size: 9px; letter-spacing: 0.2em; }
+.svh .rail-sp dd { margin: 0; font-weight: 600; font-variant-numeric: tabular-nums; }
+.svh .rail-legal { margin-top: 22px; border-top: 1px solid var(--rule); padding-top: 10px; font-size: 8.5px; letter-spacing: 0.14em; line-height: 1.8; color: var(--olive); text-transform: uppercase; }
+
+/* phone and tablet: a strip replaces the rail */
+.svh .strip { display: none; }
+
+/* ---------- cover sheet ---------- */
+.svh .cover { position: relative; margin-top: 34px; border: 1.5px solid var(--ink); background: var(--paper); }
+.svh .cover-top {
+  display: flex; flex-wrap: wrap; justify-content: space-between; gap: 6px 20px;
+  padding: 12px 22px; border-bottom: 1px solid var(--ink);
+  font-size: 9.5px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--olive);
+}
+.svh .cover-top b { color: var(--ink); font-weight: 600; }
+.svh .cover-body { display: grid; grid-template-columns: minmax(0, 1fr) 520px; gap: 30px 40px; align-items: end; padding: 34px 22px 30px; }
+.svh .cover-title { grid-column: 1 / -1; }
+.svh .eyebrow { font-size: 10px; letter-spacing: 0.3em; color: var(--olive); text-transform: uppercase; display: flex; align-items: center; gap: 10px; }
+.svh .eyebrow::before { content: ""; width: 10px; height: 10px; background: var(--yel); border: 1.5px solid var(--ink); flex: none; }
+.svh .title { margin: 22px 0 0; font-weight: 700; font-size: clamp(54px, 9.6vw, 140px); line-height: 0.86; letter-spacing: -0.055em; text-transform: uppercase; }
+/* one line when the sheet is wide, two lines when it is narrow; inline-blocks never overlap */
+.svh .title .l1, .svh .title .l2 { display: inline-block; vertical-align: top; }
+.svh .title .l1 { margin-right: 0.22em; }
+.svh .title .l2 { white-space: nowrap; }
+.svh .title .amp { font-size: 0.42em; font-weight: 500; color: var(--olive); letter-spacing: 0; vertical-align: 0.62em; margin-right: 0.14em; }
+.svh .title .hl { display: inline-block; background: var(--yel); padding: 0.04em 0.07em 0.02em; box-shadow: inset 0 0 0 0.025em var(--ink); line-height: 0.86; }
+.svh .lede { margin: 0; max-width: 54ch; font-size: 14px; line-height: 1.85; color: var(--ink-2); }
+.svh .stamp {
+  position: absolute; top: 58px; right: 26px; transform: rotate(-4deg);
+  background: var(--yel); border: 2px solid var(--ink); padding: 7px 12px 6px; text-align: center;
+  font-size: 10.5px; font-weight: 700; letter-spacing: 0.18em; line-height: 1.5; text-transform: uppercase;
+}
+.svh .stamp small { display: block; font-size: 8px; font-weight: 500; letter-spacing: 0.14em; }
+
+/* the hex dump specimen */
+.svh .dump { border: 1px solid var(--ink); background: var(--paper); min-width: 0; }
+.svh .dump-bar { display: flex; justify-content: space-between; gap: 10px; padding: 6px 10px; border-bottom: 1px solid var(--ink); font-size: 9px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--olive); }
+.svh .dump pre { margin: 0; padding: 10px 10px 12px; font-size: 10.5px; line-height: 1.8; overflow-x: auto; color: var(--ink); }
+.svh .dump .o { color: var(--olive); }
+.svh .dump .k { background: var(--yel); box-shadow: inset 0 -1px 0 var(--ink); }
+.svh .dump .a { color: var(--olive); }
+.svh .dump-cap { padding: 6px 10px; border-top: 1px solid var(--rule); font-size: 9px; letter-spacing: 0.12em; color: var(--olive); text-transform: uppercase; }
+
+.svh .meta { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1px; background: var(--ink); border-top: 1px solid var(--ink); }
+.svh .meta > div { background: var(--paper); padding: 10px 14px 11px; min-width: 0; }
+.svh .meta .k { display: block; font-size: 8.5px; letter-spacing: 0.22em; color: var(--olive); text-transform: uppercase; }
+.svh .meta .v { display: block; margin-top: 3px; font-size: 12px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; overflow-wrap: anywhere; }
+
+/* the two indexes under the cover */
+.svh .index { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 0 44px; margin-top: 44px; }
+.svh .index h2 { font-size: 9.5px; letter-spacing: 0.24em; color: var(--olive); font-weight: 600; margin: 0 0 8px; text-transform: uppercase; }
+.svh .index ol { list-style: none; margin: 0; padding: 0; border-top: 2px solid var(--ink); }
+.svh .index li { border-bottom: 1px solid var(--rule); }
+.svh .index li a,
+.svh .index li > span { display: grid; grid-template-columns: 34px minmax(0, 1fr) auto; gap: 10px; padding: 7px 2px; font-size: 11.5px; text-decoration: none; text-transform: uppercase; letter-spacing: 0.04em; }
+.svh .index li a:hover { background: var(--paper-2); }
+.svh .index .n { color: var(--olive); }
+.svh .index .p { color: var(--olive); font-size: 10px; }
+
+/* ---------- sheets ---------- */
+.svh .sheet { margin-top: 96px; scroll-margin-top: calc(var(--site-bar-h) + 24px); }
+.svh .sheet-head { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: end; gap: 6px 22px; border-top: 2.5px solid var(--ink); padding-top: 16px; }
+.svh .sheet-no { font-size: 76px; font-weight: 700; line-height: 0.78; letter-spacing: -0.06em; }
+.svh .sheet-kicker { font-size: 9.5px; letter-spacing: 0.24em; color: var(--olive); text-transform: uppercase; }
+.svh .sheet-title { margin: 4px 0 0; font-size: clamp(22px, 2.6vw, 30px); line-height: 1.05; font-weight: 700; letter-spacing: -0.01em; text-transform: uppercase; }
+.svh .sheet-ref { font-size: 9.5px; letter-spacing: 0.18em; color: var(--olive); text-align: right; line-height: 1.7; text-transform: uppercase; }
+/* a memory row under each header: 16 byte ticks, offsets 00 and 0F */
+.svh .ruler { position: relative; height: 11px; margin: 10px 0 30px; border-bottom: 1px solid var(--ink); background: repeating-linear-gradient(90deg, var(--olive-lt) 0 1px, transparent 1px calc(100% / 16)); background-size: 100% 6px; background-repeat: no-repeat; background-position: bottom; }
+.svh .ruler::before,
+.svh .ruler::after { position: absolute; top: -6px; font-size: 8px; letter-spacing: 0.1em; color: var(--olive); }
+.svh .ruler::before { content: "00"; left: 0; }
+.svh .ruler::after { content: "0F"; right: 0; }
+
+.svh .split { display: grid; grid-template-columns: minmax(0, 1fr) 230px; gap: 40px; }
+.svh .split > aside { display: flex; flex-direction: column; gap: 22px; }
+.svh p { margin: 0 0 16px; max-width: 72ch; }
+.svh h3 { margin: 36px 0 12px; font-size: 12px; letter-spacing: 0.16em; font-weight: 700; text-transform: uppercase; display: flex; gap: 12px; }
+.svh h3 .n { color: var(--olive); font-weight: 500; }
+
+/* margin note */
+.svh .note { border-top: 1.5px solid var(--ink); padding-top: 8px; font-size: 11.5px; line-height: 1.75; color: var(--ink-2); }
+.svh .note > b { display: flex; align-items: center; gap: 8px; font-size: 9px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--ink); margin-bottom: 4px; }
+.svh .note > b::before { content: ""; width: 7px; height: 7px; background: var(--yel); border: 1px solid var(--ink); }
+.svh .note p { margin: 0 0 8px; }
+
+/* numbered procedure */
+.svh .proc { list-style: none; counter-reset: st; margin: 6px 0 18px; padding: 0; max-width: 72ch; }
+.svh .proc li { counter-increment: st; position: relative; padding: 7px 0 7px 46px; border-top: 1px solid var(--rule); }
+.svh .proc li:first-child { border-top: 0; }
+.svh .proc li::before { content: counter(st, decimal-leading-zero); position: absolute; left: 0; top: 8px; font-size: 11px; font-weight: 600; color: var(--olive); }
+
+/* STE warning and caution panels */
+.svh .hazard { border: 2px solid var(--ink); margin: 26px 0; max-width: 72ch; background: var(--paper); }
+.svh .hazard-bar { display: flex; align-items: stretch; border-bottom: 2px solid var(--ink); }
+.svh .hazard-bar b { padding: 5px 12px; font-size: 11px; letter-spacing: 0.3em; background: var(--yel); border-right: 2px solid var(--ink); }
+.svh .hazard-bar i { flex: 1; background: repeating-linear-gradient(-45deg, var(--ink) 0 9px, var(--yel) 9px 18px); }
+.svh .hazard.caution .hazard-bar b { background: var(--paper-2); }
+.svh .hazard.caution .hazard-bar i { background: repeating-linear-gradient(-45deg, var(--olive-lt) 0 9px, var(--paper) 9px 18px); }
+.svh .hazard-body { padding: 12px 14px 4px; font-size: 12.5px; line-height: 1.75; }
+.svh .hazard-body p { margin: 0 0 8px; }
+.svh .hazard-body .cmd { font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; }
+.svh aside .hazard { margin: 0; }
+
+/* definition and comparison tables */
+.svh .tbl { width: 100%; border-collapse: collapse; font-size: 12px; margin: 8px 0 6px; }
+.svh .tbl th { text-align: left; font-size: 9px; letter-spacing: 0.22em; color: var(--olive); font-weight: 600; text-transform: uppercase; border-bottom: 2px solid var(--ink); padding: 0 14px 8px 0; vertical-align: bottom; }
+.svh .tbl td { border-bottom: 1px solid var(--rule); padding: 8px 14px 8px 0; vertical-align: top; line-height: 1.6; }
+.svh .tbl td:first-child { font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; font-size: 11px; white-space: nowrap; }
+.svh .tbl tr:hover td { background: rgba(242, 195, 0, 0.12); }
+.svh .tblwrap { overflow-x: auto; }
+.svh .tblcap { display: flex; flex-wrap: wrap; gap: 4px 14px; border-top: 1px solid var(--ink); border-bottom: 2.5px solid var(--ink); padding: 7px 2px; font-size: 10.5px; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 8px; }
+.svh .tblcap .no { color: var(--yel-text); font-weight: 700; }
+.svh .tblcap .ref { margin-left: auto; color: var(--olive); }
+
+/* ---------- figures ---------- */
+.svh .fig { margin: 40px 0 14px; }
+.svh .figbody { border-top: 1px solid var(--ink); padding: 22px 0 18px; overflow-x: auto; }
+.svh .figbody svg { display: block; width: 100%; height: auto; }
+.svh .figbody svg text { font-family: var(--mono); }
+.svh .figcap { display: flex; flex-wrap: wrap; gap: 4px 16px; align-items: baseline; border-top: 1px solid var(--ink); border-bottom: 2.5px solid var(--ink); padding: 8px 2px; font-size: 10.5px; letter-spacing: 0.1em; text-transform: uppercase; }
+.svh .figcap .no { color: var(--yel-text); font-weight: 700; }
+.svh .figcap .ref { margin-left: auto; color: var(--olive); }
+.svh .fignote { font-size: 12px; line-height: 1.75; color: var(--ink-2); max-width: 74ch; margin: 10px 0 0; }
+
+/* ---------- exhibits: code and real output ---------- */
+.svh .ex { border: 1.5px solid var(--ink); margin: 24px 0; min-width: 0; background: var(--paper); }
+.svh .ex-bar { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 4px 14px; padding: 6px 12px; border-bottom: 1px solid var(--ink); font-size: 9.5px; letter-spacing: 0.2em; text-transform: uppercase; }
+.svh .ex-bar span:last-child { color: var(--olive); }
+.svh .ex pre { margin: 0; padding: 12px 0; background: var(--paper-2); overflow-x: auto; font-size: 12px; line-height: 1.75; }
+.svh .ex .ln { display: block; padding: 0 14px 0 0; white-space: pre; }
+.svh .ex .ln::before { content: attr(data-n); display: inline-block; width: 38px; padding-right: 14px; text-align: right; color: var(--olive-lt); }
+.svh .ex .cm { color: var(--olive); font-style: italic; }
+.svh .ex .ln.on { background: var(--yel); box-shadow: inset 3px 0 0 var(--ink); }
+.svh .ex .ln.on::before { content: "▶"; color: var(--ink); }
+
+.svh .term { background: var(--ink); color: var(--paper); border: 1.5px solid var(--ink); margin: 24px 0; box-shadow: 6px 6px 0 rgba(18, 18, 16, 0.16); min-width: 0; }
+.svh .term-bar { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 4px 14px; padding: 6px 12px; border-bottom: 1px solid rgba(245, 244, 238, 0.2); font-size: 9.5px; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(245, 244, 238, 0.6); }
+.svh .term-bar span:first-child::before { content: ""; display: inline-block; width: 7px; height: 7px; background: var(--yel); margin-right: 9px; vertical-align: 1px; }
+.svh .term pre { margin: 0; padding: 12px 14px 14px; overflow-x: auto; font-size: 12px; line-height: 1.75; }
+.svh .term .cmd::before { content: "$ "; color: var(--yel); font-weight: 700; }
+.svh .term .out { color: rgba(245, 244, 238, 0.72); }
+.svh .term .com { color: #a6a795; font-style: italic; }
+.svh .term .hot { color: var(--yel); }
+.svh .term .omit { color: rgba(245, 244, 238, 0.4); }
+
+.svh .reading { list-style: none; margin: 4px 0 18px; padding: 0; max-width: 72ch; font-size: 12.5px; }
+.svh .reading li { display: grid; grid-template-columns: 92px minmax(0, 1fr); gap: 12px; padding: 6px 0; border-top: 1px solid var(--rule); }
+.svh .reading li:first-child { border-top: 0; }
+.svh .reading li > b { font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; padding-top: 2px; }
+
+/* ---------- interactive instruments ---------- */
+.svh .ctl {
+  font: 600 10px/1 var(--mono); letter-spacing: 0.14em; text-transform: uppercase;
+  border: 1.5px solid var(--ink); background: var(--paper); color: var(--ink);
+  padding: 9px 12px; border-radius: 0; cursor: pointer;
+}
+.svh .ctl.code { text-transform: none; letter-spacing: 0.04em; font-size: 11px; }
+.svh .ctl:hover:not(:disabled) { background: var(--ink); color: var(--paper); }
+.svh .ctl[aria-pressed="true"] { background: var(--yel); color: var(--ink); }
+.svh .ctl:disabled { opacity: 0.35; cursor: default; }
+.svh .ctl:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+.svh .ctl-row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.svh .ctl-lab { font-size: 9px; letter-spacing: 0.22em; color: var(--olive); text-transform: uppercase; margin-right: 4px; }
+.svh .readout { display: grid; grid-template-columns: repeat(auto-fit, minmax(124px, 1fr)); margin: 0; border-top: 1px solid var(--ink); border-left: 1px solid var(--ink); }
+.svh .readout > div { background: var(--paper); padding: 6px 10px 7px; min-width: 0; border-right: 1px solid var(--ink); border-bottom: 1px solid var(--ink); }
+.svh .readout dt { font-size: 8.5px; letter-spacing: 0.2em; color: var(--olive); text-transform: uppercase; }
+.svh .readout dd { margin: 1px 0 0; font-size: 12px; font-weight: 600; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+.svh .readout dd.warn { background: var(--yel); margin: 1px -10px -7px; padding: 0 10px 7px; }
+.svh .event { margin-top: 10px; border-left: 4px solid var(--ink); background: var(--paper-2); padding: 8px 12px; font-size: 12px; line-height: 1.6; min-height: 3.4em; }
+.svh .event b { color: var(--yel-text); font-size: 9.5px; letter-spacing: 0.2em; margin-right: 10px; }
+
+/* Fig. 03: the allocator arena */
+.svh .arena { margin-top: 14px; }
+.svh .arena-row { display: grid; grid-template-columns: 54px repeat(16, minmax(0, 1fr)); align-items: stretch; height: 52px; border-top: 1px solid var(--ink); }
+.svh .arena-row:last-child { border-bottom: 1px solid var(--ink); }
+.svh .arena-off { grid-row: 1; grid-column: 1; font-size: 9.5px; color: var(--olive); align-self: center; letter-spacing: 0.04em; }
+.svh .seg {
+  position: relative; margin: 6px 1px; min-width: 0; padding: 0 0 0 9px; border: 1.5px solid var(--ink); background: var(--paper-2);
+  font: 600 9px/1.25 var(--mono); letter-spacing: 0.06em; text-align: left; color: var(--ink); cursor: pointer; overflow: hidden;
+}
+.svh .seg::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 5px; background: var(--ink); }
+.svh .seg.cont { padding-left: 4px; }
+.svh .seg.cont::before { display: none; }
+.svh .seg.new { background: var(--yel); }
+.svh .seg:hover,
+.svh .seg:focus-visible { outline: 2px solid var(--ink); outline-offset: 1px; background: var(--paper); }
+.svh .seg span { display: block; white-space: nowrap; }
+.svh .seg .sz { font-weight: 400; color: var(--olive); }
+.svh .hole { margin: 6px 1px; border: 1px dashed var(--olive-lt); background: repeating-linear-gradient(45deg, transparent 0 4px, rgba(166, 167, 149, 0.45) 4px 5px); }
+.svh .freelist { margin-top: 10px; font-size: 11px; line-height: 1.7; overflow-wrap: anywhere; }
+.svh .freelist b { font-size: 9px; letter-spacing: 0.22em; color: var(--olive); margin-right: 8px; }
+
+/* Fig. 04: the stepper */
+.svh .stepper { display: grid; grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr); gap: 22px; align-items: start; }
+.svh .stepper .ex { margin: 0; }
+.svh .stepper .ex pre { font-size: 11.5px; }
+.svh .machine { border: 1.5px solid var(--ink); background: var(--paper); }
+.svh .machine-bar { display: flex; justify-content: space-between; padding: 6px 12px; border-bottom: 1px solid var(--ink); font-size: 9.5px; letter-spacing: 0.2em; text-transform: uppercase; }
+.svh .machine-bar span:last-child { color: var(--olive); }
+.svh .machine svg { display: block; width: 100%; height: auto; }
+.svh .stepper-ctl { margin-top: 14px; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 10px; align-items: center; }
+
+/* Fig. 08: depth instrument */
+.svh .depth { display: grid; grid-template-columns: minmax(0, 1fr) 260px; gap: 24px; align-items: start; }
+.svh .depth svg { display: block; width: 100%; height: auto; }
+.svh .slider { width: 100%; accent-color: var(--ink); margin: 6px 0 2px; }
+.svh .slider-lab { display: flex; justify-content: space-between; font-size: 9px; letter-spacing: 0.14em; color: var(--olive); text-transform: uppercase; }
+
+/* entrance of new frames and blocks in the instruments */
+@keyframes svh-in { from { opacity: 0; transform: translateY(-4px); } }
+.svh .enter { animation: svh-in 0.28s ease-out both; }
+
+/* ---------- summary, appendix, footer ---------- */
+.svh .rules { list-style: none; counter-reset: r; margin: 8px 0 22px; padding: 0; border-top: 2px solid var(--ink); }
+.svh .rules li { counter-increment: r; display: grid; grid-template-columns: 52px minmax(0, 1fr); gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--rule); font-size: 13px; }
+.svh .rules li::before { content: "R-" counter(r, decimal-leading-zero); font-size: 10px; font-weight: 700; letter-spacing: 0.08em; padding-top: 2px; }
+.svh .sum { border: 1.5px solid var(--ink); margin-top: 26px; }
+.svh .sum-bar { padding: 6px 12px; border-bottom: 1px solid var(--ink); font-size: 9.5px; letter-spacing: 0.22em; background: var(--yel); font-weight: 600; }
+.svh .sum p { margin: 0; padding: 10px 14px; border-top: 1px solid var(--rule); font-size: 14px; }
+.svh .sum p:first-of-type { border-top: 0; }
+
+.svh .foot { margin-top: 110px; border-top: 2.5px solid var(--ink); padding-top: 22px; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 30px; font-size: 11px; line-height: 1.8; color: var(--ink-2); }
+.svh .foot h4 { margin: 0 0 6px; font-size: 9px; letter-spacing: 0.24em; color: var(--ink); text-transform: uppercase; }
+.svh .foot a { text-decoration: underline; text-decoration-color: var(--yel); text-decoration-thickness: 2px; text-underline-offset: 3px; }
+.svh .endline { grid-column: 1 / -1; display: flex; align-items: center; gap: 14px; margin-top: 18px; font-size: 9.5px; letter-spacing: 0.3em; color: var(--olive); text-transform: uppercase; }
+.svh .endline::before,
+.svh .endline::after { content: ""; flex: 1; height: 1px; background: var(--ink); }
+.svh .endline i { width: 10px; height: 10px; background: var(--yel); border: 1.5px solid var(--ink); }
+
+/* ---------- responsive ---------- */
+@media (max-width: 1240px) {
+  .svh .cover-body { grid-template-columns: minmax(0, 1fr); }
+  .svh .dump { max-width: 560px; }
+  .svh .split { grid-template-columns: minmax(0, 1fr); gap: 4px; }
+  .svh .split > aside { max-width: 72ch; }
+  .svh .stepper { grid-template-columns: minmax(0, 1fr); }
+  .svh .machine svg { max-width: 600px; margin: 0 auto; }
+}
+@media (max-width: 1080px) {
+  .svh .page { grid-template-columns: minmax(0, 1fr); padding: 0 22px 70px; }
+  .svh .rail { display: none; }
+  .svh .strip {
+    display: flex; justify-content: space-between; gap: 12px;
+    position: sticky; top: var(--site-bar-h); z-index: 20;
+    background: var(--ink); color: var(--paper); padding: 7px 22px;
+    font-size: 9.5px; letter-spacing: 0.16em; text-transform: uppercase;
+  }
+  .svh .strip b { color: var(--yel); }
+  .svh .strip span { white-space: nowrap; }
+  .svh .strip span:last-child { overflow: hidden; text-overflow: ellipsis; min-width: 0; }
+  .svh .depth { grid-template-columns: minmax(0, 1fr); }
+  .svh .depth svg { max-width: 520px; }
+}
+@media (max-width: 760px) {
+  .svh .cover-body { padding-top: 24px; }
+  .svh .stamp { position: static; display: inline-block; margin: 22px 22px 0; transform: rotate(-3deg); }
+  .svh .meta { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .svh .index { grid-template-columns: minmax(0, 1fr); gap: 30px; }
+  .svh .sheet-head { grid-template-columns: auto minmax(0, 1fr); }
+  .svh .sheet-ref { display: none; }
+  .svh .sheet-no { font-size: 56px; }
+  .svh .foot { grid-template-columns: minmax(0, 1fr); }
+  .svh .reading li { grid-template-columns: minmax(0, 1fr); gap: 2px; }
+  .svh .tbl td:first-child { white-space: normal; }
+  /* wide drawings keep a readable size and scroll inside their frame */
+  .svh .figbody svg.wide { min-width: 640px; }
+  .svh .arena-row { grid-template-columns: 40px repeat(16, minmax(0, 1fr)); height: 46px; }
+  .svh .seg { font-size: 7.5px; padding-left: 7px; }
+  .svh .seg .sz { display: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .svh .enter { animation: none; }
+}
