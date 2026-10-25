@@ -10,6 +10,15 @@ A personal technical wiki. Each article explains a programming concept with diag
 
 Code is MIT (`LICENSE`); article content (text, diagrams, figures) is CC BY 4.0 (`LICENSE-CONTENT`, which also lists third-party material such as the Go gopher and ASD-STE100). Credit third-party artwork inside the article that uses it, as the Go footer does for Renée French's gopher.
 
+## Workflow
+
+- Commit only when asked, and then commit straight to `main`: no feature branch, since this is a solo wiki. Push only when asked.
+
+## Where the articles come from
+
+- Six articles (`asd-ste100`, `random-forest`, `go-programming`, `podman-basics`, `ci-cd`, `llm-generation`) were designed by other AIs (Mimo, Qwen, Kimi, GLM) from one standard prompt, then integrated here: "Explain [technology] by using ASD-STE100. Make a web page with diagrams and/or images to explain this topic. Design-wise it's styled like a technical dossier: IBM Plex Mono throughout, flat black/white with muted olive-gray diagram strokes and a single [color] accent, figure captions with rules".
+- Claude's own designs from that prompt came out generic. `stack-vs-heap` began as a placeholder and was rebuilt as a real dossier with the project skill `.claude/skills/dossier-design/`, which the owner judged the first good design from Claude. Build new articles with that skill, and use the existing dossiers as the references for craft.
+
 ## Commands
 
 - `npm run dev`: start the Vite dev server
