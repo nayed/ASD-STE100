@@ -26,7 +26,10 @@ A short note in the article's voice: what to look at.
 - [ ] A legend explains any fill or colour that encodes a value.
 - [ ] Labels that sit on lines have a paper halo.
 - [ ] The numbers are real (measured, run, cited) or marked as examples.
-- [ ] It reads at 375 px. A drawing whose labels would shrink under 7 px keeps a minimum width (about 640 px) and scrolls sideways inside its own frame; the page itself never scrolls sideways.
+- [ ] It reads at 375 px. A drawing whose labels would shrink under 7 px keeps a minimum width (about 640 px) and scrolls sideways in a wrapper of its own, not with the whole figure body, so the controls stay in place. The page itself never scrolls sideways.
+- [ ] Boxes on the edge of the drawing keep their full stroke: `overflow: visible` on the SVG, or a viewBox with a 2-unit margin.
+- [ ] Packets and other moving parts pass behind the boxes (draw them first), so they never cross a label.
+- [ ] Labels that code places (from data, or after an input) stay clear in every state. Test every preset and slider position, not only the first state, which is all that `check:figures` sees. When code estimates a label's width, allow 0.72em per character in Plex Mono with letter-spacing: the check's browser can measure a wider fallback font.
 
 ## Starter primitives (React + SVG)
 
@@ -138,3 +141,61 @@ SVG ids (`a-…`, `hatch-…`) must be unique on the page: prefix them with the 
 ```
 
 Readouts state the machine's state in its own terms: `SP = 0x7FFE_F3A0`, `DEPTH 3`, `FREE 288 B · LARGEST HOLE 64 B`. A reset button returns to the first state. Under `prefers-reduced-motion: reduce`, change state without animating.
+
+## Motion
+
+Animate what moves in the subject (SKILL.md, section 5). Three patterns cover most figures.
+
+**Marching dashes**: data flows along a connector. The dash pattern is 5 + 5 = 10 units long, so an offset of −20 loops without a jump.
+
+```css
+.root .flow { stroke-dasharray: 5 5; animation: root-flow 1.4s linear infinite; }
+@keyframes root-flow { to { stroke-dashoffset: -20; } }
+@media (prefers-reduced-motion: reduce) { .root .flow { animation: none; } }
+```
+
+```tsx
+<path d="M212,85 H284" className="flow" stroke={OLIVE} strokeWidth={1.4} fill="none" markerEnd="url(#a-f2)" />
+```
+
+**A packet on a path**: one request travels the pipeline. SVG's own `animateMotion` needs no JavaScript.
+
+```tsx
+<circle r={4} fill={ACCENT} stroke={INK} strokeWidth={1.2}>
+  <animateMotion dur="3s" repeatCount="indefinite" path="M60,100 H380 V220 H700" />
+</circle>
+```
+
+Hide such SVG animations under reduced motion with `@media (prefers-reduced-motion: reduce) { .root .packet { display: none; } }`, and keep a static marker that shows the same path.
+
+**Values arriving**: a bar grows to its computed width; text streams in.
+
+```css
+.root .bar { transition: width 0.6s cubic-bezier(0.2, 0.7, 0.2, 1); }
+@media (prefers-reduced-motion: reduce) { .root .bar { transition: none; } }
+```
+
+```tsx
+/** reveal text token by token; under reduced motion, show it all at once */
+function useStream(text: string, msPerToken = 45) {
+  const tokens = text.split(/(\s+)/);
+  const [n, setN] = useState(0);
+  useEffect(() => {
+    if (matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      setN(tokens.length);
+      return;
+    }
+    let i = 0;
+    setN(0);
+    const id = setInterval(() => {
+      i += 1;
+      setN(i);
+      if (i >= tokens.length) clearInterval(id);
+    }, msPerToken);
+    return () => clearInterval(id);
+  }, [text]);
+  return tokens.slice(0, n).join("");
+}
+```
+
+**Run only when visible**: start a step-through or a stream when its figure enters the screen, with an `IntersectionObserver` (threshold about 0.4). Pause loops that leave it.
