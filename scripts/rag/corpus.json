@@ -1,0 +1,129 @@
+{
+  "chunks": [
+    {
+      "id": "C-01",
+      "ref": "AMM 29-11-00 §1",
+      "title": "Description",
+      "text": "The HP-40 pump supplies hydraulic pressure to the landing gear and the flight controls. An electric motor turns the pump. The pump is in the left wheel well."
+    },
+    {
+      "id": "C-02",
+      "ref": "AMM 29-11-00 §3",
+      "title": "Pressure limits",
+      "text": "The normal system pressure is 3000 psi. Do not let the pressure go above 3200 psi. The relief valve opens at 3250 psi."
+    },
+    {
+      "id": "C-03",
+      "ref": "AMM 29-11-00 §5",
+      "title": "Filter",
+      "text": "Replace the filter element every 600 flight hours. Replace it before this time if the clog indicator shows red."
+    },
+    {
+      "id": "C-04",
+      "ref": "AMM 29-11-00 §6",
+      "title": "Fluid temperature",
+      "text": "High fluid temperature stops the pump automatically. The limit is 120 °C. Let the fluid cool before you start the pump again."
+    },
+    {
+      "id": "C-05",
+      "ref": "AMM 29-11-00 §8",
+      "title": "Approved fluid",
+      "text": "Use only fluid that meets the standard MIL-PRF-83282. Do not mix two types of fluid. The list of approved fluids is in Section 12."
+    },
+    {
+      "id": "C-06",
+      "ref": "AMM 29-11-00 §9",
+      "title": "Before maintenance",
+      "text": "Set the pump switch to OFF before maintenance. Release the system pressure with the bleed valve. Attach a DO NOT OPERATE tag to the switch."
+    },
+    {
+      "id": "C-07",
+      "ref": "CMM 29-11-01 §4",
+      "title": "Seal and cover",
+      "text": "Replace the shaft seal at each overhaul. Apply grease to the new seal before you install it. The torque of the cover bolts is 8 Nm."
+    },
+    {
+      "id": "C-08",
+      "ref": "AMM 29-12-00 §2",
+      "title": "Accumulator",
+      "text": "The accumulator keeps pressure in the system when the pump stops. Its nitrogen precharge is 1200 psi. Check the precharge every 300 flight hours."
+    },
+    {
+      "id": "C-09",
+      "ref": "AMM 29-11-00 §11",
+      "title": "Dry running",
+      "text": "Do not operate the pump without fluid. After 30 seconds without fluid, the pump bearings become hot and fail."
+    },
+    {
+      "id": "C-10",
+      "ref": "AMM 29-11-00 §12",
+      "title": "Pump noise",
+      "text": "A loud noise from the pump can show air in the fluid. Bleed the system to remove the air."
+    },
+    {
+      "id": "C-11",
+      "ref": "AMM 29-11-00 §13",
+      "title": "Leak check",
+      "text": "Look for leaks at the pump fittings after each flight. Report a leak to maintenance immediately."
+    },
+    {
+      "id": "C-12",
+      "ref": "AMM 29-11-00 §14",
+      "title": "Motor current",
+      "text": "The motor current is 40 A at normal pressure. A current above 55 A shows a worn pump."
+    }
+  ],
+  "questions": [
+    {
+      "q": "What is the maximum system pressure?",
+      "gold": "C-02"
+    },
+    {
+      "q": "How often do I replace the filter element?",
+      "gold": "C-03"
+    },
+    {
+      "q": "When must I swap the cartridge?",
+      "gold": "C-03"
+    },
+    {
+      "q": "What stops the pump if the fluid gets too hot?",
+      "gold": "C-04"
+    },
+    {
+      "q": "Where is the pump installed?",
+      "gold": "C-01"
+    },
+    {
+      "q": "What torque do the cover bolts need?",
+      "gold": "C-07"
+    },
+    {
+      "q": "Which part do I check every 300 flight hours?",
+      "gold": "C-08"
+    },
+    {
+      "q": "Which oil can I put in the system?",
+      "gold": "C-05"
+    },
+    {
+      "q": "How do I make the system safe before work?",
+      "gold": "C-06"
+    },
+    {
+      "q": "Why does the pump make a loud noise?",
+      "gold": "C-10"
+    },
+    {
+      "q": "What current does the motor draw?",
+      "gold": "C-12"
+    },
+    {
+      "q": "Is it normal to see drops at the fittings?",
+      "gold": "C-11"
+    }
+  ],
+  "unanswerable": [
+    "What is the altitude limit of the aircraft?"
+  ]
+}

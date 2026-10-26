@@ -18,6 +18,7 @@ Code is MIT (`LICENSE`); article content (text, diagrams, figures) is CC BY 4.0 
 
 - Six articles (`asd-ste100`, `random-forest`, `go-programming`, `podman-basics`, `ci-cd`, `llm-generation`) were designed by other AIs (Mimo, Qwen, Kimi, GLM) from one standard prompt, then integrated here: "Explain [technology] by using ASD-STE100. Make a web page with diagrams and/or images to explain this topic. Design-wise it's styled like a technical dossier: IBM Plex Mono throughout, flat black/white with muted olive-gray diagram strokes and a single [color] accent, figure captions with rules".
 - Claude's own designs from that prompt came out generic. `stack-vs-heap` began as a placeholder and was rebuilt as a real dossier with the project skill `.claude/skills/dossier-design/`, which the owner judged the first good design from Claude. Build new articles with that skill, and use the existing dossiers as the references for craft.
+- `rag` was built with the skill after the owner compared a Qwen version and a claude.ai version of the same prompt: Qwen's layout and its moving connectors, and a direct, strictly STE text. Its scores, vectors and answers are real runs of `BAAI/bge-small-en-v1.5` (fastembed). `scripts/rag/build_data.py` writes them to `rag/data.ts` from `scripts/rag/corpus.json` (setup in its header); `scripts/rag/eval.py` is Exhibit C and must stay as the article shows it. `rag/engine.ts` repeats the BM25 and fusion code of Exhibit C in the browser.
 
 ## Commands
 

@@ -1,3 +1,6 @@
 node_modules
 dist
 *.local
+__pycache__
+scripts/rag/.venv
+scripts/rag/models
