@@ -1,7 +1,8 @@
 import "./rag.css";
 import { Call, Code, DocBar, Figure, ISSUED, Rail, REV, Section, Term, useReading } from "./chrome";
 import { AskDossier, Masthead } from "./cover";
-import { CHUNKS, EVAL_OUTPUT, EVAL_PY, MODEL, RUN } from "./data";
+import EVAL from "../../../scripts/rag/eval.py?highlight";
+import { CHUNKS, EVAL_OUTPUT, MODEL, RUN } from "./data";
 import { FigChunker, FigSystem, FigTwoWays } from "./figs1";
 import { FigPlane, FigPrompt, FigRetriever } from "./figs2";
 import { FigEval, FigLadder, FigRun } from "./figs3";
@@ -348,7 +349,7 @@ export default function Rag() {
               <Call>Twelve questions show the method. They are too few to compare two real systems.</Call>
             </div>
             <div style={{ marginTop: 18 }} className="stack">
-              <Code label="Exhibit C — eval.py" meta={`Python · ${EVAL_PY.trimEnd().split("\n").length} lines · the code of Figures 05 and 08`} code={EVAL_PY} />
+              <Code label="Exhibit C — eval.py" meta={`Python · ${EVAL.lines.length} lines · the code of Figures 05 and 08`} listing={EVAL} />
               <Term label="Output C — a real run" meta={`Python ${RUN.python} · fastembed ${RUN.fastembed} · ${RUN.date}`} command="python eval.py" output={EVAL_OUTPUT} />
             </div>
           </Section>

@@ -1,6 +1,8 @@
 /** Document furniture of MEM-100: the address-map rail, sheet headers, captions, exhibits, hazards. */
 
 import { useEffect, useState, type ReactNode } from "react";
+import { listingStyle, type Listing } from "../../code/listing";
+import { Tokens } from "../../code/Tokens";
 
 export const DOC = "MEM-100";
 export const REV = "A";
@@ -171,32 +173,21 @@ export function Proc({ items }: { items: ReactNode[] }) {
   );
 }
 
-/** split a source line into code and comment, for C, Go and assembly listings */
-function splitComment(line: string): [string, string] {
-  const marks = ["/*", "//"].map((m) => line.indexOf(m)).filter((i) => i >= 0);
-  if (!marks.length) return [line, ""];
-  const at = Math.min(...marks);
-  return [line.slice(0, at), line.slice(at)];
-}
-
-export function Code({ label, meta, code, on }: { label: string; meta: string; code: string; on?: number }) {
+/** a C or Go listing, highlighted at build time (`?highlight` imports); `on` marks the active line of the step-through */
+export function Code({ label, meta, listing, on }: { label: string; meta: string; listing: Listing; on?: number }) {
   return (
     <div className="ex">
       <div className="ex-bar">
         <span>{label}</span>
         <span>{meta}</span>
       </div>
-      <pre>
-        {code.split("\n").map((line, i) => {
-          const [src, cm] = splitComment(line);
-          return (
-            <span key={i} className={`ln${on === i + 1 ? " on" : ""}`} data-n={i + 1}>
-              {src}
-              {cm && <span className="cm">{cm}</span>}
-              {"\n"}
-            </span>
-          );
-        })}
+      <pre style={listingStyle(listing)}>
+        {listing.lines.map((line, i) => (
+          <span key={i} className={`ln${on === i + 1 ? " on" : ""}`} data-n={i + 1}>
+            <Tokens line={line} />
+            {"\n"}
+          </span>
+        ))}
       </pre>
     </div>
   );

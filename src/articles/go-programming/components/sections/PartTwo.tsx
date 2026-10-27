@@ -7,6 +7,10 @@ import {
   K,
 } from "../Dossier";
 import { FigSlice, FigStruct } from "../diagrams/DiagramsA";
+import FUNCS from "../../listings/funcs.go?highlight";
+import FLOW from "../../listings/flow.go?highlight";
+import COLLECTIONS from "../../listings/collections.go?highlight";
+import SERVER from "../../listings/server.go?highlight";
 
 export function PartTwo() {
   return (
@@ -28,29 +32,7 @@ export function PartTwo() {
         <CodeBlock
           exhibit="EXHIBIT D"
           file="FUNCS.GO"
-          code={`package main
-
-import (
-	"errors"
-	"fmt"
-)
-
-// two results: the answer, and the failure
-func divide(a, b float64) (float64, error) {
-	if b == 0 {
-		return 0, errors.New("division by zero")
-	}
-	return a / b, nil
-}
-
-func main() {
-	result, err := divide(10, 4)
-	if err != nil {
-		fmt.Println("failed:", err)
-		return
-	}
-	fmt.Println(result) // 2.5
-}`}
+          listing={FUNCS}
         />
         <P>
           <K>defer</K> schedules a call to run when the enclosing function
@@ -63,28 +45,7 @@ func main() {
         <CodeBlock
           exhibit="EXHIBIT E"
           file="FLOW.GO"
-          code={`// if may take a short statement; its scope ends with the block
-if err := risky(); err != nil {
-	return err
-}
-
-// for is the ONLY loop keyword — it plays every role
-for i := 0; i < 10; i++ { } // counted
-for x < 100 { }             // "while"
-for { }                     // forever — break to exit
-for range 10 { }            // ten times, no counter (Go 1.22+)
-
-for i, v := range items {   // index and value
-	fmt.Println(i, v)
-}
-
-// switch — no implicit fallthrough, no break needed
-switch os := runtime.GOOS; os {
-case "darwin", "linux":
-	fmt.Println("unix lineage")
-default:
-	fmt.Println("somewhere else")
-}`}
+          listing={FLOW}
         />
         <Note label="FIELD NOTE — FUNCTIONS ARE VALUES">
           A function can be stored in a variable, passed as an argument and
@@ -120,31 +81,7 @@ default:
         <CodeBlock
           exhibit="EXHIBIT F"
           file="COLLECTIONS.GO"
-          code={`package main
-
-import "fmt"
-
-func main() {
-	// array — fixed size, rarely used directly
-	var grid [4]int
-
-	// slice — grows with append
-	scores := []int{90, 85, 77}
-	scores = append(scores, 99)
-
-	// slicing: half-open range [1:3]
-	top := scores[1:3] // 85, 77 — shares memory with scores
-
-	// map — reference type, must be made before use
-	ages := map[string]int{"ada": 36, "grace": 45}
-	ages["linus"] = 24
-
-	// the comma-ok idiom: absent vs. present-with-zero-value
-	v, ok := ages["turing"] // 0, false
-
-	_ = grid
-	fmt.Println(len(scores), top, v, ok)
-}`}
+          listing={COLLECTIONS}
         />
         <Note label="FIELD NOTE — APPEND'S CONTRACT">
           <K>append</K> writes into the existing array while capacity
@@ -187,31 +124,7 @@ func main() {
         <CodeBlock
           exhibit="EXHIBIT G"
           file="SERVER.GO"
-          code={`package main
-
-import "fmt"
-
-type Server struct {
-	Host string
-	Port int
-}
-
-// value receiver — reads a copy
-func (s Server) Addr() string {
-	return fmt.Sprintf("%s:%d", s.Host, s.Port)
-}
-
-// pointer receiver — mutates the original
-func (s *Server) Shutdown() {
-	s.Port = 0
-}
-
-func main() {
-	s := Server{Host: "localhost", Port: 8080}
-	fmt.Println(s.Addr()) // localhost:8080
-	s.Shutdown()
-	fmt.Println(s.Addr()) // localhost:0
-}`}
+          listing={SERVER}
         />
         <Figure
           fig="04"

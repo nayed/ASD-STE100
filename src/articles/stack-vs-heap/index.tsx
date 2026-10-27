@@ -3,10 +3,15 @@ import Allocator from "./Allocator";
 import Depth from "./Depth";
 import Stepper from "./Stepper";
 import { Code, DOC, Fig, Hazard, ISSUED, Note, Proc, REV, Rail, SHEETS, Sheet, TblCap, Term } from "./chrome";
-import {
-  ALLOC_ASM, ALLOC_C, COUNTER_C, DOWN_C, DOWN_OUT, DUMP, FRAME_ASM, GO_MAIN, GO_OUT, LEAK_C, LEAK_OUT, LOCAL_C, LOCAL_OUT,
-  UAF_C, UAF_OUT, WHERE_C, WHERE_OUT,
-} from "./data";
+import { ALLOC_ASM, DOWN_OUT, DUMP, FRAME_ASM, GO_OUT, LEAK_OUT, LOCAL_OUT, UAF_OUT, WHERE_OUT } from "./data";
+import WHERE from "./listings/where.c?highlight";
+import COUNTER from "./listings/counter.c?highlight";
+import MAIN_GO from "./listings/main.go?highlight";
+import ALLOC from "./listings/alloc.c?highlight";
+import DOWN from "./listings/down.c?highlight";
+import UAF from "./listings/uaf.c?highlight";
+import LEAK from "./listings/leak.c?highlight";
+import LOCAL from "./listings/local.c?highlight";
 import { FigAddressSpace, FigFrames, FigLifetimes, FigLocality, FigWhoFrees } from "./figs";
 
 const FIGURES: [string, string, string][] = [
@@ -202,7 +207,7 @@ export default function StackVsHeap() {
                 </Note>
               </aside>
             </div>
-            <Code label="EXHIBIT A — where.c" meta="C · 23 LINES" code={WHERE_C} />
+            <Code label="EXHIBIT A — where.c" meta="C · 23 LINES" listing={WHERE} />
             <Term label="OUTPUT A — TWO REAL RUNS" meta="X86-64 LINUX · GCC 16.2" lines={WHERE_OUT} />
             <Fig
               no="01"
@@ -289,7 +294,7 @@ export default function StackVsHeap() {
               counter.c prints nothing when it runs. Output B·1 is not its output: it is the machine code that GCC
               writes to the file counter.s.
             </p>
-            <Code label="EXHIBIT B — counter.c" meta="C · 15 LINES" code={COUNTER_C} />
+            <Code label="EXHIBIT B — counter.c" meta="C · 15 LINES" listing={COUNTER} />
             <Term label="OUTPUT B·1 — THE MACHINE CODE OF make_counter()" meta="GCC 16.2 · -O0 · INTEL SYNTAX" lines={FRAME_ASM} />
             <Fig
               no="02"
@@ -476,7 +481,7 @@ export default function StackVsHeap() {
                 </Note>
               </aside>
             </div>
-            <Code label="EXHIBIT C — main.go" meta="GO · 21 LINES" code={GO_MAIN} />
+            <Code label="EXHIBIT C — main.go" meta="GO · 21 LINES" listing={MAIN_GO} />
             <Term label="OUTPUT C — THE DECISIONS OF THE GO COMPILER" meta="GO 1.27" lines={GO_OUT} />
             <ul className="reading">
               <li>
@@ -504,7 +509,7 @@ export default function StackVsHeap() {
               Stack allocation is one subtraction from <code>rsp</code>. Exhibit D shows the real machine code of the two
               methods.
             </p>
-            <Code label="EXHIBIT D — alloc.c" meta="C · 14 LINES" code={ALLOC_C} />
+            <Code label="EXHIBIT D — alloc.c" meta="C · 14 LINES" listing={ALLOC} />
             <Term label="OUTPUT D — THE SAME 4,096 BYTES, TWO WAYS" meta="GCC 16.2 · -O2 · INTEL SYNTAX" lines={ALLOC_ASM} />
             <ul className="reading">
               <li>
@@ -589,7 +594,7 @@ export default function StackVsHeap() {
             >
               <Depth />
             </Fig>
-            <Code label="EXHIBIT E — down.c" meta="C · 11 LINES" code={DOWN_C} />
+            <Code label="EXHIBIT E — down.c" meta="C · 11 LINES" listing={DOWN} />
             <Term label="OUTPUT E — A REAL STACK OVERFLOW" meta="BASH · GCC 16.2 · -O0" lines={DOWN_OUT} />
 
             <h3>
@@ -616,11 +621,11 @@ export default function StackVsHeap() {
             </div>
             <TblCap no="9-1" title="Heap errors and their tools" refText="5 ERRORS" />
             <p>AddressSanitizer finds three of these errors at run time. Add -fsanitize=address to the compile command.</p>
-            <Code label="EXHIBIT F — uaf.c" meta="C · USE-AFTER-FREE" code={UAF_C} />
+            <Code label="EXHIBIT F — uaf.c" meta="C · USE-AFTER-FREE" listing={UAF} />
             <Term label="OUTPUT F — ADDRESSSANITIZER REPORT, FIRST LINES" meta="GCC 16.2 · LIBC LINES LEFT OUT (…) · PATHS SHORTENED" lines={UAF_OUT} />
-            <Code label="EXHIBIT G — leak.c" meta="C · LEAK" code={LEAK_C} />
+            <Code label="EXHIBIT G — leak.c" meta="C · LEAK" listing={LEAK} />
             <Term label="OUTPUT G — LEAKSANITIZER REPORT" meta="GCC 16.2 · LIBC LINES LEFT OUT (…) · PATHS SHORTENED" lines={LEAK_OUT} />
-            <Code label="EXHIBIT H — local.c" meta="C · DANGLING STACK POINTER" code={LOCAL_C} />
+            <Code label="EXHIBIT H — local.c" meta="C · DANGLING STACK POINTER" listing={LOCAL} />
             <Term label="OUTPUT H — THE COMPILER WARNS" meta="GCC 16.2 · -WALL" lines={LOCAL_OUT} />
             <Hazard cmd="Do not return the address of a local variable.">
               <p>The frame ends at the return. The next call uses the same addresses for its own data.</p>

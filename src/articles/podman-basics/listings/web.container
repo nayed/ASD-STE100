@@ -1,0 +1,14 @@
+# ~/.config/containers/systemd/web.container
+[Unit]
+Description=Training web server
+
+[Container]
+Image=docker.io/library/nginx:latest
+PublishPort=8080:80
+AutoUpdate=registry
+
+[Service]
+Restart=always
+
+[Install]
+WantedBy=default.target

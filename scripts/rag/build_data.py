@@ -8,7 +8,8 @@ Writes src/articles/rag/data.ts: every measured value of the RAG article.
 
 The first run downloads BAAI/bge-small-en-v1.5 (about 65 MB) into ./models. The script embeds
 the chunks and the questions of corpus.json, then writes the cosines, the 2-D projection, the
-writer's answers, the title vector, and eval.py with what it prints (Exhibit C and Output C).
+writer's answers, the title vector, and what eval.py prints (Output C). The article imports eval.py itself
+as Exhibit C.
 The article quotes some of these results (Sheets 05, 07, 08 and 09): after a change to
 corpus.json, read those sheets again.
 """
@@ -56,8 +57,7 @@ chunker = ("Filter. The filter removes particles from the fluid before the fluid
   "To replace the element, set the pump switch to OFF. Release the system pressure. Remove the filter bowl and discard the old element. "
   "Install a new element and a new O-ring. Tighten the bowl to 12 Nm. Do a leak check at 3000 psi.")
 
-# Exhibit C and Output C: the script, and what it prints when it runs
-eval_src = open("eval.py").read().rstrip("\n")
+# Output C: what eval.py prints when it runs
 eval_out = subprocess.run([sys.executable, "eval.py"], capture_output=True, text=True, check=True).stdout.rstrip("\n")
 
 run = {"date": datetime.date.today().isoformat(), "python": ".".join(platform.python_version_tuple()[:2]),
@@ -109,8 +109,7 @@ export const TITLE_VECTOR: number[] = {J(np.round(title, 4).tolist())};
 /** the long section that Fig. 03 cuts into chunks */
 export const CHUNKER_TEXT = {J(chunker)};
 
-/** Exhibit C: the evaluation script, and what it printed */
-export const EVAL_PY = {J(eval_src)};
+/** Output C: what scripts/rag/eval.py printed (the article imports the script itself as Exhibit C) */
 export const EVAL_OUTPUT = {J(eval_out)};
 '''
 open(OUT, "w").write(ts)

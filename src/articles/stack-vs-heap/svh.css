@@ -211,11 +211,10 @@
 .svh .ex { border: 1.5px solid var(--ink); margin: 24px 0; min-width: 0; background: var(--paper); }
 .svh .ex-bar { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 4px 14px; padding: 6px 12px; border-bottom: 1px solid var(--ink); font-size: 9.5px; letter-spacing: 0.2em; text-transform: uppercase; }
 .svh .ex-bar span:last-child { color: var(--olive); }
-.svh .ex pre { margin: 0; padding: 12px 0; background: var(--paper-2); overflow-x: auto; font-size: 12px; line-height: 1.75; }
+.svh .ex pre { margin: 0; padding: 12px 0; background: var(--code-bg, var(--paper-2)); overflow-x: auto; font-size: 12px; line-height: 1.75; }
 .svh .ex .ln { display: block; padding: 0 14px 0 0; white-space: pre; }
-.svh .ex .ln::before { content: attr(data-n); display: inline-block; width: 38px; padding-right: 14px; text-align: right; color: var(--olive-lt); }
-.svh .ex .cm { color: var(--olive); font-style: italic; }
-.svh .ex .ln.on { background: var(--yel); box-shadow: inset 3px 0 0 var(--ink); }
+.svh .ex .ln::before { content: attr(data-n); display: inline-block; width: 38px; padding-right: 14px; text-align: right; color: var(--code-ln, var(--olive-lt)); }
+.svh .ex .ln.on { background: var(--code-hl, var(--yel)); box-shadow: inset 3px 0 0 var(--ink); }
 .svh .ex .ln.on::before { content: "▶"; color: var(--ink); }
 
 .svh .term { background: var(--ink); color: var(--paper); border: 1.5px solid var(--ink); margin: 24px 0; box-shadow: 6px 6px 0 rgba(18, 18, 16, 0.16); min-width: 0; }

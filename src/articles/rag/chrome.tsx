@@ -1,6 +1,8 @@
 /** Document furniture of RAG-100: document bar, contents rail, sections, figure frames, callouts, exhibits. */
 
 import { createContext, useContext, useEffect, useRef, useState, type ReactNode } from "react";
+import { listingStyle, type Listing } from "../../code/listing";
+import { Tokens } from "../../code/Tokens";
 
 export const DOC = "RAG-100";
 export const REV = "A";
@@ -158,32 +160,21 @@ export function Call({ kind = "note", children }: { kind?: "note" | "caution" | 
   );
 }
 
-/** a source listing; comments (# or //) in olive */
-export function Code({ label, meta, code }: { label: string; meta: string; code: string }) {
+/** a source listing, highlighted at build time (`?highlight` imports) */
+export function Code({ label, meta, listing }: { label: string; meta: string; listing: Listing }) {
   return (
     <div className="ex">
       <div className="ex-bar">
         <span>{label}</span>
         <span>{meta}</span>
       </div>
-      <pre>
-        {code.split("\n").map((line, i) => {
-          const m = line.match(/^(.*?)((?:#|\/\/) .*)$/);
-          const inString = m && (m[1].split('"').length - 1) % 2 === 1;
-          return (
-            <span key={i} className="ln" data-n={i + 1}>
-              {m && !inString ? (
-                <>
-                  {m[1]}
-                  <span className="cm">{m[2]}</span>
-                </>
-              ) : (
-                line
-              )}
-              {"\n"}
-            </span>
-          );
-        })}
+      <pre style={listingStyle(listing)}>
+        {listing.lines.map((line, i) => (
+          <span key={i} className="ln" data-n={i + 1}>
+            <Tokens line={line} />
+            {"\n"}
+          </span>
+        ))}
       </pre>
     </div>
   );

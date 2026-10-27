@@ -12,6 +12,13 @@ import { FigInterface } from "../diagrams/DiagramsB";
 import { FigErrors } from "../diagrams/DiagramsB";
 import { FigGMP } from "../diagrams/DiagramsB";
 import { FigChannel } from "../diagrams/DiagramsB";
+import SPEAKER from "../../listings/speaker.go?highlight";
+import GENERICS from "../../listings/generics.go?highlight";
+import ERRORS from "../../listings/errors.go?highlight";
+import PARSE_ERROR from "../../listings/parse_error.go?highlight";
+import CONCURRENCY from "../../listings/concurrency.go?highlight";
+import CONTEXT from "../../listings/context.go?highlight";
+import FUNCS_TEST from "../../listings/funcs_test.go?highlight";
 
 export function PartThree() {
   return (
@@ -34,30 +41,7 @@ export function PartThree() {
         <CodeBlock
           exhibit="EXHIBIT H"
           file="SPEAKER.GO"
-          code={`package main
-
-import "fmt"
-
-// the entire contract — one method
-type Speaker interface {
-	Speak() string
-}
-
-type Dog struct{}
-type Robot struct{}
-
-func (d Dog) Speak() string   { return "woof" }
-func (r Robot) Speak() string { return "beep" }
-
-// polymorphism without inheritance
-func announce(s Speaker) {
-	fmt.Println(s.Speak())
-}
-
-func main() {
-	announce(Dog{})   // woof
-	announce(Robot{}) // beep
-}`}
+          listing={SPEAKER}
         />
         <Figure
           fig="05"
@@ -90,37 +74,7 @@ func main() {
         <CodeBlock
           exhibit="EXHIBIT I"
           file="GENERICS.GO"
-          code={`package main
-
-import (
-	"cmp"
-	"fmt"
-)
-
-// T is a type parameter; cmp.Ordered is its constraint
-// (min and max are built in since Go 1.21 — this is for illustration)
-func Max[T cmp.Ordered](a, b T) T {
-	if a > b {
-		return a
-	}
-	return b
-}
-
-// a generic type: a stack of any element type
-type Stack[T any] struct {
-	items []T
-}
-
-func (s *Stack[T]) Push(v T) { s.items = append(s.items, v) }
-
-func main() {
-	fmt.Println(Max(3, 7))      // 7 — T inferred as int
-	fmt.Println(Max("go", "c")) // go — T inferred as string
-
-	var names Stack[string]
-	names.Push("gopher")
-	fmt.Println(len(names.items)) // 1
-}`}
+          listing={GENERICS}
         />
         <Note label="FIELD NOTE — GENERICS OR INTERFACES?">
           Use an interface when values of different types must behave alike
@@ -150,41 +104,7 @@ func main() {
         <CodeBlock
           exhibit="EXHIBIT J"
           file="ERRORS.GO"
-          code={`package main
-
-import (
-	"errors"
-	"fmt"
-	"os"
-)
-
-// a sentinel error — comparable, documented, stable
-var ErrEmptyConfig = errors.New("empty config")
-
-func loadConfig(path string) ([]byte, error) {
-	data, err := os.ReadFile(path)
-	if err != nil {
-		// wrap: add context, preserve the cause
-		return nil, fmt.Errorf("load config: %w", err)
-	}
-	if len(data) == 0 {
-		return nil, ErrEmptyConfig
-	}
-	return data, nil
-}
-
-func main() {
-	cfg, err := loadConfig("config.toml")
-	if err != nil {
-		if errors.Is(err, os.ErrNotExist) {
-			fmt.Println("no config — using defaults")
-			return
-		}
-		fmt.Println("fatal:", err)
-		return
-	}
-	_ = cfg
-}`}
+          listing={ERRORS}
         />
         <Figure
           fig="06"
@@ -202,21 +122,7 @@ func main() {
         <CodeBlock
           exhibit="EXHIBIT K"
           file="PARSE_ERROR.GO"
-          code={`// a custom error type carries structured detail
-type ParseError struct {
-	Line int
-	Msg  string
-}
-
-func (e *ParseError) Error() string {
-	return fmt.Sprintf("line %d: %s", e.Line, e.Msg)
-}
-
-// errors.As finds the first error of that type in the chain
-var pe *ParseError
-if errors.As(err, &pe) {
-	fmt.Println("fix line", pe.Line)
-}`}
+          listing={PARSE_ERROR}
         />
         <Note label="FIELD NOTE — THE TYPED NIL TRAP">
           An interface value holds a type and a value. Return a nil{" "}
@@ -278,33 +184,7 @@ if errors.As(err, &pe) {
         <CodeBlock
           exhibit="EXHIBIT L"
           file="CONCURRENCY.GO"
-          code={`package main
-
-import (
-	"fmt"
-	"sync"
-	"time"
-)
-
-func main() {
-	var wg sync.WaitGroup           // waits for a set of goroutines
-	results := make(chan string, 3) // capacity 3 = 3 workers: no send blocks
-
-	for i := 1; i <= 3; i++ {
-		// wg.Go (Go 1.25+) starts the goroutine and tracks it;
-		// since Go 1.22 each iteration has its own i, safe to capture
-		wg.Go(func() {
-			time.Sleep(time.Millisecond) // simulate work
-			results <- fmt.Sprintf("worker %d done", i)
-		})
-	}
-
-	wg.Wait()
-	close(results)             // the sending side closes
-	for msg := range results { // drains, then stops at the close
-		fmt.Println(msg)
-	}
-}`}
+          listing={CONCURRENCY}
         />
         <Note label="FIELD NOTE — CLOSING A CHANNEL">
           Only the sending side closes a channel, to say that no more values
@@ -323,20 +203,7 @@ func main() {
         <CodeBlock
           exhibit="EXHIBIT M"
           file="CONTEXT.GO"
-          code={`// select waits on several channel operations at once
-func fetch(ctx context.Context, results <-chan string) (string, error) {
-	select {
-	case msg := <-results:
-		return msg, nil
-	case <-ctx.Done(): // cancelled, or the deadline passed
-		return "", ctx.Err()
-	}
-}
-
-// the caller sets the deadline once; every call below inherits it
-ctx, cancel := context.WithTimeout(context.Background(), time.Second)
-defer cancel()
-msg, err := fetch(ctx, results)`}
+          listing={CONTEXT}
         />
         <Note label="FIELD NOTE — THE RACE DETECTOR">
           If you must share memory, do it under <K>sync.Mutex</K> — and
@@ -383,26 +250,7 @@ msg, err := fetch(ctx, results)`}
         <CodeBlock
           exhibit="EXHIBIT O"
           file="FUNCS_TEST.GO"
-          code={`func TestDivide(t *testing.T) {
-	tests := []struct {
-		name    string
-		a, b    float64
-		want    float64
-		wantErr bool
-	}{
-		{"simple", 10, 4, 2.5, false},
-		{"negative", -9, 3, -3, false},
-		{"by zero", 1, 0, 0, true},
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			got, err := divide(tt.a, tt.b)
-			if (err != nil) != tt.wantErr || got != tt.want {
-				t.Errorf("divide(%v, %v) = %v, %v", tt.a, tt.b, got, err)
-			}
-		})
-	}
-}`}
+          listing={FUNCS_TEST}
         />
         <InlineList
           items={[

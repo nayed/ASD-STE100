@@ -143,7 +143,6 @@
 .cicd .listing { margin: 18px 0 22px; border: 1px solid var(--ink); background: var(--panel); max-width: 760px; }
 .cicd .listing-head { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; background: var(--ink); color: var(--bg); font-size: 10px; font-weight: 700; letter-spacing: 0.18em; padding: 8px 14px; text-transform: uppercase; }
 .cicd .listing pre { margin: 0; padding: 14px 16px; overflow-x: auto; font: 400 12.5px/1.7 "IBM Plex Mono", monospace; color: var(--ink); }
-.cicd .listing .c { color: var(--olive); font-style: italic; }
 .cicd .listing .m { color: var(--red); font-weight: 600; }
 
 /* note / caution */

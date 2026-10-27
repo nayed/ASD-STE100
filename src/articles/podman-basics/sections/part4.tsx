@@ -3,7 +3,9 @@ import { Check } from "lucide-react";
 import { Code, Figure, Note, P, REV, SECTIONS, Section, Sub } from "../components/chrome";
 import { Reveal } from "../lib/reveal";
 import { FigPod } from "../components/figs";
-import { GlossaryTable, Term } from "../components/blocks";
+import { GlossaryTable, FileBlock, Term } from "../components/blocks";
+import CONTAINERFILE from "../listings/Containerfile?theme=catppuccin-latte&highlight";
+import WEB_CONTAINER from "../listings/web.container?theme=catppuccin-latte&highlight";
 
 /* ====================== 09 — PODS, THE NAMESAKE ====================== */
 
@@ -99,25 +101,7 @@ export function S10() {
       </Reveal>
 
       <Reveal delay={60}>
-        <Term
-          title="FILE — Containerfile"
-          right="7 INSTRUCTIONS"
-          lines={[
-            { t: "# ── base layer: an official, pinned runtime floor", c: "com" },
-            { t: "FROM docker.io/library/python:3.12-slim", c: "kw" },
-            { t: "", c: "dim" },
-            { t: "WORKDIR /app", c: "kw" },
-            { t: "", c: "dim" },
-            { t: "# ── deps before code: cached until requirements.txt changes", c: "com" },
-            { t: "COPY requirements.txt .", c: "kw" },
-            { t: "RUN pip install --no-cache-dir -r requirements.txt", c: "kw" },
-            { t: "", c: "dim" },
-            { t: "# ── code lands last, so edits rebuild in seconds", c: "com" },
-            { t: "COPY . .", c: "kw" },
-            { t: "EXPOSE 3000", c: "kw" },
-            { t: 'CMD ["python", "server.py"]', c: "kw" },
-          ]}
-        />
+        <FileBlock title="FILE — Containerfile" right="7 INSTRUCTIONS" listing={CONTAINERFILE} />
       </Reveal>
 
       <Reveal delay={40}>
@@ -199,26 +183,7 @@ export function S11() {
 
       <Reveal delay={60}>
         <div className="grid gap-6 lg:grid-cols-2">
-          <Term
-            title="FILE — web.container"
-            right="QUADLET"
-            lines={[
-              { t: "# ~/.config/containers/systemd/web.container", c: "com" },
-              { t: "[Unit]", c: "sec" },
-              { t: "Description=Training web server", c: "out" },
-              { t: "", c: "dim" },
-              { t: "[Container]", c: "sec" },
-              { t: "Image=docker.io/library/nginx:latest", c: "out" },
-              { t: "PublishPort=8080:80", c: "out" },
-              { t: "AutoUpdate=registry", c: "out" },
-              { t: "", c: "dim" },
-              { t: "[Service]", c: "sec" },
-              { t: "Restart=always", c: "out" },
-              { t: "", c: "dim" },
-              { t: "[Install]", c: "sec" },
-              { t: "WantedBy=default.target", c: "out" },
-            ]}
-          />
+          <FileBlock title="FILE — web.container" right="QUADLET" listing={WEB_CONTAINER} />
           <Term
             title="OPS.LOG — HAND IT TO SYSTEMD"
             right="SHEET 11"

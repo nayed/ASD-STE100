@@ -1,7 +1,8 @@
 import { Code, Figure, Note, P, Section } from "../components/chrome";
 import { Reveal } from "../lib/reveal";
 import { FigData } from "../components/figs";
-import { Term } from "../components/blocks";
+import { FileBlock, Term } from "../components/blocks";
+import COMPOSE from "../listings/compose.yaml?theme=catppuccin-latte&highlight";
 
 /* ======================== 07 — KEEPING DATA ======================== */
 
@@ -132,27 +133,7 @@ export function S08() {
 
       <Reveal delay={60}>
         <div className="mt-8 grid gap-6">
-          <Term
-            title="FILE — compose.yaml"
-            right="2 SERVICES"
-            lines={[
-              { t: "services:", c: "sec" },
-              { t: "  db:" },
-              { t: "    image: docker.io/library/postgres:16" },
-              { t: "    environment:" },
-              { t: "      POSTGRES_PASSWORD: dev" },
-              { t: "    volumes:" },
-              { t: "      - pgdata:/var/lib/postgresql/data" },
-              { t: "  api:" },
-              { t: "    image: localhost/myapi:v1   # built on sheet 10", c: "out" },
-              { t: "    ports:" },
-              { t: '      - "3000:3000"' },
-              { t: "    depends_on: [db]" },
-              { t: "", c: "dim" },
-              { t: "volumes:", c: "sec" },
-              { t: "  pgdata:" },
-            ]}
-          />
+          <FileBlock title="FILE — compose.yaml" right="2 SERVICES" listing={COMPOSE} />
           <Term
             title="OPS.LOG — ONE COMMAND"
             right="SHEET 08"

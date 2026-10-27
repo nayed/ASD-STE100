@@ -2,18 +2,13 @@ import { useEffect, useRef } from "react";
 import "./cicd.css";
 import { mountCicd } from "./sim";
 // the real CI of this repository, shown in 4.5 — imported, so the article never drifts from the file
-import WORKFLOW from "../../../.github/workflows/ci.yml?raw";
+import WORKFLOW from "../../../.github/workflows/ci.yml?highlight";
+// 2.4: what Git writes into the file. On main, merging fix/login-error; the teammate's 5 meets the branch's 3.
+import CONFLICT from "./listings/login.ts?highlight";
+import { lineText, listingStyle } from "../../code/listing";
+import { Tokens } from "../../code/Tokens";
 
-/** 2.4: what Git writes into the file. On main, merging fix/login-error; the teammate's 5 meets the branch's 3. */
-const CONFLICT = `// src/login.ts — Git marks the lines that conflict
-export function validate(attempts: number) {
-<<<<<<< HEAD
-  const MAX_ATTEMPTS = 5;
-=======
-  const MAX_ATTEMPTS = 3;
->>>>>>> fix/login-error
-  return attempts <= MAX_ATTEMPTS;
-}`;
+/** a line where Git marks the start, the middle or the end of a conflict */
 const MARKER = /^(<{7}|={7}|>{7})/;
 
 const COLS = [1, 2, 3, 4, 5, 6, 7, 8];
@@ -284,9 +279,10 @@ export default function CiCd() {
           <p>A merge conflict is not damage. Git keeps both versions, and you lose no work. A person must select the correct lines.</p>
           <div className="listing">
             <div className="listing-head"><span>src/login.ts — during the merge</span><span>CONFLICT MARKERS</span></div>
-            <pre>{CONFLICT.split("\n").map((line, i) => (
-              <span key={i} className={MARKER.test(line) ? "m" : line.trimStart().startsWith("//") ? "c" : undefined}>{line + "\n"}</span>
-            ))}</pre>
+            <pre style={listingStyle(CONFLICT)}>{CONFLICT.lines.map((line, i) => {
+              const marker = MARKER.test(lineText(line));
+              return <span key={i} className={marker ? "m" : undefined}>{marker ? lineText(line) : <Tokens line={line} />}{"\n"}</span>;
+            })}</pre>
           </div>
           <div className="tscroll"><table className="spec">
             <thead><tr><th style={{ width: "225px" }}>Marker</th><th>Meaning</th></tr></thead>
@@ -418,8 +414,8 @@ export default function CiCd() {
           <p>The workflow below is the CI of this wiki. It checks each pull request and each push to main.</p>
           <div className="listing">
             <div className="listing-head"><span>.github/workflows/ci.yml</span><span>YAML · THIS REPOSITORY</span></div>
-            <pre>{WORKFLOW.split("\n").map((line, i) => (
-              <span key={i} className={line.trimStart().startsWith("#") ? "c" : undefined}>{line + "\n"}</span>
+            <pre style={listingStyle(WORKFLOW)}>{WORKFLOW.lines.map((line, i) => (
+              <span key={i}><Tokens line={line} />{"\n"}</span>
             ))}</pre>
           </div>
           <div className="note"><span className="k">NOTE</span><span>Use <code>npm ci</code>, not <code>npm install</code>, in CI. <code>npm ci</code> installs the exact versions in <code>package-lock.json</code>. Each run then uses the same dependencies.</span></div>

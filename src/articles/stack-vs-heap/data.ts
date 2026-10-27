@@ -1,35 +1,11 @@
 /**
- * Every listing and every output of MEM-100. The outputs are real: each program was compiled
+ * Every output of MEM-100; the listings are the files in listings/. The outputs are real: each program was compiled
  * and run on x86-64 Debian Linux with GCC 16.2 and Go 1.27 on 2026-10-24, and pasted unchanged,
  * except where a line says "…" (lines left out) or where a long path was shortened by
  * ASAN_OPTIONS=strip_path_prefix.
  */
 
 import type { TermLine } from "./chrome";
-
-export const WHERE_C = `#include <stdio.h>
-#include <stdlib.h>
-
-int initialized = 42;   /* data: a global with a value */
-int zeroed;             /* bss: a global without a value */
-
-int main(void) {
-    int local = 7;                      /* stack */
-    int *small = malloc(sizeof(int));   /* heap */
-    char *large = malloc(1 << 20);      /* 1 MiB: its own mapping */
-
-    printf("text    main()       %p\\n", (void *)main);
-    printf("data    initialized  %p\\n", (void *)&initialized);
-    printf("bss     zeroed       %p\\n", (void *)&zeroed);
-    printf("heap    small        %p\\n", (void *)small);
-    printf("mapped  large        %p\\n", (void *)large);
-    printf("lib     printf()     %p\\n", (void *)printf);
-    printf("stack   local        %p\\n", (void *)&local);
-
-    free(large);
-    free(small);
-    return local - 7;
-}`;
 
 /** run 1 feeds Fig. 01 */
 export const WHERE_RUN1 = {
@@ -62,22 +38,6 @@ export const WHERE_OUT: TermLine[] = [
   { t: "lib     printf()     0x7f41dd6cddc0" },
   { t: "stack   local        0x7ffd5c0fe2fc" },
 ];
-
-export const COUNTER_C = `#include <stdlib.h>
-
-int *make_counter(int start) {
-    int *p = malloc(sizeof(int));   /* heap */
-    *p = start;
-    return p;
-}
-
-int main(void) {
-    int step = 2;                   /* stack */
-    int *c = make_counter(10);
-    *c += step;
-    free(c);                        /* give back */
-    return 0;
-}`;
 
 /**
  * Real addresses of one run of counter.c (with print statements added, -O0).
@@ -114,28 +74,6 @@ export const FRAME_ASM: TermLine[] = [
   { t: "\tret" },
 ];
 
-export const GO_MAIN = `package main
-
-import "fmt"
-
-type point struct{ x, y int }
-
-// p stays inside the function: the compiler keeps it on the stack
-func sum() int {
-	p := point{1, 2}
-	return p.x + p.y
-}
-
-// the address of p leaves the function: p must live on the heap
-func newPoint() *point {
-	p := point{3, 4}
-	return &p
-}
-
-func main() {
-	fmt.Println(sum(), *newPoint())
-}`;
-
 export const GO_OUT: TermLine[] = [
   { t: "go build -gcflags=-m .", k: "cmd" },
   { t: "# esc" },
@@ -151,21 +89,6 @@ export const GO_OUT: TermLine[] = [
   { t: "go run .", k: "cmd" },
   { t: "3 {3 4}" },
 ];
-
-export const ALLOC_C = `#include <stdlib.h>
-
-void use(char *buf);
-
-void on_stack(void) {
-    char buf[4096];           /* stack: one subtraction */
-    use(buf);
-}
-
-void on_heap(void) {
-    char *buf = malloc(4096); /* heap: a call into the allocator */
-    use(buf);
-    free(buf);
-}`;
 
 export const ALLOC_ASM: TermLine[] = [
   { t: "gcc -O2 -S -masm=intel -fno-asynchronous-unwind-tables alloc.c", k: "cmd" },
@@ -189,18 +112,6 @@ export const ALLOC_ASM: TermLine[] = [
   { t: '\tjmp\t"free"@PLT', k: "hot" },
 ];
 
-export const DOWN_C = `#include <stdio.h>
-
-static long down(long n) {
-    if (n % 50000 == 0)
-        printf("depth %ld\\n", n);
-    return down(n + 1) + 1;   /* no end: each call adds a frame */
-}
-
-int main(void) {
-    return (int)down(1);
-}`;
-
 export const DOWN_OUT: TermLine[] = [
   { t: "ulimit -s", k: "cmd" },
   { t: "8192" },
@@ -215,15 +126,6 @@ export const DOWN_OUT: TermLine[] = [
   { t: "echo $?", k: "cmd" },
   { t: "139" },
 ];
-
-export const UAF_C = `#include <stdlib.h>
-
-int main(void) {
-    int *p = malloc(sizeof(int));
-    *p = 1;
-    free(p);
-    return *p;            /* use after free */
-}`;
 
 export const UAF_OUT: TermLine[] = [
   { t: "gcc -g -fsanitize=address -o uaf uaf.c && ./uaf", k: "cmd" },
@@ -243,15 +145,6 @@ export const UAF_OUT: TermLine[] = [
   { t: "    …", k: "omit" },
 ];
 
-export const LEAK_C = `#include <stdlib.h>
-
-int main(void) {
-    int *p = malloc(4 * sizeof(int));
-    p[0] = 1;
-    p = NULL;             /* the only pointer is lost */
-    return 0;
-}`;
-
 export const LEAK_OUT: TermLine[] = [
   { t: "gcc -g -fsanitize=address -o leak leak.c && ./leak", k: "cmd" },
   { t: "=================================================================" },
@@ -262,11 +155,6 @@ export const LEAK_OUT: TermLine[] = [
   { t: "    #1 0x55cf81e6317a in main leak.c:4" },
   { t: "    …", k: "omit" },
 ];
-
-export const LOCAL_C = `int *bad(void) {
-    int x = 5;
-    return &x;            /* x dies when bad() returns */
-}`;
 
 export const LOCAL_OUT: TermLine[] = [
   { t: "gcc -c -Wall local.c", k: "cmd" },

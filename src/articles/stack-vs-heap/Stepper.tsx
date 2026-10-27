@@ -7,7 +7,8 @@
 
 import { useState } from "react";
 import { Code } from "./chrome";
-import { COUNTER_C, RUN } from "./data";
+import COUNTER from "./listings/counter.c?highlight";
+import { RUN } from "./data";
 import { INK, INK2, L, OLIVE, OLIVE_LT, PAPER, PAPER2, YEL } from "./figs";
 
 type Var = { name: string; value: string; changed?: boolean };
@@ -77,7 +78,7 @@ export default function Stepper() {
   return (
     <div>
       <div className="stepper">
-        <Code label="EXHIBIT B — counter.c" meta="C · FROM SHEET 03" code={COUNTER_C} on={st.line ?? undefined} />
+        <Code label="EXHIBIT B — counter.c" meta="C · FROM SHEET 03" listing={COUNTER} on={st.line ?? undefined} />
 
         <div className="machine">
           <div className="machine-bar">

@@ -1,4 +1,6 @@
 import type { ReactNode } from "react";
+import { listingStyle, type Listing } from "../../../code/listing";
+import { Tokens } from "../../../code/Tokens";
 
 /* ------------------------------------------------------------------ */
 /*  Tokens                                                             */
@@ -90,58 +92,17 @@ export function Figure({
 }
 
 /* ------------------------------------------------------------------ */
-/*  Code exhibit with tiny Go highlighter                              */
+/*  Code exhibit, highlighted at build time (?highlight imports)        */
 /* ------------------------------------------------------------------ */
-const TOKEN_RE =
-  /(\/\/[^\n]*)|("(?:[^"\\\n]|\\.)*")|('(?:[^'\\\n]|\\.)*')|\b(func|package|import|return|if|else|for|range|switch|case|default|type|struct|interface|map|chan|go|defer|select|var|const|break|continue|fallthrough)\b|\b(nil|true|false|iota)\b|\b(\d[\d_]*(?:\.\d+)?)\b|([A-Z]\w*)(?=[({])|(\w+)(?=\()/g;
-
-function tokenize(code: string) {
-  const out: { text: string; kind: string }[] = [];
-  let last = 0;
-  for (const m of code.matchAll(TOKEN_RE)) {
-    const idx = m.index ?? 0;
-    if (idx > last) out.push({ text: code.slice(last, idx), kind: "plain" });
-    const kind = m[1]
-      ? "comment"
-      : m[2] || m[3]
-        ? "string"
-        : m[4]
-          ? "keyword"
-          : m[5]
-            ? "constant"
-            : m[6]
-              ? "number"
-              : m[7]
-                ? "type"
-                : "call";
-    out.push({ text: m[0], kind });
-    last = idx + m[0].length;
-  }
-  if (last < code.length) out.push({ text: code.slice(last), kind: "plain" });
-  return out;
-}
-
-const CLASS: Record<string, string> = {
-  comment: "text-go-olive italic",
-  string: "text-go-olive-deep",
-  keyword: "text-go-accent-text font-medium",
-  constant: "text-go-accent-text font-medium",
-  number: "text-go-ink",
-  type: "text-go-ink font-medium",
-  call: "text-go-ink",
-  plain: "",
-};
-
 export function CodeBlock({
   exhibit,
   file,
-  code,
+  listing,
 }: {
   exhibit?: string;
   file: string;
-  code: string;
+  listing: Listing;
 }) {
-  const lines = code.split("\n");
   return (
     <div className="my-8 border border-go-ink/40 bg-white/45">
       <div className="flex items-center justify-between border-b border-go-ink/40 px-4 py-2 text-[10px] uppercase tracking-[0.2em]">
@@ -149,17 +110,13 @@ export function CodeBlock({
           {exhibit ? <span className="text-go-olive-deep">{exhibit} — </span> : null}
           {file}
         </span>
-        <span className="text-go-olive">GO SOURCE / {lines.length} LN</span>
+        <span className="text-go-olive">GO SOURCE / {listing.lines.length} LN</span>
       </div>
-      <pre className="overflow-x-auto px-4 py-4 text-[12.5px] leading-6">
+      <pre className="overflow-x-auto px-4 py-4 text-[12.5px] leading-6" style={listingStyle(listing)}>
         <code>
-          {lines.map((line, i) => (
+          {listing.lines.map((line, i) => (
             <span key={i} className="block whitespace-pre">
-              {tokenize(line).map((t, j) => (
-                <span key={j} className={CLASS[t.kind]}>
-                  {t.text}
-                </span>
-              ))}
+              <Tokens line={line} />
               {line.length === 0 ? " " : ""}
             </span>
           ))}

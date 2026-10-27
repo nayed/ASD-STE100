@@ -1,33 +1,9 @@
 import Playground from "./Playground";
 import { Fig1, Fig3Bars, Fig4Chips, RevealSvg, Toc } from "./figures";
 import "./rf.css";
-
-/* Listing 11-1: a Python example, with comments set in olive */
-const SKLEARN = `from sklearn.datasets import load_iris
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.inspection import permutation_importance
-from sklearn.model_selection import train_test_split
-
-iris = load_iris()
-X, y = iris.data, iris.target
-X_train, X_test, y_train, y_test = train_test_split(X, y, random_state=0)
-
-forest = RandomForestClassifier(
-    n_estimators=200,      # B: the number of trees
-    max_features="sqrt",   # m = √p at each split
-    oob_score=True,        # compute the OOB score (section 7.0)
-    n_jobs=-1,             # train the trees in parallel
-    random_state=0,
-)
-forest.fit(X_train, y_train)
-
-print(f"OOB score:  {forest.oob_score_:.3f}")
-print(f"test score: {forest.score(X_test, y_test):.3f}")
-
-# permutation importance on test data (section 8.0)
-result = permutation_importance(forest, X_test, y_test, random_state=0)
-for name, value in zip(iris.feature_names, result.importances_mean):
-    print(f"{name:18} {value:.3f}")`;
+import { listingStyle, type Listing } from "../../code/listing";
+import { Tokens } from "../../code/Tokens";
+import FOREST from "./listings/forest.py?highlight";
 
 /* the real output of Listing 11-1, run with scikit-learn 1.9.1 on Python 3.14 */
 const SKLEARN_OUTPUT = `OOB score:  0.955
@@ -37,21 +13,23 @@ sepal width (cm)   0.000
 petal length (cm)  0.137
 petal width (cm)   0.184`;
 
-function Listing({ code, output = false }: { code: string; output?: boolean }) {
+/** Listing 11-1, highlighted at build time */
+function Source({ listing }: { listing: Listing }) {
   return (
-    <pre className={output ? "code out" : "code"}>
-      {code.split("\n").map((line, i) => {
-        const at = line.indexOf("#");
-        return (
-          <span key={i}>
-            {at < 0 ? line : line.slice(0, at)}
-            {at >= 0 && <span className="c">{line.slice(at)}</span>}
-            {"\n"}
-          </span>
-        );
-      })}
+    <pre className="code" style={listingStyle(listing)}>
+      {listing.lines.map((line, i) => (
+        <span key={i}>
+          <Tokens line={line} />
+          {"\n"}
+        </span>
+      ))}
     </pre>
   );
+}
+
+/** an output: plain text */
+function Output({ text }: { text: string }) {
+  return <pre className="code out">{text}</pre>;
 }
 
 export default function RandomForest() {
@@ -508,10 +486,10 @@ export default function RandomForest() {
             <h2><span className="no">11.0</span>THE FOREST IN CODE</h2>
             <p>Most projects use a library. scikit-learn is the standard Python library for classic machine learning. Every model trains with fit and predicts with predict.</p>
             <p>Listing 11-1 uses scikit-learn. It trains a forest and prints the OOB score and the test score. Then it prints the permutation importance of each feature.</p>
-            <Listing code={SKLEARN} />
+            <Source listing={FOREST} />
             <div className="figcap"><span className="fno">LISTING 11-1</span><span>— A RANDOM FOREST IN SCIKIT-LEARN</span><span className="fr">PYTHON · IRIS DATA SET</span></div>
             <p style={{ marginTop: "28px" }}>The listing gives this output:</p>
-            <Listing code={SKLEARN_OUTPUT} output />
+            <Output text={SKLEARN_OUTPUT} />
             <div className="figcap"><span className="fno">OUTPUT 11-1</span><span>— THE OUTPUT OF LISTING 11-1</span><span className="fr">SCIKIT-LEARN 1.9.1</span></div>
             <p style={{ marginTop: "20px" }}>The OOB score (0.955) is near the test score (0.974). The OOB estimate is correct here. Only the two petal features are important. Shuffle a sepal feature, and the test accuracy does not change.</p>
             <div className="note"><span className="nk">NOTE — VERSIONS</span>THIS OUTPUT COMES FROM SCIKIT-LEARN 1.9.1. OTHER VERSIONS CAN GIVE SLIGHTLY DIFFERENT NUMBERS.</div>

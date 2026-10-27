@@ -27,5 +27,7 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["src", "scripts", "vite.config.ts"]
+  "include": ["src", "scripts", "vite.config.ts"],
+  /* code listings are shown, not compiled (login.ts holds Git conflict markers) */
+  "exclude": ["src/articles/*/listings"]
 }

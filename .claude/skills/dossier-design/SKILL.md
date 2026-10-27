@@ -104,6 +104,7 @@ Framework-default palettes (slate, zinc, indigo, teal), rounded cards, soft or c
 ## 9. In the tech-wiki repo
 
 - An article is a folder in `src/articles/<slug>/` with an `index.tsx` default export and an entry in `src/articles/registry.ts`, including a `bar` theme. The bar shows `bar.accent` as text in the search menu, so use the dark text variant of a light accent there.
+- Put source and config files (not terminal sessions) in `listings/` and import them with `?highlight`: the build colours them in gruvbox-light-hard, or in another Shiki theme with `?theme=<name>&highlight` when the article's design asks for it (CLAUDE.md, code listings). Do not colour code by hand.
 - Scope all CSS under one root class in a file in the folder. Keep the palette as CSS variables on that root class, or as prefixed Tailwind tokens in `src/index.css`.
 - The shared site bar is 44 px (`var(--site-bar-h)`). Fixed and sticky parts go below it, and `scroll-margin-top` must include it.
 - Accents already used: red `#b3261e` (ASD-STE100), greens `#0e7a3c` and `#3d7151` (random forest, CI/CD), cyan `#00add8` (Go), purple `#6d28d9` (Podman), orange `#e2571f` (LLM), yellow `#f2c300` (stack vs heap), cobalt `#2c45c9` (RAG). Pick another hue.

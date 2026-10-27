@@ -1,6 +1,8 @@
 /** Code / terminal blocks and dossier tables. */
 
 import type { ReactNode } from "react";
+import { listingStyle, type Listing } from "../../../code/listing";
+import { Tokens } from "../../../code/Tokens";
 
 export type TL = { t: string; c?: "cmd" | "out" | "com" | "kw" | "sec" | "dim" | "head" };
 
@@ -42,6 +44,26 @@ export function Term({ title, right = "TTY", lines }: { title: string; right?: s
       <div className="overflow-x-auto p-4 text-[12px] leading-[1.9] md:p-5 md:text-[12.5px]">
         {lines.map((l, i) => (
           <Line key={i} l={l} />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/** a file, highlighted at build time (`?highlight` imports), in the frame of a terminal block */
+export function FileBlock({ title, right, listing }: { title: string; right: string; listing: Listing }) {
+  return (
+    <div className="min-w-0 border border-pd-ink bg-pd-ink shadow-[6px_6px_0_0_rgba(17,20,15,0.14)]">
+      <div className="flex items-center justify-between border-b border-pd-paper/15 px-4 py-2 text-[9px] uppercase tracking-[0.22em] text-pd-paper/50">
+        <span>{title}</span>
+        <span>{right}</span>
+      </div>
+      <div className="overflow-x-auto p-4 text-[12px] leading-[1.9] md:p-5 md:text-[12.5px]" style={listingStyle(listing)}>
+        {listing.lines.map((line, i) => (
+          <div key={i} className="whitespace-pre">
+            <Tokens line={line} />
+            {line.length === 0 ? " " : ""}
+          </div>
         ))}
       </div>
     </div>

@@ -10,6 +10,8 @@ import {
   DataTable,
 } from "../Dossier";
 import { FigPipeline, FigAnatomy } from "../diagrams/DiagramsA";
+import HELLO from "../../listings/hello.go?highlight";
+import VARS from "../../listings/vars.go?highlight";
 
 export function PartOne() {
   return (
@@ -85,14 +87,7 @@ export function PartOne() {
         <CodeBlock
           exhibit="EXHIBIT A"
           file="HELLO.GO"
-          code={`package main
-
-import "fmt"
-
-// the entry point — execution starts here
-func main() {
-\tfmt.Println("hello, dossier")
-}`}
+          listing={HELLO}
         />
         <Figure
           fig="02"
@@ -156,23 +151,7 @@ func main() {
         <CodeBlock
           exhibit="EXHIBIT C"
           file="VARS.GO"
-          code={`package main
-
-import "fmt"
-
-func main() {
-\t// var — explicit type, starts at its zero value (0)
-\tvar counter int
-
-\t// := — declare and infer, inside functions only
-\tratio := 3.14
-\tlang := "go"
-\tok := true
-
-\tcounter++
-\tfmt.Println(counter, ratio, lang, ok)
-\t// 1 3.14 go true
-}`}
+          listing={VARS}
         />
         <DataTable
           head={["TYPE", "ZERO VALUE", "FIELD NOTE"]}
