@@ -100,11 +100,11 @@ export function S10() {
         </div>
       </Reveal>
 
-      <Reveal delay={60}>
+      <Reveal delay={60} className="mt-10">
         <FileBlock title="FILE — Containerfile" right="7 INSTRUCTIONS" listing={CONTAINERFILE} />
       </Reveal>
 
-      <Reveal delay={40}>
+      <Reveal delay={40} className="mt-10">
         <Term
           title="OPS.LOG — STAMP THE LAYERS"
           right="SHEET 10"
@@ -181,7 +181,7 @@ export function S11() {
         </div>
       </Reveal>
 
-      <Reveal delay={60}>
+      <Reveal delay={60} className="mt-10">
         <div className="grid gap-6 lg:grid-cols-2">
           <FileBlock title="FILE — web.container" right="QUADLET" listing={WEB_CONTAINER} />
           <Term

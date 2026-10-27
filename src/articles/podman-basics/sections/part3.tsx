@@ -116,7 +116,7 @@ export function S08() {
         </div>
       </Reveal>
 
-      <Reveal delay={40}>
+      <Reveal delay={40} className="mt-10">
         <Term
           title="OPS.LOG — CONTAINERS FIND EACH OTHER"
           right="SHEET 08"
