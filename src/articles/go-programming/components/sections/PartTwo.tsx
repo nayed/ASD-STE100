@@ -7,10 +7,10 @@ import {
   K,
 } from "../Dossier";
 import { FigSlice, FigStruct } from "../diagrams/DiagramsA";
-import FUNCS from "../../listings/funcs.go?highlight";
-import FLOW from "../../listings/flow.go?highlight";
-import COLLECTIONS from "../../listings/collections.go?highlight";
-import SERVER from "../../listings/server.go?highlight";
+import FUNCS from "../../listings/funcs.go?theme=light-plus&highlight";
+import FLOW from "../../listings/flow.go?theme=light-plus&highlight";
+import COLLECTIONS from "../../listings/collections.go?theme=light-plus&highlight";
+import SERVER from "../../listings/server.go?theme=light-plus&highlight";
 
 export function PartTwo() {
   return (

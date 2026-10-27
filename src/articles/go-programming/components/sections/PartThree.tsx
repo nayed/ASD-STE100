@@ -12,13 +12,13 @@ import { FigInterface } from "../diagrams/DiagramsB";
 import { FigErrors } from "../diagrams/DiagramsB";
 import { FigGMP } from "../diagrams/DiagramsB";
 import { FigChannel } from "../diagrams/DiagramsB";
-import SPEAKER from "../../listings/speaker.go?highlight";
-import GENERICS from "../../listings/generics.go?highlight";
-import ERRORS from "../../listings/errors.go?highlight";
-import PARSE_ERROR from "../../listings/parse_error.go?highlight";
-import CONCURRENCY from "../../listings/concurrency.go?highlight";
-import CONTEXT from "../../listings/context.go?highlight";
-import FUNCS_TEST from "../../listings/funcs_test.go?highlight";
+import SPEAKER from "../../listings/speaker.go?theme=light-plus&highlight";
+import GENERICS from "../../listings/generics.go?theme=light-plus&highlight";
+import ERRORS from "../../listings/errors.go?theme=light-plus&highlight";
+import PARSE_ERROR from "../../listings/parse_error.go?theme=light-plus&highlight";
+import CONCURRENCY from "../../listings/concurrency.go?theme=light-plus&highlight";
+import CONTEXT from "../../listings/context.go?theme=light-plus&highlight";
+import FUNCS_TEST from "../../listings/funcs_test.go?theme=light-plus&highlight";
 
 export function PartThree() {
   return (

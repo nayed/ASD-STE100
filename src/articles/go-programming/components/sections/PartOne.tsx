@@ -10,8 +10,8 @@ import {
   DataTable,
 } from "../Dossier";
 import { FigPipeline, FigAnatomy } from "../diagrams/DiagramsA";
-import HELLO from "../../listings/hello.go?highlight";
-import VARS from "../../listings/vars.go?highlight";
+import HELLO from "../../listings/hello.go?theme=light-plus&highlight";
+import VARS from "../../listings/vars.go?theme=light-plus&highlight";
 
 export function PartOne() {
   return (
