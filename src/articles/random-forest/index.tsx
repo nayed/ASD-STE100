@@ -3,7 +3,7 @@ import { Fig1, Fig3Bars, Fig4Chips, RevealSvg, Toc } from "./figures";
 import "./rf.css";
 import { listingStyle, type Listing } from "../../code/listing";
 import { Tokens } from "../../code/Tokens";
-import FOREST from "./listings/forest.py?highlight";
+import FOREST from "./listings/forest.py?theme=vitesse-light&highlight";
 
 /* the real output of Listing 11-1, run with scikit-learn 1.9.1 on Python 3.14 */
 const SKLEARN_OUTPUT = `OOB score:  0.955
@@ -91,20 +91,20 @@ export default function RandomForest() {
             <table className="def">
               <thead><tr><th>TERM</th><th>MEANING</th></tr></thead>
               <tbody>
-              <tr><td>DATA SET</td><td>A collection of examples. Each example holds values and a label.</td></tr>
-              <tr><td>FEATURE</td><td>A property of an example. Examples: weight, color, size.</td></tr>
-              <tr><td>CLASS</td><td>The category of the example. Example: "APPLE" or "LEMON".</td></tr>
-              <tr><td>NODE</td><td>A test point of the tree. The node tests one feature against one threshold.</td></tr>
-              <tr><td>LEAF</td><td>An end point of the tree. The leaf gives the result.</td></tr>
-              <tr><td>BOOTSTRAP SAMPLE</td><td>A random sample of the data set. The draw is with replacement. Size: n examples.</td></tr>
-              <tr><td>VOTE</td><td>The answer of one tree for one input.</td></tr>
-              <tr><td>OVERFITTING</td><td>The model learns the noise of the training data. The model then fails on new data.</td></tr>
-              <tr><td>OOB</td><td>"Out-of-bag". The examples that a bootstrap sample does not select. See section 7.0.</td></tr>
-              <tr><td>GINI IMPURITY</td><td>A measure of the class mixture at a node. 0 means one class only. See section 3.1.</td></tr>
-              <tr><td>n</td><td>The number of examples in the data set.</td></tr>
-              <tr><td>B</td><td>The number of trees in the forest.</td></tr>
-              <tr><td>p</td><td>The number of features of each example.</td></tr>
-              <tr><td>m</td><td>The number of features that one split can test. m is smaller than p.</td></tr>
+                <tr><td>DATA SET</td><td>A collection of examples. Each example holds values and a label.</td></tr>
+                <tr><td>FEATURE</td><td>A property of an example. Examples: weight, color, size.</td></tr>
+                <tr><td>CLASS</td><td>The category of the example. Example: "APPLE" or "LEMON".</td></tr>
+                <tr><td>NODE</td><td>A test point of the tree. The node tests one feature against one threshold.</td></tr>
+                <tr><td>LEAF</td><td>An end point of the tree. The leaf gives the result.</td></tr>
+                <tr><td>BOOTSTRAP SAMPLE</td><td>A random sample of the data set. The draw is with replacement. Size: n examples.</td></tr>
+                <tr><td>VOTE</td><td>The answer of one tree for one input.</td></tr>
+                <tr><td>OVERFITTING</td><td>The model learns the noise of the training data. The model then fails on new data.</td></tr>
+                <tr><td>OOB</td><td>"Out-of-bag". The examples that a bootstrap sample does not select. See section 7.0.</td></tr>
+                <tr><td>GINI IMPURITY</td><td>A measure of the class mixture at a node. 0 means one class only. See section 3.1.</td></tr>
+                <tr><td>n</td><td>The number of examples in the data set.</td></tr>
+                <tr><td>B</td><td>The number of trees in the forest.</td></tr>
+                <tr><td>p</td><td>The number of features of each example.</td></tr>
+                <tr><td>m</td><td>The number of features that one split can test. m is smaller than p.</td></tr>
               </tbody>
             </table>
             <div className="figcap" style={{ marginTop: "8px" }}><span className="fno">TABLE 2-1</span><span>— TERMS OF THIS DOCUMENT</span><span className="fr">14 TERMS</span></div>
@@ -136,11 +136,11 @@ export default function RandomForest() {
             <table className="def">
               <thead><tr><th>NODE</th><th>APPLE</th><th>LEMON</th><th>GINI</th></tr></thead>
               <tbody>
-              <tr><td>PARENT · 10 EXAMPLES</td><td>5</td><td>5</td><td>1 − 0.5² − 0.5² = 0.50</td></tr>
-              <tr><td>YELLOW? NO · 5</td><td>4</td><td>1</td><td>1 − 0.8² − 0.2² = 0.32</td></tr>
-              <tr><td>YELLOW? YES · 5</td><td>1</td><td>4</td><td>1 − 0.2² − 0.8² = 0.32</td></tr>
-              <tr><td>AFTER THE SPLIT</td><td></td><td></td><td>0.5 × 0.32 + 0.5 × 0.32 = 0.32</td></tr>
-              <tr><td>GINI DECREASE</td><td></td><td></td><td><b>0.50 − 0.32 = 0.18</b></td></tr>
+                <tr><td>PARENT · 10 EXAMPLES</td><td>5</td><td>5</td><td>1 − 0.5² − 0.5² = 0.50</td></tr>
+                <tr><td>YELLOW? NO · 5</td><td>4</td><td>1</td><td>1 − 0.8² − 0.2² = 0.32</td></tr>
+                <tr><td>YELLOW? YES · 5</td><td>1</td><td>4</td><td>1 − 0.2² − 0.8² = 0.32</td></tr>
+                <tr><td>AFTER THE SPLIT</td><td></td><td></td><td>0.5 × 0.32 + 0.5 × 0.32 = 0.32</td></tr>
+                <tr><td>GINI DECREASE</td><td></td><td></td><td><b>0.50 − 0.32 = 0.18</b></td></tr>
               </tbody>
             </table>
             <div className="figcap" style={{ marginTop: "8px" }}><span className="fno">TABLE 3-1</span><span>— GINI DECREASE OF THE TEST "COLOR = YELLOW?"</span><span className="fr">WORKED EXAMPLE</span></div>
@@ -158,27 +158,27 @@ export default function RandomForest() {
                 <RevealSvg id="fig2" viewBox="0 0 760 292" label="Accuracy versus tree depth chart">
                   <defs>
                     <pattern id="hatch" patternUnits="userSpaceOnUse" width="7" height="7">
-                      <path d="M0,7 L7,0" stroke="#6E6E58" strokeWidth="1" opacity=".18"/>
+                      <path d="M0,7 L7,0" stroke="#6E6E58" strokeWidth="1" opacity=".18" />
                     </pattern>
                   </defs>
                   {/* overfit region */}
-                  <rect className="late" x="365.5" y="30" width="354.5" height="220" fill="url(#hatch)"/>
+                  <rect className="late" x="365.5" y="30" width="354.5" height="220" fill="url(#hatch)" />
                   <text className="late" x="712" y="47" fontSize="9.5" letterSpacing=".14em" fill="#6E6E58" textAnchor="end">OVERFITTING REGION</text>
                   {/* grid */}
                   <g stroke="#E7E5DA" strokeWidth="1">
-                    <line x1="129.1" y1="30" x2="129.1" y2="250"/><line x1="188.2" y1="30" x2="188.2" y2="250"/>
-                    <line x1="247.3" y1="30" x2="247.3" y2="250"/><line x1="306.4" y1="30" x2="306.4" y2="250"/>
-                    <line x1="365.5" y1="30" x2="365.5" y2="250"/><line x1="424.5" y1="30" x2="424.5" y2="250"/>
-                    <line x1="483.6" y1="30" x2="483.6" y2="250"/><line x1="542.7" y1="30" x2="542.7" y2="250"/>
-                    <line x1="601.8" y1="30" x2="601.8" y2="250"/><line x1="660.9" y1="30" x2="660.9" y2="250"/>
-                    <line x1="70" y1="74" x2="720" y2="74"/><line x1="70" y1="118" x2="720" y2="118"/>
-                    <line x1="70" y1="162" x2="720" y2="162"/><line x1="70" y1="206" x2="720" y2="206"/>
+                    <line x1="129.1" y1="30" x2="129.1" y2="250" /><line x1="188.2" y1="30" x2="188.2" y2="250" />
+                    <line x1="247.3" y1="30" x2="247.3" y2="250" /><line x1="306.4" y1="30" x2="306.4" y2="250" />
+                    <line x1="365.5" y1="30" x2="365.5" y2="250" /><line x1="424.5" y1="30" x2="424.5" y2="250" />
+                    <line x1="483.6" y1="30" x2="483.6" y2="250" /><line x1="542.7" y1="30" x2="542.7" y2="250" />
+                    <line x1="601.8" y1="30" x2="601.8" y2="250" /><line x1="660.9" y1="30" x2="660.9" y2="250" />
+                    <line x1="70" y1="74" x2="720" y2="74" /><line x1="70" y1="118" x2="720" y2="118" />
+                    <line x1="70" y1="162" x2="720" y2="162" /><line x1="70" y1="206" x2="720" y2="206" />
                   </g>
                   {/* best depth marker */}
-                  <line className="late" x1="365.5" y1="30" x2="365.5" y2="250" stroke="#0E7A3C" strokeWidth="1.5" strokeDasharray="5 4"/>
+                  <line className="late" x1="365.5" y1="30" x2="365.5" y2="250" stroke="#0E7A3C" strokeWidth="1.5" strokeDasharray="5 4" />
                   {/* axes */}
-                  <line x1="70" y1="250" x2="720" y2="250" stroke="#191914" strokeWidth="1.5"/>
-                  <line x1="70" y1="30" x2="70" y2="250" stroke="#191914" strokeWidth="1.5"/>
+                  <line x1="70" y1="250" x2="720" y2="250" stroke="#191914" strokeWidth="1.5" />
+                  <line x1="70" y1="30" x2="70" y2="250" stroke="#191914" strokeWidth="1.5" />
                   {/* y labels */}
                   <g fontSize="9.5" fill="#6E6E58" textAnchor="end">
                     <text x="62" y="34">100%</text><text x="62" y="78">90%</text><text x="62" y="122">80%</text>
@@ -194,17 +194,17 @@ export default function RandomForest() {
                   <text x="395" y="288" fontSize="10" fill="#6E6E58" textAnchor="middle" letterSpacing=".12em">TREE DEPTH (LEVELS)</text>
                   <text transform="rotate(-90 20 140)" x="20" y="140" fontSize="9.5" fill="#6E6E58" textAnchor="middle" letterSpacing=".14em">ACCURACY</text>
                   {/* curves */}
-                  <polyline className="draw" points="70,197.2 129.1,144.4 188.2,109.2 247.3,82.8 306.4,65.2 365.5,52 424.5,43.2 483.6,36.6 542.7,33.1 601.8,30.9 660.9,30 720,30" fill="none" stroke="#191914" strokeWidth="2"/>
-                  <polyline className="draw" points="70,206 129.1,157.6 188.2,122.4 247.3,100.4 306.4,89.4 365.5,87.2 424.5,91.6 483.6,98.2 542.7,107 601.8,118 660.9,126.8 720,135.6" fill="none" stroke="#6E6E58" strokeWidth="2"/>
+                  <polyline className="draw" points="70,197.2 129.1,144.4 188.2,109.2 247.3,82.8 306.4,65.2 365.5,52 424.5,43.2 483.6,36.6 542.7,33.1 601.8,30.9 660.9,30 720,30" fill="none" stroke="#191914" strokeWidth="2" />
+                  <polyline className="draw" points="70,206 129.1,157.6 188.2,122.4 247.3,100.4 306.4,89.4 365.5,87.2 424.5,91.6 483.6,98.2 542.7,107 601.8,118 660.9,126.8 720,135.6" fill="none" stroke="#6E6E58" strokeWidth="2" />
                   {/* annotations */}
                   <g className="late">
-                    <circle cx="365.5" cy="87.2" r="4" fill="#0E7A3C"/>
+                    <circle cx="365.5" cy="87.2" r="4" fill="#0E7A3C" />
                     <text x="358" y="244" fontSize="10.5" fontWeight="700" fill="#0E7A3C" textAnchor="end">BEST DEPTH 6</text>
-                    <line x1="505" y1="158" x2="488" y2="106" stroke="#6E6E58" strokeWidth="1" strokeDasharray="3 3"/>
+                    <line x1="505" y1="158" x2="488" y2="106" stroke="#6E6E58" strokeWidth="1" strokeDasharray="3 3" />
                     <text x="509" y="163" fontSize="10" fill="#6E6E58">NEW-DATA ACCURACY FALLS</text>
-                    <line x1="80" y1="40" x2="106" y2="40" stroke="#191914" strokeWidth="2"/>
+                    <line x1="80" y1="40" x2="106" y2="40" stroke="#191914" strokeWidth="2" />
                     <text x="114" y="44" fontSize="10" fill="#191914">TRAIN SET</text>
-                    <line x1="80" y1="58" x2="106" y2="58" stroke="#6E6E58" strokeWidth="2"/>
+                    <line x1="80" y1="58" x2="106" y2="58" stroke="#6E6E58" strokeWidth="2" />
                     <text x="114" y="62" fontSize="10" fill="#6E6E58">TEST SET · NEW DATA</text>
                   </g>
                 </RevealSvg>
@@ -232,24 +232,24 @@ export default function RandomForest() {
               <div className="figbody">
                 <svg id="fig3" viewBox="0 0 760 285" role="img" aria-label="Bootstrap sampling matrix">
                   <defs>
-                    <marker id="ah3" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0L8,4L0,8Z" fill="#6E6E58"/></marker>
+                    <marker id="ah3" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0L8,4L0,8Z" fill="#6E6E58" /></marker>
                   </defs>
                   <text x="118" y="47" fontSize="12" fontWeight="600" textAnchor="end">D · 12</text>
                   <text x="118" y="139" fontSize="12" fontWeight="600" textAnchor="end">B1</text>
                   <text x="118" y="187" fontSize="12" fontWeight="600" textAnchor="end">B2</text>
                   <text x="118" y="235" fontSize="12" fontWeight="600" textAnchor="end">B3</text>
                   <Fig3Bars />
-                  <line x1="250" y1="66" x2="250" y2="104" stroke="#6E6E58" strokeWidth="1.3" markerEnd="url(#ah3)"/>
-                  <line x1="570" y1="66" x2="570" y2="104" stroke="#6E6E58" strokeWidth="1.3" markerEnd="url(#ah3)"/>
+                  <line x1="250" y1="66" x2="250" y2="104" stroke="#6E6E58" strokeWidth="1.3" markerEnd="url(#ah3)" />
+                  <line x1="570" y1="66" x2="570" y2="104" stroke="#6E6E58" strokeWidth="1.3" markerEnd="url(#ah3)" />
                   <text x="410" y="90" fontSize="10" fill="#6E6E58" textAnchor="middle" letterSpacing=".1em">THREE RANDOM SAMPLES · WITH REPLACEMENT</text>
                   {/* legend */}
                   <g fontSize="9.5" fill="#6E6E58">
-                    <rect x="130" y="264" width="26" height="7.5" fill="#6E6E58"/>
+                    <rect x="130" y="264" width="26" height="7.5" fill="#6E6E58" />
                     <text x="164" y="273">×1 — SELECTED ONCE</text>
-                    <rect x="322" y="255.5" width="26" height="7.5" fill="#6E6E58"/>
-                    <rect x="322" y="264.5" width="26" height="7.5" fill="#0E7A3C"/>
+                    <rect x="322" y="255.5" width="26" height="7.5" fill="#6E6E58" />
+                    <rect x="322" y="264.5" width="26" height="7.5" fill="#0E7A3C" />
                     <text x="356" y="273">×2 — SELECTED TWICE</text>
-                    <rect x="522" y="255" width="26" height="17" fill="none" stroke="#6E6E58" strokeWidth="1.2" strokeDasharray="3 3"/>
+                    <rect x="522" y="255" width="26" height="17" fill="none" stroke="#6E6E58" strokeWidth="1.2" strokeDasharray="3 3" />
                     <text x="556" y="273">0 — OUT-OF-BAG (NOT DRAWN)</text>
                   </g>
                 </svg>
@@ -273,27 +273,27 @@ export default function RandomForest() {
               <div className="figbody">
                 <svg id="fig4" viewBox="0 0 760 272" role="img" aria-label="Random feature subset selection at one node">
                   <defs>
-                    <marker id="ah4" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0L8,4L0,8Z" fill="#6E6E58"/></marker>
+                    <marker id="ah4" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0L8,4L0,8Z" fill="#6E6E58" /></marker>
                   </defs>
                   <Fig4Chips />
                   {/* bracket around selected chips */}
                   <g stroke="#0E7A3C" strokeWidth="1.5" fill="none">
-                    <path d="M415,59 H427"/><path d="M415,143 H427"/><path d="M415,199 H427"/><path d="M427,59 V199"/>
+                    <path d="M415,59 H427" /><path d="M415,143 H427" /><path d="M415,199 H427" /><path d="M427,59 V199" />
                   </g>
-                  <line x1="427" y1="129" x2="460" y2="129" stroke="#6E6E58" strokeWidth="1.3" markerEnd="url(#ah4)"/>
+                  <line x1="427" y1="129" x2="460" y2="129" stroke="#6E6E58" strokeWidth="1.3" markerEnd="url(#ah4)" />
                   <text x="433" y="118" fontSize="11" fontWeight="700" fill="#0E7A3C">m = 3</text>
                   {/* left box */}
-                  <rect x="28" y="88" width="190" height="84" fill="none" stroke="#191914" strokeWidth="1.5"/>
+                  <rect x="28" y="88" width="190" height="84" fill="none" stroke="#191914" strokeWidth="1.5" />
                   <text x="123" y="108" fontSize="9.5" fill="#6E6E58" textAnchor="middle" letterSpacing=".14em">AT ONE NODE</text>
                   <text x="123" y="129" fontSize="13" fontWeight="600" textAnchor="middle">n EXAMPLES</text>
                   <text x="123" y="151" fontSize="11" textAnchor="middle">CANDIDATE FEATURES p = 8</text>
-                  <line x1="218" y1="130" x2="242" y2="130" stroke="#6E6E58" strokeWidth="1.3" markerEnd="url(#ah4)"/>
+                  <line x1="218" y1="130" x2="242" y2="130" stroke="#6E6E58" strokeWidth="1.3" markerEnd="url(#ah4)" />
                   {/* right box */}
-                  <rect x="468" y="68" width="264" height="134" fill="none" stroke="#191914" strokeWidth="1.5"/>
+                  <rect x="468" y="68" width="264" height="134" fill="none" stroke="#191914" strokeWidth="1.5" />
                   <text x="600" y="92" fontSize="9.5" fill="#6E6E58" textAnchor="middle" letterSpacing=".16em">SPLIT SEARCH</text>
-                  <line x1="484" y1="104" x2="716" y2="104" stroke="#E4E2D6" strokeWidth="1"/>
+                  <line x1="484" y1="104" x2="716" y2="104" stroke="#E4E2D6" strokeWidth="1" />
                   <text x="600" y="126" fontSize="11" textAnchor="middle">SCORE THE 3 CANDIDATE SPLITS</text>
-                  <rect x="484" y="140" width="232" height="32" fill="rgba(14,122,60,.09)" stroke="#0E7A3C" strokeWidth="1.5"/>
+                  <rect x="484" y="140" width="232" height="32" fill="rgba(14,122,60,.09)" stroke="#0E7A3C" strokeWidth="1.5" />
                   <text x="600" y="161" fontSize="13" fontWeight="700" fill="#0E7A3C" textAnchor="middle">BEST SPLIT: X5 ≤ 4.5</text>
                   <text x="600" y="190" fontSize="9" fill="#6E6E58" textAnchor="middle" letterSpacing=".08em">THE OTHER 5 FEATURES: NOT TESTED</text>
                   <text x="28" y="262" fontSize="10" fill="#6E6E58" letterSpacing=".06em">TYPICAL: m = √p — CLASSIFICATION · m = p/3 — REGRESSION</text>
@@ -326,62 +326,62 @@ export default function RandomForest() {
               <div className="figbody">
                 <svg id="fig5" viewBox="0 0 760 315" role="img" aria-label="Majority vote diagram of five trees">
                   <defs>
-                    <marker id="ah5" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0L8,4L0,8Z" fill="#6E6E58"/></marker>
+                    <marker id="ah5" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0L8,4L0,8Z" fill="#6E6E58" /></marker>
                   </defs>
                   {/* fan-out arrows */}
                   <g stroke="#6E6E58" strokeWidth="1.2" fill="none">
-                    <path d="M142,165 H192 V35 H250"/><path d="M142,165 H192 V100 H250"/>
-                    <path d="M142,165 H192 V165 H250"/><path d="M142,165 H192 V230 H250"/>
-                    <path d="M142,165 H192 V290 H250"/>
+                    <path d="M142,165 H192 V35 H250" /><path d="M142,165 H192 V100 H250" />
+                    <path d="M142,165 H192 V165 H250" /><path d="M142,165 H192 V230 H250" />
+                    <path d="M142,165 H192 V290 H250" />
                   </g>
                   {/* trees */}
                   <g>
-                    <rect x="250" y="18" width="84" height="34" fill="none" stroke="#191914" strokeWidth="1.4"/><text x="292" y="39" fontSize="11" fontWeight="600" textAnchor="middle">TREE 1</text>
-                    <rect x="250" y="83" width="84" height="34" fill="none" stroke="#191914" strokeWidth="1.4"/><text x="292" y="104" fontSize="11" fontWeight="600" textAnchor="middle">TREE 2</text>
-                    <rect x="250" y="148" width="84" height="34" fill="none" stroke="#191914" strokeWidth="1.4"/><text x="292" y="169" fontSize="11" fontWeight="600" textAnchor="middle">TREE 3</text>
-                    <rect x="250" y="213" width="84" height="34" fill="none" stroke="#191914" strokeWidth="1.4"/><text x="292" y="234" fontSize="11" fontWeight="600" textAnchor="middle">TREE 4</text>
-                    <rect x="250" y="278" width="84" height="34" fill="none" stroke="#191914" strokeWidth="1.4"/><text x="292" y="299" fontSize="11" fontWeight="600" textAnchor="middle">TREE 5</text>
+                    <rect x="250" y="18" width="84" height="34" fill="none" stroke="#191914" strokeWidth="1.4" /><text x="292" y="39" fontSize="11" fontWeight="600" textAnchor="middle">TREE 1</text>
+                    <rect x="250" y="83" width="84" height="34" fill="none" stroke="#191914" strokeWidth="1.4" /><text x="292" y="104" fontSize="11" fontWeight="600" textAnchor="middle">TREE 2</text>
+                    <rect x="250" y="148" width="84" height="34" fill="none" stroke="#191914" strokeWidth="1.4" /><text x="292" y="169" fontSize="11" fontWeight="600" textAnchor="middle">TREE 3</text>
+                    <rect x="250" y="213" width="84" height="34" fill="none" stroke="#191914" strokeWidth="1.4" /><text x="292" y="234" fontSize="11" fontWeight="600" textAnchor="middle">TREE 4</text>
+                    <rect x="250" y="278" width="84" height="34" fill="none" stroke="#191914" strokeWidth="1.4" /><text x="292" y="299" fontSize="11" fontWeight="600" textAnchor="middle">TREE 5</text>
                   </g>
                   {/* tree to vote bus */}
                   <g stroke="#6E6E58" strokeWidth="1.2">
-                    <path d="M334,35 H342"/><path d="M366,35 H396"/>
-                    <path d="M334,100 H342"/><path d="M366,100 H396"/>
-                    <path d="M334,165 H342"/><path d="M366,165 H396"/>
-                    <path d="M334,230 H342"/><path d="M366,230 H396"/>
-                    <path d="M334,290 H342"/><path d="M366,290 H396"/>
-                    <path d="M396,35 V290"/>
+                    <path d="M334,35 H342" /><path d="M366,35 H396" />
+                    <path d="M334,100 H342" /><path d="M366,100 H396" />
+                    <path d="M334,165 H342" /><path d="M366,165 H396" />
+                    <path d="M334,230 H342" /><path d="M366,230 H396" />
+                    <path d="M334,290 H342" /><path d="M366,290 H396" />
+                    <path d="M396,35 V290" />
                   </g>
                   <g fill="#191914">
-                    <circle cx="396" cy="35" r="2.5"/><circle cx="396" cy="100" r="2.5"/><circle cx="396" cy="165" r="2.5"/>
-                    <circle cx="396" cy="230" r="2.5"/><circle cx="396" cy="290" r="2.5"/>
+                    <circle cx="396" cy="35" r="2.5" /><circle cx="396" cy="100" r="2.5" /><circle cx="396" cy="165" r="2.5" />
+                    <circle cx="396" cy="230" r="2.5" /><circle cx="396" cy="290" r="2.5" />
                   </g>
-                  <line x1="396" y1="165" x2="422" y2="165" stroke="#6E6E58" strokeWidth="1.3" markerEnd="url(#ah5)"/>
+                  <line x1="396" y1="165" x2="422" y2="165" stroke="#6E6E58" strokeWidth="1.3" markerEnd="url(#ah5)" />
                   {/* vote chips */}
                   <g fontSize="10" fontWeight="700" textAnchor="middle">
-                    <rect x="342" y="27" width="24" height="16" fill="none" stroke="#0E7A3C" strokeWidth="1.4"/><text x="354" y="39" fill="#0E7A3C">A</text>
-                    <rect x="342" y="92" width="24" height="16" fill="none" stroke="#191914" strokeWidth="1.4"/><text x="354" y="104" fill="#191914">B</text>
-                    <rect x="342" y="157" width="24" height="16" fill="none" stroke="#0E7A3C" strokeWidth="1.4"/><text x="354" y="169" fill="#0E7A3C">A</text>
-                    <rect x="342" y="222" width="24" height="16" fill="none" stroke="#0E7A3C" strokeWidth="1.4"/><text x="354" y="234" fill="#0E7A3C">A</text>
-                    <rect x="342" y="282" width="24" height="16" fill="none" stroke="#191914" strokeWidth="1.4"/><text x="354" y="294" fill="#191914">B</text>
+                    <rect x="342" y="27" width="24" height="16" fill="none" stroke="#0E7A3C" strokeWidth="1.4" /><text x="354" y="39" fill="#0E7A3C">A</text>
+                    <rect x="342" y="92" width="24" height="16" fill="none" stroke="#191914" strokeWidth="1.4" /><text x="354" y="104" fill="#191914">B</text>
+                    <rect x="342" y="157" width="24" height="16" fill="none" stroke="#0E7A3C" strokeWidth="1.4" /><text x="354" y="169" fill="#0E7A3C">A</text>
+                    <rect x="342" y="222" width="24" height="16" fill="none" stroke="#0E7A3C" strokeWidth="1.4" /><text x="354" y="234" fill="#0E7A3C">A</text>
+                    <rect x="342" y="282" width="24" height="16" fill="none" stroke="#191914" strokeWidth="1.4" /><text x="354" y="294" fill="#191914">B</text>
                   </g>
                   {/* input */}
-                  <rect x="30" y="140" width="112" height="50" fill="none" stroke="#191914" strokeWidth="1.5"/>
+                  <rect x="30" y="140" width="112" height="50" fill="none" stroke="#191914" strokeWidth="1.5" />
                   <text x="86" y="161" fontSize="9.5" fill="#6E6E58" textAnchor="middle" letterSpacing=".14em">NEW INPUT</text>
                   <text x="86" y="179" fontSize="11.5" fontWeight="600" textAnchor="middle">X = (X1, X2)</text>
                   {/* tally */}
-                  <rect x="430" y="95" width="230" height="140" fill="none" stroke="#191914" strokeWidth="1.5"/>
+                  <rect x="430" y="95" width="230" height="140" fill="none" stroke="#191914" strokeWidth="1.5" />
                   <text x="444" y="120" fontSize="10" fill="#6E6E58" letterSpacing=".18em">VOTE TALLY</text>
-                  <line x1="444" y1="132" x2="646" y2="132" stroke="#E4E2D6" strokeWidth="1"/>
+                  <line x1="444" y1="132" x2="646" y2="132" stroke="#E4E2D6" strokeWidth="1" />
                   <text x="444" y="163" fontSize="12" fontWeight="600">CLASS A</text>
-                  <rect x="556" y="150" width="15" height="15" fill="#0E7A3C"/><rect x="576" y="150" width="15" height="15" fill="#0E7A3C"/><rect x="596" y="150" width="15" height="15" fill="#0E7A3C"/>
+                  <rect x="556" y="150" width="15" height="15" fill="#0E7A3C" /><rect x="576" y="150" width="15" height="15" fill="#0E7A3C" /><rect x="596" y="150" width="15" height="15" fill="#0E7A3C" />
                   <text x="622" y="163" fontSize="13" fontWeight="700" fill="#0E7A3C">= 3</text>
                   <text x="444" y="197" fontSize="12" fontWeight="600">CLASS B</text>
-                  <rect x="556" y="184" width="15" height="15" fill="#1D1D16"/><rect x="576" y="184" width="15" height="15" fill="#1D1D16"/>
+                  <rect x="556" y="184" width="15" height="15" fill="#1D1D16" /><rect x="576" y="184" width="15" height="15" fill="#1D1D16" />
                   <text x="622" y="197" fontSize="13" fontWeight="700">= 2</text>
-                  <line x1="444" y1="214" x2="646" y2="214" stroke="#E4E2D6" strokeWidth="1"/>
+                  <line x1="444" y1="214" x2="646" y2="214" stroke="#E4E2D6" strokeWidth="1" />
                   <text x="444" y="228" fontSize="9.5" fill="#6E6E58" letterSpacing=".08em">MARGIN 3 : 2</text>
-                  <line x1="545" y1="235" x2="545" y2="250" stroke="#6E6E58" strokeWidth="1.3" markerEnd="url(#ah5)"/>
-                  <rect x="430" y="256" width="230" height="42" fill="rgba(14,122,60,.09)" stroke="#0E7A3C" strokeWidth="2"/>
+                  <line x1="545" y1="235" x2="545" y2="250" stroke="#6E6E58" strokeWidth="1.3" markerEnd="url(#ah5)" />
+                  <rect x="430" y="256" width="230" height="42" fill="rgba(14,122,60,.09)" stroke="#0E7A3C" strokeWidth="2" />
                   <text x="545" y="276" fontSize="13.5" fontWeight="700" fill="#0E7A3C" textAnchor="middle">RESULT: CLASS A</text>
                   <text x="545" y="291" fontSize="9" fill="#6E6E58" textAnchor="middle" letterSpacing=".1em">MAJORITY OF B = 5 VOTES</text>
                 </svg>
@@ -412,8 +412,8 @@ export default function RandomForest() {
             <table className="def">
               <thead><tr><th>TYPE</th><th>METHOD</th><th>WEAK POINT</th></tr></thead>
               <tbody>
-              <tr><td>MEAN DECREASE IN IMPURITY</td><td>Add the Gini decrease of all splits on the feature. Calculate the mean over all trees.</td><td>It is fast. It favors features with many different values. It uses the training data.</td></tr>
-              <tr><td>PERMUTATION IMPORTANCE</td><td>Shuffle the values of one feature in test data. Measure the decrease in accuracy.</td><td>It is slower. It measures the effect on data that the trees did not train on.</td></tr>
+                <tr><td>MEAN DECREASE IN IMPURITY</td><td>Add the Gini decrease of all splits on the feature. Calculate the mean over all trees.</td><td>It is fast. It favors features with many different values. It uses the training data.</td></tr>
+                <tr><td>PERMUTATION IMPORTANCE</td><td>Shuffle the values of one feature in test data. Measure the decrease in accuracy.</td><td>It is slower. It measures the effect on data that the trees did not train on.</td></tr>
               </tbody>
             </table>
             <div className="figcap" style={{ marginTop: "8px" }}><span className="fno">TABLE 8-1</span><span>— TWO TYPES OF FEATURE IMPORTANCE</span><span className="fr">2 METHODS</span></div>
@@ -497,10 +497,10 @@ export default function RandomForest() {
             <table className="def">
               <thead><tr><th>SETTING</th><th>EFFECT</th></tr></thead>
               <tbody>
-              <tr><td>n_estimators (B)</td><td>More trees give a more stable vote. The accuracy stops increasing after some hundred trees. Each tree adds time.</td></tr>
-              <tr><td>max_features (m)</td><td>Fewer features give more different trees, but weaker trees. Start with "sqrt" for classification.</td></tr>
-              <tr><td>min_samples_leaf</td><td>Larger leaves give smoother results. Increase this value when the labels contain noise.</td></tr>
-              <tr><td>max_depth</td><td>The default is no limit. Set a limit to save memory and time.</td></tr>
+                <tr><td>n_estimators (B)</td><td>More trees give a more stable vote. The accuracy stops increasing after some hundred trees. Each tree adds time.</td></tr>
+                <tr><td>max_features (m)</td><td>Fewer features give more different trees, but weaker trees. Start with "sqrt" for classification.</td></tr>
+                <tr><td>min_samples_leaf</td><td>Larger leaves give smoother results. Increase this value when the labels contain noise.</td></tr>
+                <tr><td>max_depth</td><td>The default is no limit. Set a limit to save memory and time.</td></tr>
               </tbody>
             </table>
             <div className="figcap" style={{ marginTop: "8px" }}><span className="fno">TABLE 11-1</span><span>— THE FOUR MAIN SETTINGS</span><span className="fr">SCIKIT-LEARN NAMES</span></div>
