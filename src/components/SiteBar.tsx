@@ -104,7 +104,7 @@ export default function SiteBar({ accent, background }: { accent?: string; backg
                 className="absolute left-0 right-0 top-[calc(100%+6px)] z-20 flex max-h-[min(70vh,calc(100dvh-var(--site-bar-h)-16px))] flex-col border border-(--bar-border) bg-(--bar-panel) shadow-lg sm:left-auto sm:w-full sm:min-w-[22rem]"
               >
                 <div className="bar-label flex shrink-0 justify-between bg-(--bar-head-bg) px-3 py-1.5 text-(--bar-head-fg)" role="presentation">
-                  <span>{s.browsing ? "Recently added" : "Results"}</span>
+                  <span>{s.browsing ? "Recently updated" : "Results"}</span>
                   <span className="text-(--bar-accent) tabular-nums">
                     {s.browsing ? `${s.results.length} of ${s.total}` : s.matches}
                   </span>

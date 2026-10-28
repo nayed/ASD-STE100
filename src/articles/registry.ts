@@ -7,8 +7,10 @@ export interface ArticleMeta {
   title: string;
   summary: string;
   tags: string[];
-  /** publication date, YYYY-MM-DD; orders "recently added" */
+  /** publication date, YYYY-MM-DD */
   added: string;
+  /** date of the last edit a reader can see, YYYY-MM-DD; with `added` when unset, orders "recently updated" */
+  updated?: string;
   /** colours and type of the shared site bar on this article; unset fields use DEFAULT_BAR */
   bar?: Partial<BarTheme>;
   /** each article is its own lazy chunk, with its own design */
@@ -70,6 +72,7 @@ export const ARTICLES: ArticleMeta[] = [
     },
     load: () => import("./rag"),
     added: "2026-10-26",
+    updated: "2026-10-27",
   },
   {
     slug: "stack-vs-heap",
@@ -105,6 +108,7 @@ export const ARTICLES: ArticleMeta[] = [
     tags: ["machine learning", "algorithms", "decision trees"],
     load: () => import("./random-forest"),
     added: "2026-10-05",
+    updated: "2026-10-27",
     bar: {
       page: "#fbfbf7",
       bg: "rgba(251, 251, 247, 0.95)",
@@ -132,6 +136,7 @@ export const ARTICLES: ArticleMeta[] = [
     tags: ["go", "golang", "languages", "concurrency"],
     load: () => import("./go-programming"),
     added: "2026-10-05",
+    updated: "2026-10-27",
     bar: {
       page: "#f2f0e9",
       bg: "rgba(242, 240, 233, 0.95)",
@@ -159,6 +164,7 @@ export const ARTICLES: ArticleMeta[] = [
     tags: ["podman", "containers", "devops", "linux"],
     load: () => import("./podman-basics"),
     added: "2026-10-06",
+    updated: "2026-10-28",
     bar: {
       page: "#fbfbf8",
       bg: "rgba(251, 251, 248, 0.95)",

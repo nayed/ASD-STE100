@@ -35,9 +35,12 @@ export function searchArticles(query: string): ArticleMeta[] {
     .map((r) => r.a);
 }
 
-/** newest first, then A–Z */
+/** the date of the last edit, or of publication when the article has no edit yet */
+export const lastChange = (a: ArticleMeta) => a.updated ?? a.added;
+
+/** last edited first, then A–Z */
 export function recentArticles(limit: number): ArticleMeta[] {
-  return [...ARTICLES].sort((a, b) => b.added.localeCompare(a.added) || byTitle(a, b)).slice(0, limit);
+  return [...ARTICLES].sort((a, b) => lastChange(b).localeCompare(lastChange(a)) || byTitle(a, b)).slice(0, limit);
 }
 
 /** articles grouped by the first letter of the title; titles that start with a digit or a symbol go under "#" */

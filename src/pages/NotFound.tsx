@@ -18,7 +18,7 @@ export default function NotFound() {
       <p className="mt-3 text-neutral-600">
         Nothing is published at <code className="rounded bg-neutral-100 px-1.5 py-0.5 text-sm">{pathname}</code>.
       </p>
-      <h2 className="mt-10 text-sm font-semibold uppercase tracking-wider text-neutral-500">Recently added</h2>
+      <h2 className="mt-10 text-sm font-semibold uppercase tracking-wider text-neutral-500">Recently updated</h2>
       <ul className="mt-3 divide-y divide-neutral-200 border-y border-neutral-200">
         {recentArticles(5).map((a) => (
           <li key={a.slug}>
