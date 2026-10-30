@@ -21,6 +21,8 @@ const LANGS: Record<string, BundledLanguage> = {
   ".c": "c",
   ".container": "ini",
   ".go": "go",
+  ".js": "javascript",
+  ".mjs": "javascript",
   ".py": "python",
   ".ts": "typescript",
   ".yaml": "yaml",

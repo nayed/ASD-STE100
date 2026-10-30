@@ -107,7 +107,7 @@ Framework-default palettes (slate, zinc, indigo, teal), rounded cards, soft or c
 - Put source and config files (not terminal sessions) in `listings/` and import them with `?highlight`: the build colours them in gruvbox-light-hard, or in another Shiki theme with `?theme=<name>&highlight` when the article's design asks for it (CLAUDE.md, code listings). Do not colour code by hand.
 - Scope all CSS under one root class in a file in the folder. Keep the palette as CSS variables on that root class, or as prefixed Tailwind tokens in `src/index.css`.
 - The shared site bar is 44 px (`var(--site-bar-h)`). Fixed and sticky parts go below it, and `scroll-margin-top` must include it.
-- Accents already used: red `#b3261e` (ASD-STE100), greens `#0e7a3c` and `#3d7151` (random forest, CI/CD), cyan `#00add8` (Go), purple `#6d28d9` (Podman), orange `#e2571f` (LLM), yellow `#f2c300` (stack vs heap), cobalt `#2c45c9` (RAG). Pick another hue.
+- Accents already used: red `#b3261e` (ASD-STE100), greens `#0e7a3c` and `#3d7151` (random forest, CI/CD), cyan `#00add8` (Go), purple `#6d28d9` (Podman), orange `#e2571f` (LLM), yellow `#f2c300` (stack vs heap), cobalt `#2c45c9` (RAG), magenta `#b5106b` (WebSocket). Pick another hue.
 - Checks before you report:
   - `npm run typecheck`, `npm run build`, then `npm run check:figures` (colliding or cut-off SVG labels; a label on a line needs a halo or a background patch).
   - No horizontal overflow at 375 px. Test in a 375 px iframe and compare `documentElement.scrollWidth` with 375: under phone emulation `innerWidth` grows with the page, so comparing the two hides the overflow. Grid children need `min-width: 0`; code blocks and wide tables scroll inside their own box.

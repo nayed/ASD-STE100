@@ -43,8 +43,8 @@ Every article is written in ASD-STE100 Simplified Technical English (short sente
 
 ## Evidence on Hand
 
-- Eight published articles in `src/articles/` (asd-ste100, rag, stack-vs-heap, random-forest, go-programming, podman-basics, ci-cd, llm-generation).
-- Measured data: RAG scores, vectors and answers from real runs of `BAAI/bge-small-en-v1.5` (`scripts/rag/`); real addresses in stack vs heap; a real scikit-learn run in random forest.
+- Nine published articles in `src/articles/` (asd-ste100, rag, stack-vs-heap, random-forest, go-programming, podman-basics, ci-cd, llm-generation, websocket).
+- Measured data: RAG scores, vectors and answers from real runs of `BAAI/bge-small-en-v1.5` (`scripts/rag/`); real addresses in stack vs heap; a real scikit-learn run in random forest; a real WebSocket session captured byte by byte (`scripts/websocket/`).
 - No testimonials, reader numbers or external reviews exist; do not invent them.
 
 ## Product Principles
