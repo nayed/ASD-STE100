@@ -2,10 +2,10 @@ import { Fragment, useEffect, useMemo, useRef, useState, type CSSProperties } fr
 import { Link, useLocation } from "react-router";
 import { ARTICLES, articlePath, INDEX_PATH, type ArticleMeta } from "../articles/registry";
 import SiteShell from "../components/SiteShell";
-import type { BarTheme } from "../components/theme";
 import { nearestArticle, type Op } from "../search/nearest";
 import { lastChange } from "../search/search";
 import { SITE_NAME } from "../site";
+import { REVISION, SHEET_BAR, Strip } from "./Sheet";
 import "./not-found.css";
 
 /*
@@ -14,29 +14,6 @@ import "./not-found.css";
  * flagged against it and proofread toward the nearest real address. Scoped under .nf (not-found.css).
  */
 
-const MONO = '"IBM Plex Mono", ui-monospace, monospace';
-const BAR: Partial<BarTheme> = {
-  page: "#f5f8f9",
-  bg: "rgba(245, 248, 249, 0.95)",
-  fg: "#0d1316",
-  muted: "#5b6359",
-  accent: "#006d77",
-  border: "#0d1316",
-  panel: "#fbfcfd",
-  hover: "rgba(0, 109, 119, 0.08)",
-  headBg: "#0d1316",
-  headFg: "#f5f8f9",
-  tag: "#006d77",
-  font: MONO,
-  size: "10px",
-  case: "uppercase",
-  tracking: "0.16em",
-  titleFont: MONO,
-  summaryFont: MONO,
-};
-
-/** the wiki's current revision: the newest publication or edit date in the registry */
-const REVISION = ARTICLES.map(lastChange).sort().at(-1)!;
 /** a list of effective pages runs in page order: here, by address */
 const PAGES = [...ARTICLES].sort((a, b) => a.slug.localeCompare(b.slug));
 
@@ -269,33 +246,28 @@ export default function NotFound() {
   }, []);
 
   return (
-    <SiteShell theme={BAR}>
-      <div className="nf">
+    <SiteShell theme={SHEET_BAR}>
+      <div className="wk nf">
         <main className="sheet">
-          <header className="strip">
-            <div className="cell doc">
-              <span className="k">Document</span>
-              <span className="v">
-                <b>LEP-01</b> · List of effective pages
-              </span>
-            </div>
-            <div className="cell">
-              <span className="k">Revision</span>
-              <span className="v">{REVISION}</span>
-            </div>
-            <div className="cell">
-              <span className="k">Pages</span>
-              <span className="v">{ARTICLES.length}</span>
-            </div>
-            <div className="cell st">
-              <span className="k">Requested page</span>
-              <span className="v">
-                <span className="rq">
-                  <Addr path={`/${shown}`} />
-                </span> · <span className="ni">Not issued</span>
-              </span>
-            </div>
-          </header>
+          <Strip
+            cells={[
+              { k: "Document", v: <><b>LEP-01</b> · List of effective pages</> },
+              { k: "Revision", v: REVISION },
+              { k: "Pages", v: ARTICLES.length },
+              {
+                k: "Requested page",
+                className: "st",
+                v: (
+                  <>
+                    <span className="rq">
+                      <Addr path={`/${shown}`} />
+                    </span>{" "}
+                    · <span className="ni">Not issued</span>
+                  </>
+                ),
+              },
+            ]}
+          />
 
           <div className="grid">
             <section className="claim" aria-labelledby="nf-title">

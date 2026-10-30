@@ -1,0 +1,91 @@
+/* The wiki's own pages (the 404 page, the A–Z index): one controlled document, on a datasheet's cold white. Scoped under .wk. */
+
+.wk {
+  /* a datasheet's cold white, with a blue-black ink and a cool olive-gray to match */
+  --paper: #f5f8f9;
+  --panel: #fbfcfd;
+  --paper-2: #e7edf0;
+  --ink: #0d1316;
+  --ink-70: #3d464b;
+  --olive: #5b6359; /* 5.8:1 on paper: labels and secondary text */
+  --olive-lt: #b0b8b2;
+  --rule: #d8e0e3;
+  --rule-2: #c0cacd;
+  --acc: #006d77; /* petrol, 5.7:1 on paper: stamps, flags, marks, the item in focus */
+  --mono: "IBM Plex Mono", ui-monospace, monospace;
+
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--mono);
+  font-size: 13.5px;
+  line-height: 1.8;
+  font-variant-ligatures: none;
+  font-variant-numeric: tabular-nums;
+  -webkit-font-smoothing: antialiased;
+  min-height: calc(100vh - var(--site-bar-h));
+}
+.wk *,
+.wk *::before,
+.wk *::after { box-sizing: border-box; }
+.wk ::selection { background: var(--acc); color: #fff; }
+.wk :focus-visible { outline: 2px solid var(--acc); outline-offset: 2px; }
+.wk p { margin: 0; }
+.wk a { color: inherit; text-decoration-color: var(--olive-lt); text-underline-offset: 3px; }
+.wk a:hover { text-decoration-color: var(--ink); }
+.wk b { font-weight: 600; }
+.wk .sr-only {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
+
+.wk .sheet { max-width: 1280px; margin: 0 auto; padding: 24px 20px 40px; }
+
+/* ---------- the form strip: cells with 1 px gaps on ink ---------- */
+.wk .strip {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 1px;
+  background: var(--ink); border: 1px solid var(--ink);
+}
+.wk .cell { background: var(--paper); padding: 7px 12px 8px; min-width: 0; display: flex; flex-direction: column; gap: 1px; }
+.wk .cell.doc { grid-column: 1 / -1; }
+.wk .cell .k { font-size: 8.5px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--olive); line-height: 1.5; }
+.wk .cell .v { font-size: 12.5px; font-weight: 500; line-height: 1.5; }
+.wk .cell .v b { font-weight: 700; }
+.wk .cell .rq { overflow-wrap: anywhere; }
+.wk .ni { color: var(--acc); font-weight: 600; white-space: nowrap; }
+
+/* ---------- the title: one solid word, one outlined ---------- */
+.wk .head { position: relative; }
+.wk h1 {
+  margin: 0; font-size: clamp(48px, 6.6vw, 92px); font-weight: 700;
+  letter-spacing: -0.045em; line-height: 0.9;
+}
+/* the second line drops a little, so that the descender of "g" clears the outlined letters */
+.wk h1 .ol { display: block; margin-top: 0.08em; color: transparent; -webkit-text-stroke: 1.5px var(--ink); }
+
+.wk .lede { margin-top: 26px; max-width: 54ch; color: var(--ink-70); }
+
+/* ---------- change bars and their key ---------- */
+.wk .nw { white-space: nowrap; }
+.wk .key { display: flex; flex-wrap: wrap; gap: 4px 28px; margin-top: 12px; font-size: 11px; line-height: 1.6; color: var(--olive); }
+.wk .key > span { display: flex; align-items: center; gap: 10px; }
+.wk .key .cb { flex-shrink: 0; width: 3px; height: 15px; background: var(--ink); }
+
+/* ---------- footer ---------- */
+.wk .foot {
+  display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 10px 32px;
+  margin-top: 44px; padding-top: 12px; border-top: 1px solid var(--ink); font-size: 12.5px; color: var(--ink-70);
+}
+.wk .foot p:first-child { max-width: 72ch; }
+.wk kbd { font-family: var(--mono); font-size: 11px; padding: 0 5px; border: 1px solid var(--rule-2); background: var(--panel); color: var(--ink); }
+.wk .end { font-size: 9px; letter-spacing: 0.24em; text-transform: uppercase; color: var(--olive); }
+
+@media (max-width: 639px) {
+  .wk .cell.st { grid-column: 1 / -1; }
+}
+@media (min-width: 640px) {
+  .wk .strip { grid-template-columns: minmax(0, 2fr) minmax(0, 1fr) minmax(0, 0.7fr) minmax(0, 1.3fr); }
+  .wk .cell.doc { grid-column: auto; }
+}
+@media (min-width: 1024px) {
+  .wk .sheet { padding: 28px 40px 44px; }
+}
