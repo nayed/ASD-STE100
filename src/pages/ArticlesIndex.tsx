@@ -1,102 +1,157 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router";
 import { ARTICLES, articlePath } from "../articles/registry";
-import { groupByLetter } from "../search/search";
+import SiteShell from "../components/SiteShell";
+import { groupByLetter, lastChange } from "../search/search";
 import { OWNER, SITE_NAME } from "../site";
+import { REVISION, SHEET_BAR, Strip } from "./Sheet";
+import "./articles-index.css";
+
+/*
+ * The A–Z index: the wiki's alphabetical index, the second sheet of the document that the 404 page opens
+ * (sheet.css). Its device is the thumb index, the letter tabs cut into the edge of a printed manual:
+ * a sticky column at the right on wide screens, a sticky row under the site bar on narrow ones.
+ * Scoped under .ix (articles-index.css).
+ */
 
 const LETTERS = ["#", ..."ABCDEFGHIJKLMNOPQRSTUVWXYZ"];
+const idOf = (letter: string) => `letter-${letter === "#" ? "num" : letter}`;
 
-function formatDate(iso: string): string {
-  return new Date(`${iso}T00:00:00`).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" });
+/** the letter whose group is under the reading line (30 % down the window), for the active tab */
+function useActiveLetter(letters: string[]) {
+  const [active, setActive] = useState<string | null>(null);
+  useEffect(() => {
+    let raf = 0;
+    const update = () => {
+      raf = 0;
+      const line = window.innerHeight * 0.3;
+      let cur: string | null = null;
+      for (const l of letters) {
+        const el = document.getElementById(idOf(l));
+        if (el && el.getBoundingClientRect().top <= line) cur = l;
+      }
+      setActive(cur ?? letters[0] ?? null);
+    };
+    const onScroll = () => {
+      if (!raf) raf = requestAnimationFrame(update);
+    };
+    update();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+    return () => {
+      cancelAnimationFrame(raf);
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+    };
+  }, [letters]);
+  return active;
 }
 
-/** every article, A–Z, grouped by first letter, with a letter bar to jump */
 export default function ArticlesIndex() {
   const groups = groupByLetter(ARTICLES);
-  const present = new Set(groups.map((g) => g.letter));
+  const [present] = useState(() => groups.map((g) => g.letter));
+  const active = useActiveLetter(present);
 
   useEffect(() => {
     document.title = `All articles · ${SITE_NAME}`;
   }, []);
 
   return (
-    <main className="pb-24 text-neutral-900">
-      <header className="mx-auto max-w-3xl px-5 pt-14">
-        <p className="font-mono text-sm text-neutral-500">Index</p>
-        <h1 className="mt-2 text-4xl font-bold tracking-tight">All articles</h1>
-        <p className="mt-3 text-neutral-600">
-          {ARTICLES.length} {ARTICLES.length === 1 ? "article" : "articles"}, A to Z.
-          <span className="hidden sm:inline">
-            {" "}
-            Press <kbd className="rounded border border-neutral-300 px-1.5 font-mono text-xs">/</kbd> to search instead.
-          </span>
-        </p>
-      </header>
+    <SiteShell theme={SHEET_BAR}>
+      <div className="wk ix">
+        <main className="sheet">
+          <Strip
+            cells={[
+              { k: "Document", v: <><b>IDX-01</b> · Alphabetical index</> },
+              { k: "Revision", v: REVISION },
+              { k: "Pages", v: ARTICLES.length },
+              { k: "Letters", className: "st", v: `${present.length} of ${LETTERS.length} in use` },
+            ]}
+          />
 
-      {/* letter bar, held under the site bar */}
-      <nav
-        aria-label="Jump to letter"
-        className="sticky top-(--site-bar-h) z-30 mt-8 border-y border-neutral-200 bg-white/95 backdrop-blur"
-      >
-        <div className="mx-auto flex max-w-3xl flex-wrap gap-x-0.5 px-4 py-2 font-mono text-[13px]">
-          {LETTERS.map((l) =>
-            present.has(l) ? (
-              <a
-                key={l}
-                href={`#letter-${l === "#" ? "num" : l}`}
-                className="rounded px-1.5 py-0.5 font-semibold text-blue-600 hover:bg-blue-50"
-              >
-                {l}
-              </a>
-            ) : (
-              <span key={l} className="px-1.5 py-0.5 text-neutral-300" aria-hidden>
-                {l}
-              </span>
-            ),
-          )}
-        </div>
-      </nav>
+          <header className="head">
+            <h1>
+              All <span className="ol">articles</span>
+            </h1>
+            <p className="lede">
+              The wiki has {ARTICLES.length} articles. This index lists them by title, from A to Z. To search all pages, press{" "}
+              <kbd>/</kbd>.
+            </p>
+          </header>
 
-      <div className="mx-auto max-w-3xl px-5">
-        {groups.map(({ letter, articles }) => (
-          <section
-            key={letter}
-            id={`letter-${letter === "#" ? "num" : letter}`}
-            className="mt-10 scroll-mt-[calc(var(--site-bar-h)+3.5rem)]"
-          >
-            <h2 className="flex items-baseline gap-3 border-b border-neutral-900 pb-1.5">
-              <span className="text-2xl font-bold">{letter}</span>
-              <span className="font-mono text-xs text-neutral-400">{articles.length}</span>
-            </h2>
-            <ul className="divide-y divide-neutral-200">
-              {articles.map((a) => (
-                <li key={a.slug}>
-                  <Link to={articlePath(a.slug)} className="group block py-4">
-                    <div className="flex items-baseline justify-between gap-4">
-                      <span className="text-lg font-semibold group-hover:text-blue-600 group-hover:underline group-hover:underline-offset-4">
-                        {a.title}
-                      </span>
-                      <time dateTime={a.added} className="shrink-0 font-mono text-xs text-neutral-400">
-                        {formatDate(a.added)}
-                      </time>
-                    </div>
-                    <p className="mt-1 text-neutral-600">{a.summary}</p>
-                    <p className="mt-1.5 font-mono text-xs text-blue-600">{a.tags.join(" · ")}</p>
-                  </Link>
-                </li>
+          <div className="ix-grid">
+            <nav className="thumb" aria-label="Jump to letter">
+              <ol>
+                {LETTERS.map((l) =>
+                  present.includes(l) ? (
+                    <li key={l}>
+                      <a href={`#${idOf(l)}`} className={active === l ? "on" : undefined} aria-current={active === l ? "location" : undefined}>
+                        {l}
+                      </a>
+                    </li>
+                  ) : (
+                    <li key={l} className="off" aria-hidden="true">
+                      <span>{l}</span>
+                    </li>
+                  ),
+                )}
+              </ol>
+            </nav>
+
+            <div className="body">
+              {groups.map(({ letter, articles }) => (
+                <section key={letter} id={idOf(letter)} className="grp" aria-labelledby={`${idOf(letter)}-t`}>
+                  <header className="gh">
+                    <h2 id={`${idOf(letter)}-t`}>{letter}</h2>
+                    <span className="sub">
+                      {articles.length} {articles.length === 1 ? "article" : "articles"}
+                    </span>
+                  </header>
+                  <ul className="entries">
+                    {articles.map((a) => {
+                      const changed = lastChange(a) === REVISION;
+                      return (
+                        <li key={a.slug} className="ent">
+                          {changed && <span className="cb" title={`Changed in revision ${REVISION}`} />}
+                          <div className="line">
+                            <Link to={articlePath(a.slug)} className="t">
+                              {a.title}
+                            </Link>
+                            <span className="lead" aria-hidden="true" />
+                            <span className="pg">/{a.slug}</span>
+                          </div>
+                          <p className="sum">{a.summary}</p>
+                          <div className="meta">
+                            <span className="tags">{a.tags.join(" · ")}</span>
+                            <span className="dates">
+                              Issued {a.added} · Revised {a.updated ?? "—"}
+                            </span>
+                          </div>
+                          {changed && <span className="sr-only"> (changed in revision {REVISION})</span>}
+                        </li>
+                      );
+                    })}
+                  </ul>
+                </section>
               ))}
-            </ul>
-          </section>
-        ))}
 
-        <p className="mt-16 border-t border-neutral-200 pt-4 font-mono text-xs text-neutral-400">
-          © 2026 {OWNER} · Articles under{" "}
-          <a href="https://creativecommons.org/licenses/by/4.0/" className="underline underline-offset-2 hover:text-neutral-600">
-            CC BY 4.0
-          </a>{" "}
-          · Code under MIT · Third-party material keeps its own licence
-        </p>
+              <p className="key">
+                <span>
+                  <span className="cb" aria-hidden="true" />A bar in the margin marks a page that changed in revision {REVISION}.
+                </span>
+              </p>
+            </div>
+          </div>
+
+          <footer className="foot">
+            <p>
+              © 2026 {OWNER} · Articles under <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a> · Code under
+              MIT · Third-party material keeps its own licence
+            </p>
+            <p className="end">End of index · nothing follows</p>
+          </footer>
+        </main>
       </div>
-    </main>
+    </SiteShell>
   );
 }

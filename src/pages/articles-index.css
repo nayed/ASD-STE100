@@ -1,0 +1,73 @@
+/* The A–Z index: the wiki's alphabetical index. Its palette, strip, title and footer are in sheet.css (.wk); every rule here is scoped under .ix. */
+
+.ix .head { margin-top: 36px; }
+
+/* ---------- the thumb index: a sticky row under the site bar; at 1024 px, a column of tabs at the right edge ---------- */
+.ix .ix-grid { margin-top: 28px; }
+.ix .thumb {
+  position: sticky; top: var(--site-bar-h); z-index: 20;
+  margin: 0 -20px; padding: 7px 20px; background: var(--paper); border-bottom: 1px solid var(--ink);
+}
+.ix .thumb ol { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 3px; }
+.ix .thumb a, .ix .thumb span {
+  display: flex; align-items: center; justify-content: center; width: 30px; height: 26px;
+  font-size: 11.5px; font-weight: 600; line-height: 1; text-decoration: none;
+}
+.ix .thumb a { background: var(--ink); color: var(--paper); transition: background-color 0.15s ease-out; }
+.ix .thumb a:hover { background: var(--ink-70); }
+.ix .thumb a.on { background: var(--acc); }
+.ix .thumb a:focus-visible { outline-offset: 2px; }
+.ix .thumb .off { display: none; }
+.ix .thumb .off span { color: var(--olive-lt); border: 1px solid var(--rule); font-weight: 500; }
+
+/* ---------- one group per letter ---------- */
+.ix .grp { scroll-margin-top: calc(var(--site-bar-h) + 54px); }
+.ix .gh {
+  display: flex; align-items: baseline; gap: 14px; margin-top: 40px; padding-top: 8px; border-top: 2px solid var(--ink);
+}
+.ix .gh h2 { margin: 0; font-size: 46px; font-weight: 700; letter-spacing: -0.03em; line-height: 1; }
+.ix .gh .sub { font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--olive); }
+
+/* ---------- an entry: title, dot leader, address; summary; keywords and dates ---------- */
+.ix .entries { list-style: none; margin: 6px 0 0; padding: 0; }
+.ix .ent { position: relative; margin: 0 -10px; padding: 14px 10px 15px; }
+/* the rule under an entry keeps to the text column; the hover fill reaches 10 px past it */
+.ix .ent::before { content: ""; position: absolute; left: 10px; right: 10px; bottom: 0; border-bottom: 1px solid var(--rule); }
+.ix .ent:hover { background: var(--paper-2); }
+.ix .ent .cb { position: absolute; left: -4px; top: 16px; bottom: 16px; width: 3px; background: var(--ink); }
+.ix .line { display: flex; align-items: baseline; flex-wrap: wrap; }
+.ix .t { font-size: 15.5px; font-weight: 600; line-height: 1.45; text-decoration: none; }
+/* the whole entry opens the article */
+.ix .t::after { content: ""; position: absolute; inset: 0; }
+.ix .ent:hover .t { text-decoration: underline; text-decoration-color: var(--ink); }
+.ix .t:focus-visible { outline: none; }
+.ix .t:focus-visible::after { outline: 2px solid var(--acc); outline-offset: -2px; }
+.ix .lead { display: none; }
+.ix .pg { flex-basis: 100%; font-size: 12px; color: var(--olive); }
+.ix .sum { margin-top: 6px; max-width: 72ch; font-size: 13px; line-height: 1.75; color: var(--ink-70); }
+.ix .meta {
+  display: flex; flex-wrap: wrap; justify-content: space-between; gap: 2px 24px; margin-top: 7px;
+  font-size: 9.5px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--olive); line-height: 1.6;
+}
+.ix .key { margin-top: 18px; }
+
+@media (min-width: 640px) {
+  /* the dot leader runs from the title to the address, as in a printed index */
+  .ix .lead { display: block; flex: 1; min-width: 24px; margin: 0 10px; border-bottom: 1px dotted var(--olive); transform: translateY(-0.32em); }
+  .ix .pg { flex-basis: auto; white-space: nowrap; font-size: 12.5px; }
+}
+@media (min-width: 1024px) {
+  .ix .ix-grid { display: grid; grid-template-columns: minmax(0, 880px) 1fr; column-gap: 40px; }
+  .ix .body { grid-column: 1; grid-row: 1; }
+  .ix .thumb {
+    grid-column: 2; grid-row: 1; justify-self: end; align-self: start;
+    top: calc(var(--site-bar-h) + 20px); margin: 46px 0 0; padding: 0; background: none; border: 0;
+  }
+  .ix .thumb ol { flex-direction: column; flex-wrap: nowrap; gap: 2px; }
+  .ix .thumb a, .ix .thumb span { width: 38px; height: 21px; font-size: 11px; }
+  .ix .thumb .off { display: block; }
+  .ix .grp { scroll-margin-top: calc(var(--site-bar-h) + 20px); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ix .thumb a { transition: none; }
+}
