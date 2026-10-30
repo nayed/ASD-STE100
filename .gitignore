@@ -5,5 +5,6 @@ __pycache__
 scripts/rag/.venv
 scripts/rag/models
 .impeccable/hook.cache.json
+.impeccable/review
 scripts/websocket/.venv
 skills-export
