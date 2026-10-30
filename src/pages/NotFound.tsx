@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useMemo, type CSSProperties } from "react";
+import { Fragment, useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
 import { Link, useLocation } from "react-router";
 import { ARTICLES, articlePath, INDEX_PATH, type ArticleMeta } from "../articles/registry";
 import SiteShell from "../components/SiteShell";
@@ -118,9 +118,74 @@ function Mark({ kind, first = true, last = true }: { kind: Kind; first?: boolean
   );
 }
 
+/*
+ * When each mark is drawn, in seconds from the start: one correction after the other, at a pen's pace.
+ * A strike sweeps 0.1 s per character and ends with its delete loop; an insertion draws its caret, then
+ * types its characters in; a change strikes each character, then its correction appears below.
+ * d: when the stroke starts, t: how long it takes, ld: when the corrected character appears.
+ */
+const START = 0.4;
+const STEP = 0.1;
+function schedule(ops: Op[]) {
+  const plan = new Map<number, { d: number; t: number; ld: number }>();
+  let at = START;
+  for (let i = 0; i < ops.length; ) {
+    const kind = ops[i].kind;
+    let j = i;
+    while (j < ops.length && ops[j].kind === kind) j++;
+    const n = j - i;
+    if (kind === "remove") {
+      const end = n === 1 ? 0.7 : 0.6; // the cell that carries the loop
+      for (let k = 0; k < n; k++) plan.set(i + k, { d: at + k * STEP, t: k === n - 1 ? end : STEP, ld: 0 });
+      at += (n - 1) * STEP + end + 0.15;
+    } else if (kind === "add") {
+      for (let k = 0; k < n; k++) plan.set(i + k, { d: at, t: 0.4, ld: at + 0.3 + k * STEP });
+      at += 0.3 + n * STEP + 0.35;
+    } else if (kind === "change") {
+      for (let k = 0; k < n; k++) plan.set(i + k, { d: at + k * 0.3, t: 0.35, ld: at + k * 0.3 + 0.3 });
+      at += n * 0.3 + 0.4;
+    }
+    i = j;
+  }
+  return plan;
+}
+
+/** true once the fonts are in and the figure is on screen: the drawing starts on a settled page */
+function useSettled<T extends Element>() {
+  const ref = useRef<T>(null);
+  const [settled, setSettled] = useState(false);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    let live = true;
+    let seen = false;
+    let fonts = false;
+    const go = () => live && seen && fonts && setSettled(true);
+    document.fonts.ready.then(() => {
+      fonts = true;
+      go();
+    });
+    const io = new IntersectionObserver(
+      ([e]) => {
+        if (!e.isIntersecting) return;
+        seen = true;
+        io.disconnect();
+        go();
+      },
+      { threshold: 0.6 },
+    );
+    io.observe(el);
+    return () => {
+      live = false;
+      io.disconnect();
+    };
+  }, []);
+  return [ref, settled] as const;
+}
+
 /** the signature: the typed address over the real one in comb fields, one character per cell, each correction marked */
 function Proof({ ops }: { ops: Op[] }) {
-  let n = 0; // order of the marks, for the drawing delay
+  const plan = schedule(ops);
   return (
     <div className="proof" aria-hidden="true" style={{ "--n": ops.length + 1 } as CSSProperties}>
       <div className="keys">
@@ -142,13 +207,18 @@ function Proof({ ops }: { ops: Op[] }) {
             );
           const first = ops[i - 1]?.kind !== o.kind;
           const last = ops[i + 1]?.kind !== o.kind;
+          const p = plan.get(i)!;
           return (
-            <li key={i} className={`col ${o.kind}${last ? " last" : ""}`} style={{ "--i": n++ } as CSSProperties}>
+            <li
+              key={i}
+              className={`col ${o.kind}${first ? " first" : ""}${last ? " last" : ""}`}
+              style={{ "--d": `${p.d}s`, "--t": `${p.t}s`, "--ld": `${p.ld}s` } as CSSProperties}
+            >
               <span className="c t">
                 {o.kind === "add" ? "" : o.typed}
                 <Mark kind={o.kind} first={first} last={last} />
               </span>
-              <span className="c e">{o.kind === "remove" ? "" : o.want}</span>
+              <span className="c e">{o.kind === "remove" ? "" : <span className="ch">{o.want}</span>}</span>
             </li>
           );
         })}
@@ -185,6 +255,7 @@ function Arrow() {
 export default function NotFound() {
   const { pathname } = useLocation();
   const near = useMemo(() => nearestArticle(pathname), [pathname]);
+  const [figRef, settled] = useSettled<HTMLElement>();
   const shown = typedPath(pathname);
   const fixes = near ? corrections(near.ops) : [];
   // the requested address takes its place in the list, by address, as a page not issued
@@ -258,7 +329,7 @@ export default function NotFound() {
               </p>
 
               {near && near.reason !== "tag" && fixes.length > 0 && (
-                <figure className="proof-fig">
+                <figure className={`proof-fig${settled ? " draw" : ""}`} ref={figRef}>
                   <Proof ops={near.ops} />
                   <figcaption className="figcap">
                     <span className="no">Fig. 01</span>
