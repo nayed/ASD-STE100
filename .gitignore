@@ -6,3 +6,4 @@ scripts/rag/.venv
 scripts/rag/models
 .impeccable/hook.cache.json
 scripts/websocket/.venv
+skills-export
