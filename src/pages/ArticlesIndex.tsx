@@ -17,7 +17,7 @@ import "./articles-index.css";
 const LETTERS = ["#", ..."ABCDEFGHIJKLMNOPQRSTUVWXYZ"];
 const idOf = (letter: string) => `letter-${letter === "#" ? "num" : letter}`;
 
-/** the letter whose group is under the reading line (30 % down the window), for the active tab */
+/** the letter whose group is under the reading line (30 % down the window), or the last one at the bottom of the page, for the active tab */
 function useActiveLetter(letters: string[]) {
   const [active, setActive] = useState<string | null>(null);
   useEffect(() => {
@@ -30,6 +30,9 @@ function useActiveLetter(letters: string[]) {
         const el = document.getElementById(idOf(l));
         if (el && el.getBoundingClientRect().top <= line) cur = l;
       }
+      // at the bottom of the page the last groups cannot reach the line: the last one is then the active one
+      const h = document.documentElement;
+      if (h.scrollTop + window.innerHeight >= h.scrollHeight - 2) cur = letters.at(-1) ?? cur;
       setActive(cur ?? letters[0] ?? null);
     };
     const onScroll = () => {
