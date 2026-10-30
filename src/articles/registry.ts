@@ -49,7 +49,7 @@ export const ARTICLES: ArticleMeta[] = [
   {
     slug: "websocket",
     title: "WebSocket",
-    summary: "One TCP connection that stays open: the HTTP upgrade, frames, masking, ping and close, a real session byte by byte, the browser API and production.",
+    summary: "One TCP connection that stays open: HTTP upgrade, frames, masking, ping and close, a real session, browser API, production.",
     tags: ["websocket", "networking", "web", "protocols", "javascript"],
     bar: {
       page: "#f3f2ed",
@@ -104,7 +104,7 @@ export const ARTICLES: ArticleMeta[] = [
   {
     slug: "stack-vs-heap",
     title: "Stack vs heap",
-    summary: "Where a program keeps its data: frames on the stack, blocks on the heap, how each grows and fails, with real addresses and a step-through program.",
+    summary: "Where a program keeps its data: stack frames and heap blocks, how each grows and fails, with real addresses.",
     tags: ["memory", "systems", "c", "go"],
     bar: {
       page: "#f5f4ee",
@@ -131,7 +131,7 @@ export const ARTICLES: ArticleMeta[] = [
   {
     slug: "random-forest",
     title: "Random forest",
-    summary: "How a team of randomised decision trees votes its way past overfitting: Gini splits, out-of-bag scores, feature importance, scikit-learn, and a live forest to train.",
+    summary: "How randomised decision trees vote past overfitting: Gini splits, out-of-bag scores, feature importance, scikit-learn and a live forest.",
     tags: ["machine learning", "algorithms", "decision trees"],
     load: () => import("./random-forest"),
     added: "2026-10-05",
