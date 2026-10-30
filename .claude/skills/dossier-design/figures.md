@@ -33,10 +33,10 @@ A short note in the article's voice: what to look at.
 
 ## Starter primitives (React + SVG)
 
-Adapt the colours to the article. Keep one set of primitives per article so every figure shares one hand.
+The colours are the article's CSS variables (SKILL.md, section 2), so the figures follow its paper, and a figure inside a dark area follows the variables that area redefines. Keep one set of primitives per article so every figure shares one hand.
 
 ```tsx
-const INK = "#121210", OLIVE = "#6b6c5a", OLIVE_LT = "#a6a795", PAPER = "#f5f4ee", ACCENT = "#f2c300";
+const INK = "var(--ink)", OLIVE = "var(--olive)", OLIVE_LT = "var(--olive-lt)", PAPER = "var(--paper)", ACCENT = "var(--acc)";
 
 /** label on a paper-coloured halo, so lines can pass behind it */
 function Label({ x, y, children, size = 10, anchor = "start", fill = INK, weight = 400, ls = 0.08 }: {

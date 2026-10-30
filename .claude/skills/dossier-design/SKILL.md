@@ -1,6 +1,6 @@
 ---
 name: dossier-design
-description: Design and build a web page in the "technical dossier" style (IBM Plex Mono, flat black and white, muted olive-gray strokes, one accent colour, hand-drawn SVG figures with ruled captions) at the craft level of the tech wiki's best articles. Use when asked for a page, article or explainer "styled like a technical dossier", when adding or redesigning an article in the tech-wiki repo, or whenever a page must not look generic.
+description: Design and build a web page in the "technical dossier" style (IBM Plex Mono, flat ink on a light paper chosen for the topic, dark areas where they earn their place, muted olive-gray strokes, one accent colour, hand-drawn SVG figures with ruled captions) at the craft level of the tech wiki's best articles. Use when asked for a page, article or explainer "styled like a technical dossier", when adding or redesigning an article in the tech-wiki repo, or whenever a page must not look generic.
 ---
 
 # Technical dossier design
@@ -18,15 +18,21 @@ Write a short plan first, and keep to it:
 - **Sections**: 8–12 sheets, each with a one-line purpose, in the order of the explanation.
 - **Figures**: 6–8. For each one: what it teaches, the single element that gets the accent, static or interactive, and what moves (section 5). At least one interactive figure that teaches by doing (step through, drag, toggle, type).
 - **Accent**: the colour, and the exact places it may appear.
+- **Paper and dark areas**: the paper stock for this topic (not one already used, section 9), and which areas go dark, if any, with the reason for each.
 
 ## 2. Visual system
 
 **Colour**
-- Paper: warm off-white, never `#fff` (`#fbfbf8`, `#f2f0e9`, `#f5f4ee`).
-- Ink: near-black, never `#000` (`#11140f`, `#121210`).
-- Olive-gray for diagram strokes and secondary text (`#6b6c5a`–`#70755e`, 4.5:1 or more on paper), a light olive for construction lines and hatching, a pale rule colour for hairlines.
+
+The page is light: a long read needs a light ground. Within that, the paper and the dark areas are choices for each article, like the device and the accent. Be inventive with them.
+
+- **Paper**: a light ground chosen for the topic, never pure `#fff`. Think of the stock the document would be printed on: the cold white of a datasheet, the blue-white of a blueprint print, green ledger paper, a buff or manila folder, grey newsprint, the cream of an old manual. Do not reuse a paper from the list in section 9. The warm off-whites (`#f2f0e9` to `#f7f6f2`) and the near-whites (`#fbf9f3` to `#fbfbf9`) are used up.
+- **Dark areas**, where they help the reader or make the page more interesting: a dark cover or header (Go, LLM), a dark band that sets one key section apart (LLM, clause 05, between its dark header and its dark footer), a dark footer or colophon (ASD-STE100, Podman), terminal blocks, table header rows. Each dark area has a reason. Never make the whole page dark, and never alternate light and dark sections only for rhythm. A dark area takes the ink, or a near-black of the same family, as its ground, and the paper colour or a light tint of it for text.
+- **Ink**: near-black in the temperature of the paper, never `#000` (`#11140f` on warm paper, a blue-black such as `#0d1316` on cold paper).
+- **Olive-gray** for diagram strokes and secondary text (`#6b6c5a`–`#70755e` on warm paper; greener and cooler on cold paper, such as `#5b6359`), 4.5:1 or more on the paper. A light olive for construction lines and hatching, a pale rule colour for hairlines.
 - **One** saturated accent. It marks the single key element of each figure, the active navigation item, stamps and warnings. Never use it as a wash or for decoration.
-- Check contrast. If the accent is under 4.5:1 on paper, add a darker text variant of the same hue for small text. If it is too light for thin strokes (yellow), use it only as a fill with an ink outline.
+- Check contrast on the paper and on every dark area. If the accent is under 4.5:1 on the paper, add a darker text variant of the same hue for small text. On a dark area, add a lighter variant (WebSocket: `#b5106b` on its paper, `#ff79c6` on its terminal blocks). If the accent is too light for thin strokes (yellow), use it only as a fill with an ink outline.
+- Give the palette as CSS variables on the article's root class (`--paper`, `--ink`, `--olive`, `--acc`…), and make the figures read them (figures.md). A dark area can redefine `--paper` and `--ink` for what it holds.
 
 **Type** (IBM Plex Mono only, weights 300–700)
 - Display title: 64–120 px, bold, letter-spacing −0.03 to −0.05em, line-height ≈ 0.9. Give one word a contrasting treatment: outlined text, a reversed block, an accent fill.
@@ -90,7 +96,7 @@ If an animation can show something, add it. Most subjects have a flow, an order,
 
 ## 7. Generic tells: reject on sight
 
-Framework-default palettes (slate, zinc, indigo, teal), rounded cards, soft or coloured shadows, gradients, glassmorphism, emoji, pill badges, a centred hero with a subtitle and a button, every section built the same way (heading, paragraph, card grid), "Key takeaways" boxes, two or three accent colours, diagrams of rounded rectangles with no annotation, fake numbers presented as real, motion with no meaning (blinking, bouncing, floating), short output.
+Framework-default palettes (slate, zinc, indigo, teal), the same paper as the last article, rounded cards, soft or coloured shadows, gradients, glassmorphism, emoji, pill badges, a centred hero with a subtitle and a button, every section built the same way (heading, paragraph, card grid), "Key takeaways" boxes, two or three accent colours, diagrams of rounded rectangles with no annotation, fake numbers presented as real, motion with no meaning (blinking, bouncing, floating), short output.
 
 ## 8. Process
 
@@ -108,7 +114,8 @@ Framework-default palettes (slate, zinc, indigo, teal), rounded cards, soft or c
 - Put source and config files (not terminal sessions) in `listings/` and import them with `?highlight`: the build colours them in gruvbox-light-hard, or in another Shiki theme with `?theme=<name>&highlight` when the article's design asks for it (CLAUDE.md, code listings). Do not colour code by hand.
 - Scope all CSS under one root class in a file in the folder. Keep the palette as CSS variables on that root class, or as prefixed Tailwind tokens in `src/index.css`.
 - The shared site bar is 44 px (`var(--site-bar-h)`). Fixed and sticky parts go below it, and `scroll-margin-top` must include it.
-- Accents already used: red `#b3261e` (ASD-STE100), greens `#0e7a3c` and `#3d7151` (random forest, CI/CD), cyan `#00add8` (Go), purple `#6d28d9` (Podman), orange `#e2571f` (LLM), yellow `#f2c300` (stack vs heap), cobalt `#2c45c9` (RAG), magenta `#b5106b` (WebSocket). Pick another hue.
+- Accents already used: red `#b3261e` (ASD-STE100), greens `#0e7a3c` and `#3d7151` (random forest, CI/CD), cyan `#00add8` (Go), purple `#6d28d9` (Podman), orange `#e2571f` (LLM), yellow `#f2c300` (stack vs heap), cobalt `#2c45c9` (RAG), magenta `#b5106b` (WebSocket), petrol `#006d77` (the 404 page). Pick another hue.
+- Papers already used: beige `#f2eee4` (ASD-STE100); warm off-whites `#f2f0e9` (Go), `#f3f2ed` (WebSocket), `#f5f4ee` (stack vs heap), `#f7f6f2` (RAG); near-whites `#fbf9f3` (CI/CD), `#fbfbf7` (random forest), `#fbfbf8` (Podman), `#fbfbf9` (LLM); cold white `#f5f8f9` (the 404 page). Pick another stock.
 - Checks before you report:
   - `npm run typecheck`, `npm run build`, then `npm run check:figures` (colliding or cut-off SVG labels; a label on a line needs a halo or a background patch).
   - No horizontal overflow at 375 px. Test in a 375 px iframe and compare `documentElement.scrollWidth` with 375: under phone emulation `innerWidth` grows with the page, so comparing the two hides the overflow. Grid children need `min-width: 0`; code blocks and wide tables scroll inside their own box.
