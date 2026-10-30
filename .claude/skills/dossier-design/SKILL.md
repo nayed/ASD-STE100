@@ -45,10 +45,11 @@ Write a short plan first, and keep to it:
 
 Use most of these, but vary the combination so articles do not look alike:
 
-- **Cover sheet**: eyebrow ("TECHNICAL DOSSIER — SERIES …"), huge title, a lede of 2–4 sentences, a metadata grid (document no., revision, date, subject, platform or scope, classification), a rotated stamp.
+- **Cover sheet**: a ruled header row like the strip of a printed form ("TECHNICAL DOSSIER · SERIES … · DOC CODE" at the left, revision and sheet count at the right), huge title, a lede of 2–4 sentences, a metadata grid (document no., revision, date, subject, platform or scope, classification), a rotated stamp.
 - **Running header** or strip: document code · revision · "SHEET 04 / 10 — TITLE", updated as the reader scrolls.
 - **Index rail**: sticky, the active section marked, a scroll-progress line or counter.
-- **Section header**: a giant number, a small kicker, the title, a sheet reference at the right.
+- **Section header**: a giant number, the title, a sub-line under it (scope, figure references), a sheet reference at the right.
+- Never stack a small label (eyebrow, kicker) directly above a heading: the heading carries its own weight. Put metadata in the ruled header row or in a sub-line under the heading.
 - **Body parts**: margin notes, numbered procedures (`01`, `02` counters in olive), definition tables, WARNING / CAUTION panels, terminal blocks and code "exhibits" with a title bar, a summary sheet, a glossary appendix.
 - **Footer**: colophon (typeface, conventions), sources, a control block (document code, revision, sheets, figures), "END OF DOCUMENT — NOTHING FOLLOWS".
 
