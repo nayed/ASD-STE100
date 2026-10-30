@@ -15,7 +15,7 @@ Audience and job: a reader who mistyped an address or followed an old link (for 
 
 THESIS: The 404 is the wiki's List of Effective Pages, the controlled-document page that lists every valid page with its issue and revision, with the requested address flagged against it and proofread toward the nearest real one. It refuses the category default: a giant 404 numeral, a joke, a centred "Go home" button.
 
-OWN-WORLD: Technical dossier family. IBM Plex Mono only; off-white paper, near-black ink, olive-gray rules and labels; one petrol accent (#006d77), used only for the NOT ISSUED stamp and the NOT ISSUED flags (strip value, requested row, its cross), the proofreading marks and the nearest-page marker; links and the button hover stay in the ink family; ink change bars in the list margin; a ruled form strip; comb fields (one boxed cell per character); square corners, hairlines, 2 px ink rules.
+OWN-WORLD: Technical dossier family. IBM Plex Mono only; a datasheet's cold white paper (#f5f8f9), blue-black ink, cool olive-gray rules and labels; one petrol accent (#006d77), used only for the NOT ISSUED stamp and the NOT ISSUED flags (strip value, requested row, its cross), the proofreading marks and the nearest-page marker; links and the button hover stay in the ink family; ink change bars in the list margin; a ruled form strip; comb fields (one boxed cell per character); square corners, hairlines, 2 px ink rules.
 
 STORY: The reader sees at once that no page has this address, sees the nearest real address with each correction marked, and opens it in one click. Without a near match, they scan all nine pages, or search.
 

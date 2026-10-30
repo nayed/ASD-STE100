@@ -1,16 +1,17 @@
 /* The 404 page: the List of Effective Pages. Every rule is scoped under .nf. */
 
 .nf {
-  --paper: #f4f4ef;
-  --panel: #fafaf6;
-  --paper-2: #e8e8e0;
-  --ink: #11140f;
-  --ink-70: #45483f;
-  --olive: #626650; /* 5.3:1 on paper: labels and secondary text */
-  --olive-lt: #b4b6a3;
-  --rule: #dadbd0;
-  --rule-2: #c3c5b5;
-  --acc: #006d77; /* petrol, 5.5:1 on paper: the stamp, the NOT ISSUED flags, the proof marks, the nearest page */
+  /* a datasheet's cold white, with a blue-black ink and a cool olive-gray to match */
+  --paper: #f5f8f9;
+  --panel: #fbfcfd;
+  --paper-2: #e7edf0;
+  --ink: #0d1316;
+  --ink-70: #3d464b;
+  --olive: #5b6359; /* 5.8:1 on paper: labels and secondary text */
+  --olive-lt: #b0b8b2;
+  --rule: #d8e0e3;
+  --rule-2: #c0cacd;
+  --acc: #006d77; /* petrol, 5.7:1 on paper: the stamp, the NOT ISSUED flags, the proof marks, the nearest page */
   --mono: "IBM Plex Mono", ui-monospace, monospace;
 
   background: var(--paper);
