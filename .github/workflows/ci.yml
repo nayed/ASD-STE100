@@ -1,5 +1,5 @@
 # Checks every pull request and every push to main.
-# Netlify deploys main separately (see netlify.toml).
+# Cloudflare Pages deploys main separately (build settings in its dashboard).
 name: CI
 
 on:

@@ -23,7 +23,7 @@ Every article is written in ASD-STE100 Simplified Technical English (short sente
 ## Operating Context
 
 - Reading: on desktop and on a phone; an article is read in full once, then used as a reference (search box, A–Z index at `/articles`, in-page section anchors).
-- Writing: the owner adds articles over time with LLM help. New dossiers follow the project skill `.claude/skills/dossier-design/`; CLAUDE.md records the standard prompt, the article origins and the workflow (commit straight to `main`, Netlify deploys on push).
+- Writing: the owner adds articles over time with LLM help. New dossiers follow the project skill `.claude/skills/dossier-design/`; CLAUDE.md records the standard prompt, the article origins and the workflow (commit straight to `main`, Cloudflare Pages deploys on push).
 - The homepage is the ASD-STE100 article itself, which explains the standard the rest of the wiki is written in, and includes a teaching STE checker.
 
 ## Capabilities and Constraints

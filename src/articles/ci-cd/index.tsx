@@ -450,7 +450,7 @@ export default function CiCd() {
 
           <h3><span className="idx">5.2</span>Deployment</h3>
           <p>Continuous deployment goes one step further. The pipeline deploys each good change to production. No person gives approval.</p>
-          <div className="note"><span className="k">EXAMPLE</span><span>This wiki uses continuous deployment. After each push to main, Netlify builds the site and publishes it. GitHub Actions (4.5) checks the same commit in parallel.</span></div>
+          <div className="note"><span className="k">EXAMPLE</span><span>This wiki uses continuous deployment. After each push to main, Cloudflare Pages builds the site and publishes it. GitHub Actions (4.5) checks the same commit in parallel.</span></div>
 
           <h3><span className="idx">5.3</span>Environments</h3>
           <p>The pipeline deploys the artifact to the environments in this sequence: development, staging, production. Staging is a copy of production. The team tests each release in staging first.</p>

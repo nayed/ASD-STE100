@@ -219,6 +219,7 @@ export const ARTICLES: ArticleMeta[] = [
     tags: ["ci/cd", "git", "github", "devops"],
     load: () => import("./ci-cd"),
     added: "2026-10-09",
+    updated: "2026-10-30",
     bar: {
       page: "#fbf9f3",
       bg: "rgba(251, 249, 243, 0.95)",
