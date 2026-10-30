@@ -22,16 +22,10 @@ export default function ArticlePage({ slug: fixed }: { slug?: string }) {
   const Article = useMemo(() => (meta ? lazyArticle(meta.slug, meta.load) : null), [meta]);
 
   useEffect(() => {
-    document.title = meta ? `${meta.title} · ${SITE_NAME}` : `Not found · ${SITE_NAME}`;
+    if (meta) document.title = `${meta.title} · ${SITE_NAME}`;
   }, [meta]);
 
-  if (!meta || !Article) {
-    return (
-      <SiteShell>
-        <NotFound />
-      </SiteShell>
-    );
-  }
+  if (!meta || !Article) return <NotFound />;
 
   return (
     <SiteShell theme={meta.bar}>

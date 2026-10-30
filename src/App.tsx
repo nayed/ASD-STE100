@@ -22,14 +22,7 @@ export default function App() {
           }
         />
         <Route path="/:slug" element={<ArticlePage />} />
-        <Route
-          path="*"
-          element={
-            <SiteShell>
-              <NotFound />
-            </SiteShell>
-          }
-        />
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </>
   );
