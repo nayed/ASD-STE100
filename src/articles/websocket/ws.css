@@ -1,16 +1,17 @@
 /* WS-6455. Every rule is scoped under .ws: CSS from a lazy chunk stays loaded after navigation. */
 
 .ws {
-  --paper: #f3f2ed;
-  --panel: #f9f9f5;
-  --paper-2: #e9e8e1;
+  /* greenbar: the pale green fanfold paper that line printers ran protocol traces on */
+  --paper: #ebf1e6;
+  --panel: #f5f8f2;
+  --paper-2: #dfe7d8;
   --ink: #121311;
   --ink-70: #474840;
-  --olive: #626650; /* 5.3:1 on paper: small labels and strokes */
-  --olive-lt: #b3b5a2;
-  --rule: #dcdcd2;
-  --rule-2: #c4c6b6;
-  --acc: #b5106b; /* magenta, 5.8:1 on paper: the accent, also as text */
+  --olive: #5c6150; /* 5.6:1 on paper, 5:1 on paper-2: small labels and strokes */
+  --olive-lt: #adb6a0;
+  --rule: #d2dbcb;
+  --rule-2: #bac5b0;
+  --acc: #b5106b; /* magenta, 5.6:1 on paper: the accent, also as text */
   --acc-10: rgba(181, 16, 107, 0.09);
   --acc-lt: #ff79c6; /* the accent on the dark blocks, 7.7:1 */
   --dark: #141513;
@@ -100,7 +101,7 @@
 .ws .strip {
   position: sticky; top: var(--site-bar-h); z-index: 30; height: var(--strip-h);
   display: flex; align-items: center; gap: 12px; padding: 0 16px;
-  background: rgba(243, 242, 237, 0.96); border-bottom: 1px solid var(--ink);
+  background: rgba(235, 241, 230, 0.96); border-bottom: 1px solid var(--ink);
   font-size: 9.5px; letter-spacing: 0.16em; text-transform: uppercase; white-space: nowrap; overflow: hidden;
 }
 .ws .strip .doc { font-weight: 700; }
