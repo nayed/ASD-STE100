@@ -1,7 +1,7 @@
 import "./rag.css";
 import { Call, Code, DocBar, Figure, ISSUED, Rail, REV, Section, Term, useReading } from "./chrome";
 import { AskDossier, Masthead } from "./cover";
-import EVAL from "../../../scripts/rag/eval.py?theme=slack-ochin&highlight";
+import EVAL from "../../../scripts/rag/eval.py?theme=github-light&highlight";
 import { CHUNKS, EVAL_OUTPUT, MODEL, RUN } from "./data";
 import { FigChunker, FigSystem, FigTwoWays } from "./figs1";
 import { FigPlane, FigPrompt, FigRetriever } from "./figs2";
