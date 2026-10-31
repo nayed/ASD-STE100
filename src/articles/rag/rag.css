@@ -1,16 +1,18 @@
 /* RAG-100. Every rule is scoped under .rag: CSS from a lazy chunk stays loaded after navigation. */
 
 .rag {
-  --paper: #f7f6f2;
-  --panel: #fdfdfa;
-  --paper-2: #efeee7;
+  /* manila: the folder of a card file; the figure panels stay card-white on it, and the index cards carry blue rules */
+  --paper: #f1e8d2;
+  --panel: #fdfbf5;
+  --paper-2: #e6dbc0;
   --ink: #0e0f0d;
   --ink-70: #4b4c46;
-  --olive: #676d52; /* 4.9:1 on paper: small labels and strokes */
-  --olive-lt: #b4b7a2;
-  --rule: #e0e0d6;
-  --rule-2: #c9cbbb;
-  --acc: #2c45c9; /* cobalt, 7.3:1 on paper: the accent, also as text */
+  --olive: #5c5f45; /* 5.4:1 on paper, 4.8:1 on paper-2: small labels and strokes */
+  --olive-lt: #b1ab8f;
+  --rule: #ddd2b6;
+  --rule-2: #c6b994;
+  --card-rule: #c9d3ec; /* the pale blue lines of an index card */
+  --acc: #2c45c9; /* cobalt, 6.1:1 on paper, 7.2:1 on the panels: the accent, also as text */
   --acc-12: rgba(44, 69, 201, 0.1);
   --acc-lt: #93a3ff; /* the accent on the dark figure panel */
   --dark: #121311;
@@ -37,7 +39,7 @@
 /* ---------- document bar (under the site bar) ---------- */
 .rag .docbar {
   position: sticky; top: var(--site-bar-h); z-index: 30;
-  height: var(--bar-h); background: rgba(247, 246, 242, 0.96);
+  height: var(--bar-h); background: rgba(241, 232, 210, 0.96);
   border-bottom: 1px solid var(--ink);
 }
 .rag .docbar-in {
@@ -311,4 +313,55 @@
   .rag .flow, .rag .cell, .rag .appear, .rag .draw, .rag .caret { animation: none !important; opacity: 1 !important; stroke-dashoffset: 0 !important; }
   .rag .grow, .rag .slide, .rag .ask .bar i { transition: none !important; }
   .rag .packet { display: none; }
+}
+
+/* ---------- the card file (Sheet 03): one index card per chunk, on the manila of the drawer ---------- */
+.rag .cardfile {
+  list-style: none; margin: 0; padding: 14px; border: 1px solid var(--ink); background: var(--paper-2);
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 12px;
+}
+.rag .icard { display: flex; flex-direction: column; min-width: 0; padding: 8px 12px 10px; background: var(--panel); border: 1px solid var(--rule-2); }
+.rag .ic-head { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; }
+.rag .ic-no { font-size: 11px; font-weight: 700; letter-spacing: 0.06em; }
+.rag .ic-ref { font-size: 9.5px; letter-spacing: 0.06em; color: var(--olive); white-space: nowrap; }
+/* the heading line of an index card, then its pale blue writing lines down to the bottom of the card */
+.rag .ic-title { margin: 4px 0 0; padding-bottom: 4px; border-bottom: 1.5px solid #8796cf; font-size: 12.5px; font-weight: 600; line-height: 1.4; }
+.rag .ic-text {
+  flex: 1; margin: 0; padding-top: 1px; font-size: 11.5px; line-height: 21px; color: var(--ink-70);
+  background-image: repeating-linear-gradient(to bottom, transparent 0 20px, var(--card-rule) 20px 21px);
+}
+
+/* ---------- Fig. 05: the drawer of the card file; the k best cards rise with their rank ---------- */
+.rag .drawer { position: relative; margin-top: 14px; height: 96px; overflow: hidden; }
+.rag .dr-cards { position: absolute; inset: 0 8px 0; display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 4px; align-items: end; }
+.rag .dr-card {
+  position: relative; height: 62px; display: flex; flex-direction: column; align-items: center; gap: 3px; padding-top: 5px;
+  background: var(--panel); border: 1px solid var(--rule-2); border-bottom: 0;
+  font-size: 10px; line-height: 1; color: var(--olive); transition: transform 0.35s cubic-bezier(0.2, 0.7, 0.3, 1);
+}
+.rag .dr-card.up { transform: translateY(-30px); border-color: var(--acc); border-top: 3px solid var(--acc); color: var(--acc); }
+.rag .dr-no { font-weight: 600; }
+.rag .dr-rank { order: -1; display: grid; place-items: center; width: 15px; height: 15px; background: var(--acc); color: #fff; font-size: 9px; font-weight: 700; }
+.rag .dr-card.gold .dr-no::after { content: ""; display: block; width: 6px; height: 6px; margin: 4px auto 0; background: var(--ink); }
+.rag .dr-front {
+  position: absolute; left: 0; right: 0; bottom: 0; z-index: 1; height: 28px; padding: 0 10px;
+  display: flex; justify-content: space-between; align-items: center; gap: 12px;
+  background: var(--paper-2); border-top: 2px solid var(--ink);
+  font-size: 9px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--olive); white-space: nowrap; overflow: hidden;
+}
+
+.rag .gold-key { display: inline-block; width: 6px; height: 6px; margin-right: 2px; background: var(--ink); vertical-align: 1px; }
+
+/* ---------- Fig. 07: a cited chunk as the tab of its card ---------- */
+.rag .cite {
+  display: inline-block; margin: 0 2px; padding: 0 4px; border: 1px solid var(--acc); border-top-width: 3px;
+  background: var(--panel); color: var(--acc); font-weight: 700; font-size: 0.86em; line-height: 1.35; vertical-align: 1px;
+}
+
+@media (max-width: 560px) {
+  .rag .dr-cards { gap: 2px; inset: 0 4px 0; }
+  .rag .dr-front span:last-child { display: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .rag .dr-card { transition: none; }
 }

@@ -201,6 +201,33 @@ export function FigRetriever() {
           three searches.
         </p>
       )}
+      {/* the card file: the k best cards rise out of the drawer, each with its rank */}
+      <div className="drawer" aria-hidden="true">
+        <div className="dr-cards">
+          {CHUNKS.map((c) => {
+            const r = hits.findIndex((h) => h.id === c.id);
+            const up = r >= 0 && r < k;
+            return (
+              <div key={c.id} className={`dr-card${up ? " up" : ""}${c.id === gold ? " gold" : ""}`} title={`${c.id} · ${c.title}`}>
+                {up && <span className="dr-rank">{r + 1}</span>}
+                <span className="dr-no">{c.id.slice(2)}</span>
+              </div>
+            );
+          })}
+        </div>
+        <div className="dr-front">
+          <span>Card file · {CHUNKS.length} cards</span>
+          <span>
+            {Math.min(k, hits.length)} pulled · rank on top
+            {gold && (
+              <>
+                {" · "}
+                <i className="gold-key" /> gold
+              </>
+            )}
+          </span>
+        </div>
+      </div>
       <div className="tw" style={{ marginTop: 12 }}>
         <table className="tbl" style={{ minWidth: 620 }}>
           <thead>

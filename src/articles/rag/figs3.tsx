@@ -117,7 +117,7 @@ export function FigRun() {
             <>
               {keep.map((id) => (
                 <div key={id}>
-                  <b style={{ color: ACC }}>{id}</b> passes {THRESHOLD}
+                  <span className="cite">{id}</span> passes {THRESHOLD}
                 </div>
               ))}
               {top.length > keep.length && <div style={{ color: "var(--olive)" }}>{top.length - keep.length} chunk{top.length - keep.length > 1 ? "s" : ""} under the threshold</div>}
@@ -131,7 +131,16 @@ export function FigRun() {
           "Prompt",
           <>
             <div style={{ color: "var(--olive)" }}>Instruction: use only the chunks; cite each one.</div>
-            <div>Chunks: {keep.length ? keep.map((id) => `[${id}]`).join(" ") : "none"}</div>
+            <div>
+              Chunks:{" "}
+              {keep.length
+                ? keep.map((id) => (
+                    <span key={id} className="cite">
+                      {id}
+                    </span>
+                  ))
+                : "none"}
+            </div>
             <div>Question: {q}</div>
           </>,
         )}
@@ -141,9 +150,9 @@ export function FigRun() {
           <div aria-live="polite" style={{ minHeight: "4.5em" }}>
             {shown.split(/(\[C-\d\d\])/).map((part, i) =>
               /^\[C-\d\d\]$/.test(part) ? (
-                <b key={i} style={{ color: ACC }}>
-                  {part}
-                </b>
+                <span key={i} className="cite">
+                  {part.slice(1, -1)}
+                </span>
               ) : (
                 <span key={i}>{part}</span>
               ),

@@ -120,29 +120,19 @@ export default function Rag() {
               ))}
             </ol>
             <h3>The example manual</h3>
-            <div className="tcap">Table 3-1 · HP-40 hydraulic pump manual (invented) · 12 chunks</div>
-            <div className="tw">
-              <table className="tbl" style={{ minWidth: 640 }}>
-                <thead>
-                  <tr>
-                    <th>Chunk</th>
-                    <th>Reference</th>
-                    <th>Title</th>
-                    <th>Text</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {CHUNKS.map((c) => (
-                    <tr key={c.id}>
-                      <td className="k a">{c.id}</td>
-                      <td style={{ whiteSpace: "nowrap" }}>{c.ref}</td>
-                      <td style={{ whiteSpace: "nowrap" }}>{c.title}</td>
-                      <td>{c.text}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+            <div className="tcap">Card file 3-1 · HP-40 hydraulic pump manual (invented) · 12 chunks, one card each</div>
+            <ol className="cardfile">
+              {CHUNKS.map((c) => (
+                <li key={c.id} className="icard">
+                  <div className="ic-head">
+                    <b className="ic-no">{c.id}</b>
+                    <span className="ic-ref">{c.ref}</span>
+                  </div>
+                  <h4 className="ic-title">{c.title}</h4>
+                  <p className="ic-text">{c.text}</p>
+                </li>
+              ))}
+            </ol>
           </Section>
 
           {/* ============ 04 ============ */}
